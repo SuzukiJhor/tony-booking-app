@@ -1,5 +1,9 @@
+'use client';
+
 export default function DashboardCard() {
-    return (
-        <h1 className="text-blue-500">{'dashboard'}</h1>
-    );
+    return <>
+        <div className="bg-white text-black dark:bg-gray-800 dark:text-white">
+                Dashboard
+            </div>
+    </>
 }

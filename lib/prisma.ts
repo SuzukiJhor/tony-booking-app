@@ -1,14 +1,18 @@
-import { PrismaClient } from "@prisma/client/extension";
+import { PrismaPg } from '@prisma/adapter-pg'
+import { PrismaClient } from '@prisma/client'
 
-declare global {
-  var prisma: PrismaClient | undefined;
+const globalForPrisma = global as unknown as {
+    prisma: PrismaClient
 }
 
-const prisma = global.prisma || new PrismaClient();
+const adapter = new PrismaPg({
+  connectionString: process.env.DATABASE_URL,
+})
 
-// Em ambiente de desenvolvimento, usamos a variável global para evitar múltiplas instâncias
-if (process.env.NODE_ENV !== "production") {
-  global.prisma = prisma;
-}
+const prisma = globalForPrisma.prisma || new PrismaClient({
+  adapter,
+})
 
-export default prisma;
+if (process.env.NODE_ENV !== 'production') globalForPrisma.prisma = prisma
+
+export default prisma

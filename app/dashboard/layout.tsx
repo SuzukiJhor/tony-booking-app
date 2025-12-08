@@ -17,7 +17,7 @@ export default async function Layout({ children }: { children: React.ReactNode }
        <Header />
         
         {/* Conteúdo da Página (page.tsx ou sub-rotas) */}
-        <main className="p-8">
+        <main className="p-0">
           {children}
         </main>
       </div>

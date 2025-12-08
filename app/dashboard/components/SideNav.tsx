@@ -14,9 +14,9 @@ export default function SideNav() {
   const pathname = usePathname();
 
   return (
-    <div className="flex flex-col h-full border-r bg-gray-50 p-4 w-64 fixed top-0 left-0">
-      <div className="flex items-center mb-6 h-20">
-        <h1 className="text-2xl font-extrabold text-indigo-600">Tony Agenda</h1>
+    <div className="flex flex-col h-full border-r bg-background p-4 w-64 fixed top-0 left-0">
+      <div className="flex items-center justify-center mb-6 h-20">
+        <h1 className="text-2xl font-extrabold text-primary">Tony</h1>
       </div>
 
       <nav className="grow space-y-2">
@@ -30,8 +30,8 @@ export default function SideNav() {
               href={link.href}
               className={`flex items-center p-3 text-sm font-medium rounded-lg transition-colors 
                 ${isActive
-                  ? 'bg-indigo-100 text-indigo-700 font-semibold'
-                  : 'text-gray-600 hover:bg-gray-100'
+                  ? 'bg-indigo-100 text-primary font-semibold'
+                  : 'text-secondary hover:bg-gray-100'
                 }`}
             >
               <LinkIcon className="w-5 h-5 mr-3" />
@@ -40,7 +40,6 @@ export default function SideNav() {
           );
         })}
       </nav>
-
       <form
         action={async () =>
           console.log('botão de deslogar!')}
