@@ -1,24 +1,35 @@
+import NextTopLoader from 'nextjs-toploader';
 import { Header } from './components/Header';
 import SideNav from './components/SideNav';
+import { NavigationUX } from '../components/NavigationUX';
 
 export default async function Layout({ children }: { children: React.ReactNode }) {
-  
+
   // Opcional: Obter dados da sessão para exibição ou controle de acesso mais granular
 
   return (
     <div className="flex h-screen bg-gray-50">
-      
+
       {/* Menu Lateral Fixo */}
       <SideNav />
-      
+
       {/* Conteúdo Principal */}
-      <div className="grow ml-64 overflow-y-auto"> 
-        
-       <Header />
-        
+      <div className="grow ml-64 overflow-y-auto">
+
+        <Header />
+
         {/* Conteúdo da Página (page.tsx ou sub-rotas) */}
         <main className="p-0">
-          {children}
+          <NextTopLoader
+            height={4}
+            showSpinner={false}
+            easing="ease"
+            speed={350}
+            color="var(--color-primary)"
+          />
+          <NavigationUX>
+            {children}
+          </NavigationUX>
         </main>
       </div>
     </div>

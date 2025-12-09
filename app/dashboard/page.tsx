@@ -1,6 +1,7 @@
 'use client'
 import { CalendarCheck, Clock, Users, MessageSquare } from 'lucide-react'
 import DashboardCard from '../components/DashboardCard';
+import TitlePage from '../components/TitlePage';
 
 // Dados de Exemplo (FAKE)
 const dashboardMetrics = [
@@ -37,7 +38,7 @@ const dashboardMetrics = [
 export default function Dashboard() {
     return (
         <div className=" p-4 bg-background">
-            <h1 className="text-3xl font-extrabold text-primary pb-10">Dashboard</h1>
+            <TitlePage title="Dashboard" />
             <div className="min-h-screen">
                 <h2 className="text-3xl font-bold mb-8 text-gray-900 dark:text-white">
                     Visão Geral da Clínica
@@ -46,8 +47,8 @@ export default function Dashboard() {
                 {/* 1. GRADE DE MÉTRICAS (PREENCHIDA) */}
                 <section className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6 mb-10">
                     {dashboardMetrics.map((metric, index) => (
-                        <DashboardCard 
-                            key={index} 
+                        <DashboardCard
+                            key={index}
                             title={metric.title}
                             value={metric.value}
                             icon={metric.icon}

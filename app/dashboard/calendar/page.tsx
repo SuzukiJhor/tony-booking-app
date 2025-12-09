@@ -4,7 +4,41 @@ import { DialogNewEvent } from "../components/DialogNewEvent";
 import { brasilTranslations } from "@/util/translations-calendar";
 import { fetchAppointments } from "@/util/api-calendar";
 import { useState, useEffect } from "react";
+import TitlePage from "@/app/components/TitlePage";
 
+
+const eventDataBase = {
+    id: 1,
+    dataHora: '2025-12-11T18:06:41.052Z',
+    statusConfirmacao: 'MENSAGEM_ENVIADA',
+    mensagemEnviadaEm: null,
+    mensagemId: null,
+    pacienteId: 1,
+    empresaId: 1,
+    createdAt: '2025-12-08T05:16:08.287Z',
+    updatedAt: '2025-12-08T05:16:08.287Z'
+};
+
+const eventsMetaData = [
+    {
+        id: '1',
+        title: 'Team Meeting',
+        start: new Date('2025-12-15T10:00:00'),
+        end: new Date('2025-12-15T11:00:00'),
+        description: 'Weekly team sync',
+        backgroundColor: '#3b82f6',
+        color: 'black'
+    },
+    {
+        id: '2',
+        title: 'Project Deadline',
+        start: new Date('2025-12-20T23:59:59'),
+        end: new Date('2025-12-20T23:59:59'),
+        allDay: true,
+        backgroundColor: '#ef4444',
+        color: 'black'
+    }
+];
 
 export default function Calendar() {
     const [events, setEvents] = useState([]);
@@ -43,19 +77,24 @@ export default function Calendar() {
     );
 
     return <>
-        <div className=" p-4 bg-background">
-            <h1 className="text-3xl font-extrabold text-primary pb-10">Calendário</h1>
-            <IlamyCalendar
-                timeFormat="12-hour"
-                locale="pt-BR"
-                // translations={brasilTranslations}
-                timezone="America/Sao_Paulo" headerClassName="text-secondary" viewHeaderClassName="bg-primary text-background font-semibold py-3"
-                // onEventClick={handleEventClick}
-                // onCellClick={handleDateClick}
-                // renderEvent={renderEvent}
-                onViewChange={handleViewChange}
-                renderEventForm={(props: EventFormProps) => <DialogNewEvent {...props} />}
-            />
+        <div className="h-screen bg-background">
+            <div className="p-4">
+
+                <TitlePage title="Calendário" />
+
+                <IlamyCalendar
+                    events={eventsMetaData}
+                    timeFormat="12-hour"
+                    locale="pt-BR"
+                    translations={brasilTranslations}
+                    timezone="America/Sao_Paulo" headerClassName="text-secondary" viewHeaderClassName="bg-primary text-background font-semibold py-3"
+                    // onEventClick={handleEventClick}
+                    // onCellClick={handleDateClick}
+                    // renderEvent={renderEvent}
+                    onViewChange={handleViewChange}
+                    renderEventForm={(props: EventFormProps) => <DialogNewEvent {...props} />}
+                />
+            </div>
         </div>
     </>
 }
