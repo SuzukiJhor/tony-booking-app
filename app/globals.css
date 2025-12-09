@@ -7,11 +7,11 @@
 }
 
 .dark {
-  --background: #261500;
-  --background-secondary: #dee2e6;
+  --background: #212121;
+  --background-secondary: #2C2C2C;
   --foreground: #ededed;
-  --color-primary: #e68a2e;
-  --color-secondary: #a5b3aa;
+  --color-primary: #1C770B;
+  --color-secondary: #A0A0A0;
 }
 
 @theme inline {

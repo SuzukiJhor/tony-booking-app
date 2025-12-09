@@ -44,7 +44,7 @@ export default function Calendar() {
 
     return <>
         <div className=" p-4 bg-background">
-            <h1 className="text-4xl font-extrabold text-primary pb-10">Calendário</h1>
+            <h1 className="text-3xl font-extrabold text-primary pb-10">Calendário</h1>
             <IlamyCalendar
                 timeFormat="12-hour"
                 locale="pt-BR"
