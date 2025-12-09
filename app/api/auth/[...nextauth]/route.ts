@@ -11,14 +11,15 @@ export const authOptions: AuthOptions = {
             clientId: process.env.GOOGLE_CLIENT_ID!,
             clientSecret: process.env.GOOGLE_CLIENT_SECRET!,
         }),
-
         CredentialsProvider({
             name: "credentials",
             credentials: {
                 email: { label: "Email", type: "email" },
                 password: { label: "Senha", type: "password" },
             },
-            async authorize(credentials: any) {
+            async authorize(credentials: Record<"email" | "password", string> | undefined) {
+                if (!credentials) return null;
+
                 const user = await prisma.acessoSistema.findUnique({
                     where: { email: credentials.email },
                 });
@@ -56,8 +57,8 @@ export const authOptions: AuthOptions = {
         },
         async session({ session, token }) {
             if (token) {
-                session.user.id = token.id;
-                session.user.nomeEmpresa = token.nomeEmpresa;
+                session.user.id = token.id as string;
+                session.user.nomeEmpresa = token.nomeEmpresa as string;
             }
             return session;
         },
