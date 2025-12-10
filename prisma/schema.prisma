@@ -16,6 +16,12 @@ enum StatusAgendamento {
   CANCELADO          // Cancelado pelo usuário (admin)
 }
 
+enum TipoAgendamento {
+  CONSULTA
+  RETORNO
+  EXAME
+}
+
 // -----------------------------------------------------
 // 🏢 Modelo Empresa (Tenant)
 // -----------------------------------------------------
@@ -76,6 +82,8 @@ model Agendamento {
 
   createdAt         DateTime             @default(now())
   updatedAt         DateTime             @updatedAt
+  tipoAgendamento   TipoAgendamento      @default(CONSULTA)
+  tempoAtendimento  Int                  @default(60)
 }
 
 // -----------------------------------------------------

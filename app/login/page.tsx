@@ -2,6 +2,7 @@
 import { signIn } from "next-auth/react";
 import { useState } from "react";
 import { GoogleSVG } from "@/assets/googleSVG";
+import { LogoTonySVG } from "@/assets/logoTonySVG";
 
 export default function LoginPage() {
     const [email, setEmail] = useState("");
@@ -28,9 +29,9 @@ export default function LoginPage() {
         <div className="h-screen w-full flex items-center justify-center from-primary/20 via-background to-primary/30">
             <div className="backdrop-blur-xl bg-white/10 border border-white/20 shadow-2xl rounded-2xl p-8 w-[360px]">
 
-                <h2 className="text-2xl font-extrabold text-center text-primary mb-6">
-                    Tony
-                </h2>
+              <LogoTonySVG  />
+
+
 
                 <form onSubmit={handleSubmit} className="space-y-4">
 

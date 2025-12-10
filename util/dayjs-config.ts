@@ -8,3 +8,4 @@ dayjs.extend(isSameOrAfter);
 dayjs.extend(isSameOrBefore);
 dayjs.extend(timezone);
 dayjs.extend(utc);
+export default dayjs;

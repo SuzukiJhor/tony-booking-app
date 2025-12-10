@@ -1,0 +1,6 @@
+export enum StatusConfirmacao {
+    MENSAGEM_ENVIADA = "MENSAGEM_ENVIADA",
+    CONFIRMADO = "CONFIRMADO",
+    CANCELADO = "CANCELADO",
+    AGUARDANDO = "AGUARDANDO"
+}

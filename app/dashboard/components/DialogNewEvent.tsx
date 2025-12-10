@@ -1,7 +1,6 @@
-'use client'
-
 import { EventFormProps, CalendarEvent } from "@ilamy/calendar";
-import { useState } from "react";
+import { DataBaseEventType } from "@/app/dashboard/types/eventDBType";
+import dayjs from "@/util/dayjs-config";
 
 export function DialogNewEvent({
     open,
@@ -11,106 +10,134 @@ export function DialogNewEvent({
     onDelete,
     onClose,
 }: EventFormProps) {
-
-    const [start, setStart] = useState<string>(
-        selectedEvent?.start
-            ? new Date((selectedEvent.start as any).toDate()).toISOString().slice(0, 16)
-            : new Date().toISOString().slice(0, 16)
-    );
-
-    const [duration, setDuration] = useState<number>(60); // default 1h (em minutos)
+    if (!open) return null;
 
     const handleSubmit = (formData: FormData) => {
-        const startDate = new Date(start);
-        const endDate = new Date(startDate.getTime() + duration * 60000);
+        const startDate = dayjs(formData.get("start") as string);
+        const duration = Number(formData.get("tempoAtendimento") || 60);
+        const endDate = startDate.add(duration, "minute");
 
-        const eventData: CalendarEvent = {
-            id: selectedEvent?.id || `event-${Date.now()}`,
-            title: formData.get('title') as string,
-            patientName: formData.get('patientName') as string,
-            contact: formData.get('contact') as string,
-            status: formData.get('status') as string,
+        const eventData: CalendarEvent & Partial<DataBaseEventType> = {
+            id: selectedEvent?.id as number,
+            title: formData.get("pacientName") as string,
             start: startDate,
             end: endDate,
+            tempoAtendimento: duration,
+            tipoAgendamento: formData.get(
+                "tipoAgendamento"
+            ) as DataBaseEventType["tipoAgendamento"],
+            phone: formData.get("phone") as string,
+            email: formData.get("email") as string | null,
         };
 
         selectedEvent?.id ? onUpdate?.(eventData) : onAdd?.(eventData);
         onClose();
     };
 
-    if (!open) return null;
-
     return (
         <dialog
             open={open}
-            className="fixed inset-0 w-screen h-screen flex items-center justify-center bg-black/50 z-[9999]"
+            className="fixed inset-0 w-screen h-screen m-0 p-0 flex items-center justify-center z-[9999] bg-black/50"
         >
             <form
-                className="bg-white text-black p-6 rounded-xl shadow-xl w-[350px] space-y-4"
+                className="bg-background text-foreground p-8 rounded-xl shadow-xl w-full max-w-md space-y-6"
                 onSubmit={(e) => {
                     e.preventDefault();
                     handleSubmit(new FormData(e.currentTarget));
                 }}
             >
-                <h2 className="text-xl font-bold">
-                    {selectedEvent?.id ? 'Editar Agendamento' : 'Novo Agendamento'}
+                <h2 className="text-2xl font-bold mb-4">
+                    {selectedEvent?.id ? "Editar Agendamento" : "Criar Agendamento"}
                 </h2>
 
-                {/* Nome do Paciente */}
-                <label className="text-sm font-medium">Paciente</label>
-                <input
-                    name="patientName"
-                    defaultValue={(selectedEvent as any)?.patientName}
-                    placeholder="Nome do paciente"
-                    required
-                    className="w-full p-2 rounded border border-gray-300"
-                />
+                {/* Data e hora */}
+                <div className="flex flex-col">
+                    <label htmlFor="start" className="mb-2 font-medium">Data e Hora</label>
+                    <input
+                        type="datetime-local"
+                        name="start"
+                        id="start"
+                        defaultValue={
+                            selectedEvent?.start ? selectedEvent.start.format("YYYY-MM-DDTHH:mm") : ""
+                        }
+                        className="w-full p-3 rounded border border-gray-300 bg-background"
+                        required
+                    />
+                </div>
 
-                {/* Contato */}
-                <label className="text-sm font-medium">Contato</label>
-                <input
-                    name="contact"
-                    defaultValue={(selectedEvent as any)?.contact}
-                    placeholder="Telefone / Email"
-                    className="w-full p-2 rounded border border-gray-300"
-                />
+                {/* Paciente */}
+                <div className="flex flex-col">
+                    <label htmlFor="pacientName" className="mb-2 font-medium">Nome do Paciente</label>
+                    <input
+                        type="text"
+                        name="pacientName"
+                        id="pacientName"
+                        defaultValue={selectedEvent?.title === "newEvent" ? "" : selectedEvent?.title}
+                        placeholder="Digite o nome do paciente"
+                        className="w-full p-3 rounded border border-gray-300 bg-background"
+                        required
+                    />
+                </div>
 
-                {/* Horário */}
-                <label className="text-sm font-medium">Horário inicial</label>
-                <input
-                    type="datetime-local"
-                    value={start}
-                    onChange={(e) => setStart(e.target.value)}
-                    className="w-full p-2 rounded border border-gray-300"
-                    required
-                />
+                {/* Telefone e Email lado a lado */}
+                <div className="flex flex-col md:flex-row md:gap-4">
+                    <div className="flex flex-col flex-1">
+                        <label htmlFor="phone" className="mb-2 font-medium">Telefone (WhatsApp)</label>
+                        <input
+                            type="tel"
+                            name="phone"
+                            id="phone"
+                            defaultValue={selectedEvent?.phone || ""}
+                            placeholder="+55 11 91234-5678"
+                            className="w-full p-3 rounded border border-gray-300 bg-background"
+                            required
+                        />
+                    </div>
+                    <div className="flex flex-col flex-1 mt-4 md:mt-0">
+                        <label htmlFor="email" className="mb-2 font-medium">Email (opcional)</label>
+                        <input
+                            type="email"
+                            name="email"
+                            id="email"
+                            defaultValue={selectedEvent?.email || ""}
+                            placeholder="exemplo@email.com"
+                            className="w-full p-3 rounded border border-gray-300 bg-background"
+                        />
+                    </div>
+                </div>
 
-                {/* Duração */}
-                <label className="text-sm font-medium">Duração (minutos)</label>
-                <input
-                    type="number"
-                    name="duration"
-                    value={duration}
-                    onChange={(e) => setDuration(parseInt(e.target.value))}
-                    min={15}
-                    step={15}
-                    className="w-full p-2 rounded border border-gray-300"
-                />
+                {/* Tipo de agendamento e Duração lado a lado */}
+                <div className="flex flex-col md:flex-row md:gap-4">
+                    <div className="flex flex-col flex-1">
+                        <label htmlFor="tipoAgendamento" className="mb-2 font-medium">Tipo de Agendamento</label>
+                        <select
+                            name="tipoAgendamento"
+                            id="tipoAgendamento"
+                            defaultValue={"CONSULTA"}
+                            className="w-full p-3 rounded border border-gray-300 bg-background"
+                            required
+                        >
+                            <option value="CONSULTA">Consulta</option>
+                            <option value="RETORNO">Retorno</option>
+                            <option value="EXAME">Exame</option>
+                        </select>
+                    </div>
+                    <div className="flex flex-col flex-1 mt-4 md:mt-0">
+                        <label htmlFor="tempoAtendimento" className="mb-2 font-medium">Duração (minutos)</label>
+                        <input
+                            type="number"
+                            name="tempoAtendimento"
+                            id="tempoAtendimento"
+                            defaultValue={60}
+                            min={1}
+                            className="w-full p-3 rounded border border-gray-300 bg-background"
+                            required
+                        />
+                    </div>
+                </div>
 
-                {/* Status */}
-                <label className="text-sm font-medium">Status</label>
-                <select
-                    name="status"
-                    defaultValue={(selectedEvent as any)?.status || "pending"}
-                    className="w-full p-2 rounded border border-gray-300"
-                >
-                    <option value="pending">Pendente</option>
-                    <option value="confirmed">Confirmado</option>
-                    <option value="canceled">Cancelado</option>
-                </select>
-
-                {/* Ações */}
-                <div className="flex justify-between gap-3">
+                {/* Botões */}
+                <div className="flex justify-between gap-3 pt-4">
                     {selectedEvent?.id && (
                         <button
                             type="button"
@@ -118,7 +145,7 @@ export function DialogNewEvent({
                                 onDelete?.(selectedEvent);
                                 onClose();
                             }}
-                            className="px-3 py-2 rounded bg-red-600 text-white hover:bg-red-700"
+                            className="px-4 py-2 rounded bg-red-600 text-white hover:bg-red-700"
                         >
                             Excluir
                         </button>
@@ -127,16 +154,16 @@ export function DialogNewEvent({
                     <button
                         type="button"
                         onClick={onClose}
-                        className="px-3 py-2 rounded bg-gray-400 text-white hover:bg-gray-500"
+                        className="px-4 py-2 rounded bg-gray-400 text-white hover:bg-gray-500"
                     >
                         Cancelar
                     </button>
 
                     <button
                         type="submit"
-                        className="px-3 py-2 rounded bg-indigo-600 text-white hover:opacity-90"
+                        className="px-4 py-2 rounded bg-primary text-background hover:opacity-90"
                     >
-                        {selectedEvent?.id ? 'Salvar' : 'Criar'}
+                        {selectedEvent?.id ? "Salvar" : "Criar"}
                     </button>
                 </div>
             </form>

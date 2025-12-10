@@ -1,0 +1,23 @@
+import { StatusConfirmacao } from "@/app/enum/statusConfirmacao";
+import { TipoAgendamento } from "@prisma/client";
+
+export interface DataBaseEventType {
+    id: number;
+    dataHora: string;
+    statusConfirmacao: StatusConfirmacao;
+    mensagemEnviadaEm: string | null;
+    mensagemId: string | null;
+    pacienteId: number;
+    paciente?: PacienteEventInfo;
+    empresaId: number;
+    tipoAgendamento: TipoAgendamento;
+    tempoAtendimento: number;
+    createdAt: string;
+    updatedAt: string;
+}
+
+export interface PacienteEventInfo {
+    nome: string;
+    telefone: string | null;
+    email: string | null;
+}

@@ -89,7 +89,17 @@ export async function GET(request: Request) {
   try {
 
 
-    const eventsAll = await prisma.agendamento.findMany();
+    const eventsAll = await prisma.agendamento.findMany({
+      include: {
+        paciente: {
+          select: {
+            nome: true,
+            telefone: true,
+            email: true
+          }
+        }
+      }
+    });
 
     return NextResponse.json(eventsAll, { status: 200 });
 

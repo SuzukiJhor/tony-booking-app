@@ -3,6 +3,7 @@ import Link from 'next/link';
 import { usePathname } from 'next/navigation';
 import { LogOut, Calendar, Home, Settings, Users } from 'lucide-react';
 import { signOut } from "next-auth/react"
+import { LogoTonySVG } from '@/assets/logoTonySVG';
 
 const navLinks = [
   { name: 'Dashboard', href: '/dashboard', icon: Home },
@@ -17,7 +18,8 @@ export default function SideNav() {
   return (
     <div className="flex flex-col h-full border-r bg-background p-4 w-64 fixed top-0 left-0">
       <div className="flex items-center justify-center mb-6 h-20">
-        <h1 className="text-2xl font-extrabold text-primary">Tony</h1>
+        {/* <h1 className="text-2xl font-extrabold text-primary">Tony</h1> */}
+        <LogoTonySVG />
       </div>
 
       <nav className="grow space-y-2">

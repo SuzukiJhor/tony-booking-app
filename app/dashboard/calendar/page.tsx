@@ -5,6 +5,7 @@ import { brasilTranslations } from "@/util/translations-calendar";
 import { fetchAppointments } from "@/util/api-calendar";
 import { useState, useEffect } from "react";
 import TitlePage from "@/app/components/TitlePage";
+import { mapEventsToCalendar } from "@/util/mapEventToCalendar";
 
 
 const eventDataBase = {
@@ -24,7 +25,7 @@ const eventsMetaData = [
         id: '1',
         title: 'Team Meeting',
         start: new Date('2025-12-15T10:00:00'),
-        end: new Date('2025-12-15T11:00:00'),
+        end: new Date('2025-12-15T12:00:00'),
         description: 'Weekly team sync',
         backgroundColor: '#3b82f6',
         color: 'black'
@@ -51,7 +52,7 @@ export default function Calendar() {
         load();
     }, []);
 
-    console.log(events);
+    console.log(mapEventsToCalendar(events));
 
     const handleEventClick = (event) => {
         console.log('Event clicked:', event);
@@ -83,7 +84,7 @@ export default function Calendar() {
                 <TitlePage title="Calendário" />
 
                 <IlamyCalendar
-                    events={eventsMetaData}
+                    events={mapEventsToCalendar(events)}
                     timeFormat="12-hour"
                     locale="pt-BR"
                     translations={brasilTranslations}
