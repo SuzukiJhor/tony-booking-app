@@ -1,8 +1,9 @@
+/* eslint-disable @typescript-eslint/no-unused-expressions */
 /* eslint-disable react-hooks/rules-of-hooks */
 'use client';
 import { DataBaseEventType } from "@/app/dashboard/types/eventDBType";
 import dayjs from "@/util/dayjs-config";
-import { useEffect, useState } from "react";
+import { useState } from "react";
 import { useSession } from "next-auth/react";
 import { ExtendedEventFormProps } from "../types/eventDetailsType";
 import { durationOptions } from "@/util/optionsDurationInput";
@@ -32,8 +33,10 @@ export function DialogNewEvent({
     };
 
     const handleSubmit = (formData: FormData) => {
+
         const startDate = dayjs(formData.get("start") as string);
         const duration = Number(formData.get("tempoAtendimento") || 60);
+
 
         const eventData: DataBaseEventType = {
             id: selectedEvent?.id as number,
@@ -51,7 +54,14 @@ export function DialogNewEvent({
             empresaId: session?.user.empresaID as number,
         };
 
-        selectedEvent?.id ? onUpdate?.(eventData) : onAdd?.(eventData);
+        const calendarEvent = {
+            ...eventData,
+            title: eventData.paciente?.nome ?? "",
+            start: startDate,
+            end: startDate.add(duration, "minute"),
+        };
+
+        selectedEvent?.id ? onUpdate?.(calendarEvent) : onAdd?.(calendarEvent);
         onClose();
     };
 
@@ -64,7 +74,7 @@ export function DialogNewEvent({
     return (
         <dialog
             open={open}
-            className="fixed inset-0 w-screen h-screen m-0 p-0 flex items-center justify-center z-[9999] bg-black/50"
+            className="fixed inset-0 w-screen h-screen m-0 p-0 flex items-center justify-center z-9999 bg-black/50"
         >
             <form
                 className="bg-background text-foreground p-8 rounded-xl shadow-xl w-full max-w-md space-y-6"

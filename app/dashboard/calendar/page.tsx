@@ -9,25 +9,20 @@ import { mapEventsToCalendar } from "@/util/mapEventToCalendar";
 import { DataBaseEventType, PacienteEventInfo } from "../types/eventDBType";
 import { useCalendar } from "@/app/context/CalendarContext";
 
-const pacienteDetailsEmpty = { nome: '', telefone: '', email: '' };
 export default function Calendar() {
     const { events } = useCalendar();
 
-
-    const handleViewChange = (view) => {
-        console.log('View changed to:', view);
-        // Update URL, track analytics, etc.
+    const handleAdd = (eventData: any) => {
+        console.log("📥 Novo evento recebido do Dialog:", eventData);
     };
-    const renderEvent = (event) => (
-        console.log('Rendering event:', event),
-        <div className="px-2 py-1 rounded bg-blue-100 text-blue-800">
-            <div className="font-semibold">{event.title}</div>
-            <div className="text-xs">{event.description}</div>
-        </div>
-    );
 
+    const handleUpdate = (eventData: any) => {
+        console.log("📥 Novo evento recebido do Dialog:", eventData);
+    };
 
-
+    const handleDelete = (eventData: DataBaseEventType) => {
+        console.log("🗑 Evento deletado:", eventData);
+    };
 
     return <>
         <div className="h-screen bg-background">
@@ -41,14 +36,11 @@ export default function Calendar() {
                     locale="pt-BR"
                     translations={brasilTranslations}
                     timezone="America/Sao_Paulo" headerClassName="text-secondary" viewHeaderClassName="bg-primary text-background font-semibold py-3"
-                    // onEventClick={handleEventClick}
-                    // onCellClick={handleDateClick}]
                     selectedEvent={'null'}
-                    // renderEvent={renderEvent}
-                    // onViewChange={handleViewChange}
                     renderEventForm={(props) => (
                         <DialogNewEvent
                             {...props}
+                            onAdd={handleAdd} onUpdate={handleUpdate} onDelete={handleDelete}
                         />
                     )}
                 />
