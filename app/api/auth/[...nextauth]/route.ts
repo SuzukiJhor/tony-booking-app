@@ -22,6 +22,9 @@ export const authOptions: AuthOptions = {
 
                 const user = await prisma.acessoSistema.findUnique({
                     where: { email: credentials.email },
+                    include: {
+                        empresa: true,
+                    },
                 });
 
                 if (!user) return null;
@@ -33,7 +36,8 @@ export const authOptions: AuthOptions = {
                 return {
                     id: String(user.id),
                     email: user.email,
-                    nomeEmpresa: user.nomeEmpresa,
+                    nomeEmpresa: user.empresa?.nome ?? "",
+                    empresaID: user.empresaId,
                 };
             },
         }),
@@ -52,6 +56,7 @@ export const authOptions: AuthOptions = {
             if (user) {
                 token.id = user.id;
                 token.nomeEmpresa = user.nomeEmpresa;
+                token.empresaID = user.empresaID;
             }
             return token;
         },
@@ -59,6 +64,7 @@ export const authOptions: AuthOptions = {
             if (token) {
                 session.user.id = token.id as string;
                 session.user.nomeEmpresa = token.nomeEmpresa as string;
+                session.user.empresaID = token.empresaID as number;
             }
             return session;
         },

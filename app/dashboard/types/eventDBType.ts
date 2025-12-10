@@ -3,17 +3,17 @@ import { TipoAgendamento } from "@prisma/client";
 
 export interface DataBaseEventType {
     id: number;
-    dataHora: string;
+    dataHora: string | Date;
     statusConfirmacao: StatusConfirmacao;
-    mensagemEnviadaEm: string | null;
-    mensagemId: string | null;
-    pacienteId: number;
+    mensagemEnviadaEm?: string | null;
+    mensagemId?: string | null;
+    pacienteId?: number;
     paciente?: PacienteEventInfo;
     empresaId: number;
     tipoAgendamento: TipoAgendamento;
     tempoAtendimento: number;
-    createdAt: string;
-    updatedAt: string;
+    createdAt?: string;
+    updatedAt?: string;
 }
 
 export interface PacienteEventInfo {

@@ -35,6 +35,7 @@ model Empresa {
   pacientes        Paciente[]
   agendamentos     Agendamento[]
   configuracoes    Configuracao[] 
+  acessos          AcessoSistema[]
 
   createdAt        DateTime       @default(now())
   updatedAt        DateTime       @updatedAt
@@ -106,5 +107,7 @@ model AcessoSistema {
   id            Int     @id @default(autoincrement())
   email         String  @unique 
   password      String  // hash da senha
-  nomeEmpresa   String? @default("Tony Agenda")
+  empresaId     Int?
+  empresa       Empresa?   @relation(fields: [empresaId], references: [id])
+  @@map("acesso_sistema")
 }

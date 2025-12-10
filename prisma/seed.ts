@@ -8,26 +8,20 @@ const adapter = new PrismaPg({
     connectionString: process.env.DATABASE_URL,
 })
 
-const prisma = new PrismaClient({
-    adapter,
-});
+const prisma = new PrismaClient({ adapter });
 
 const NUM_PACIENTES = 5;
 const NUM_AGENDAMENTOS_TOTAIS = 10;
 
-// --- 1. CONFIGURAÇÕES FIXAS ---
+// --- Configurações fixas ---
 const EMPRESA_SLUG = 'clinica-demo';
 const ADMIN_EMAIL = 'admin@tony.com';
 const ADMIN_PASSWORD = 'password123';
 
-
 async function main() {
     console.log('--- Iniciando o Seeding de Dados (Tony App) ---');
 
-    // --- 2. HASH DA SENHA ---
-    const passwordHash = await bcrypt.hash(ADMIN_PASSWORD, 10);
-
-    // --- 3. CRIAR/ATUALIZAR EMPRESA (Tenant) ---
+    // --- 1. Criar/atualizar empresa ---
     const empresa = await prisma.empresa.upsert({
         where: { slug: EMPRESA_SLUG },
         update: {},
@@ -38,25 +32,28 @@ async function main() {
     });
     console.log(`✅ Empresa criada/atualizada: ${empresa.nome}`);
 
-    // --- 4. CRIAR/ATUALIZAR USUÁRIO ADMIN ---
-    await prisma.acessoSistema.upsert({
+    // --- 2. Hash da senha do admin ---
+    const passwordHash = await bcrypt.hash(ADMIN_PASSWORD, 10);
+
+    // --- 3. Criar/atualizar usuário admin ---
+    const admin = await prisma.acessoSistema.upsert({
         where: { email: ADMIN_EMAIL },
-        update: { password: passwordHash, nomeEmpresa: empresa.nome },
+        update: { password: passwordHash, empresaId: empresa.id },
         create: {
             email: ADMIN_EMAIL,
             password: passwordHash,
-            nomeEmpresa: empresa.nome,
+            empresaId: empresa.id,
         },
     });
     console.log(`✅ Usuário Admin criado/atualizado: ${ADMIN_EMAIL}`);
 
-    // --- 5. CRIAR PACIENTES FAKES ---
+    // --- 4. Criar pacientes fakes ---
     const pacientesCriados = [];
     for (let i = 0; i < NUM_PACIENTES; i++) {
         const paciente = await prisma.paciente.create({
             data: {
                 nome: faker.person.fullName(),
-                telefone: faker.phone.number(),
+                telefone: faker.phone.number('+55##########'),
                 email: faker.internet.email(),
                 empresaId: empresa.id,
             },
@@ -65,7 +62,7 @@ async function main() {
     }
     console.log(`✅ ${pacientesCriados.length} Pacientes fakes criados.`);
 
-    // --- 6. CRIAR AGENDAMENTOS FAKES ---
+    // --- 5. Criar agendamentos fakes ---
     const statuses = Object.values(StatusAgendamento);
 
     for (let i = 0; i < NUM_AGENDAMENTOS_TOTAIS; i++) {
@@ -79,6 +76,8 @@ async function main() {
                 statusConfirmacao: randomStatus,
                 pacienteId: pacienteAleatorio.id,
                 empresaId: empresa.id,
+                tipoAgendamento: 'CONSULTA', // default
+                tempoAtendimento: 60,       // default
             },
         });
     }

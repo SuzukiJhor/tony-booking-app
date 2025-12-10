@@ -4,12 +4,14 @@ declare module "next-auth" {
     interface User {
         id: string;
         nomeEmpresa?: string | null;
+        empresaID?: number | null;
     }
 
     interface Session {
         user: {
             id: string;
             nomeEmpresa?: string | null;
+            empresaID?: number | null;
             email?: string | null;
         };
     }

@@ -1,6 +1,13 @@
-import { EventFormProps, CalendarEvent } from "@ilamy/calendar";
+/* eslint-disable react-hooks/rules-of-hooks */
+'use client';
 import { DataBaseEventType } from "@/app/dashboard/types/eventDBType";
 import dayjs from "@/util/dayjs-config";
+import { useEffect, useState } from "react";
+import { useSession } from "next-auth/react";
+import { ExtendedEventFormProps } from "../types/eventDetailsType";
+import { durationOptions } from "@/util/optionsDurationInput";
+import { useCalendar } from "@/app/context/CalendarContext";
+import { formatPhone } from "@/util/maskPhoneBr";
 
 export function DialogNewEvent({
     open,
@@ -9,30 +16,50 @@ export function DialogNewEvent({
     onUpdate,
     onDelete,
     onClose,
-}: EventFormProps) {
+}: ExtendedEventFormProps) {
     if (!open) return null;
+
+    const { events } = useCalendar();
+    const { data: session, } = useSession();
+    const eventDetails = getEventById(Number(selectedEvent?.id));
+    const pacienteDetails = eventDetails ? eventDetails.paciente : { nome: '', telefone: '', email: '' };
+    const [phoneValue, setPhoneValue] = useState(pacienteDetails?.telefone ?? "");
+
+    const handlePhoneChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+        const value = e.target.value;
+        const formatted = formatPhone(value);
+        setPhoneValue(formatted);
+    };
 
     const handleSubmit = (formData: FormData) => {
         const startDate = dayjs(formData.get("start") as string);
         const duration = Number(formData.get("tempoAtendimento") || 60);
-        const endDate = startDate.add(duration, "minute");
 
-        const eventData: CalendarEvent & Partial<DataBaseEventType> = {
+        const eventData: DataBaseEventType = {
             id: selectedEvent?.id as number,
-            title: formData.get("pacientName") as string,
-            start: startDate,
-            end: endDate,
+            paciente: {
+                nome: formData.get("pacientName") as string,
+                telefone: formData.get("phone") as string,
+                email: formData.get("email") as string | null,
+            },
+            dataHora: startDate.toDate(),
             tempoAtendimento: duration,
             tipoAgendamento: formData.get(
                 "tipoAgendamento"
             ) as DataBaseEventType["tipoAgendamento"],
-            phone: formData.get("phone") as string,
-            email: formData.get("email") as string | null,
+            statusConfirmacao: formData.get("statusAgendamento") as DataBaseEventType["statusConfirmacao"],
+            empresaId: session?.user.empresaID as number,
         };
 
         selectedEvent?.id ? onUpdate?.(eventData) : onAdd?.(eventData);
         onClose();
     };
+
+
+
+    function getEventById(id: number | null) {
+        return events.find(event => event.id === id) || null;
+    }
 
     return (
         <dialog
@@ -72,7 +99,7 @@ export function DialogNewEvent({
                         type="text"
                         name="pacientName"
                         id="pacientName"
-                        defaultValue={selectedEvent?.title === "newEvent" ? "" : selectedEvent?.title}
+                        defaultValue={pacienteDetails?.nome}
                         placeholder="Digite o nome do paciente"
                         className="w-full p-3 rounded border border-gray-300 bg-background"
                         required
@@ -81,14 +108,18 @@ export function DialogNewEvent({
 
                 {/* Telefone e Email lado a lado */}
                 <div className="flex flex-col md:flex-row md:gap-4">
+
                     <div className="flex flex-col flex-1">
                         <label htmlFor="phone" className="mb-2 font-medium">Telefone (WhatsApp)</label>
                         <input
                             type="tel"
                             name="phone"
                             id="phone"
-                            defaultValue={selectedEvent?.phone || ""}
-                            placeholder="+55 11 91234-5678"
+                            value={phoneValue}
+                            defaultValue={pacienteDetails?.telefone ?? ""}
+                            placeholder="(XX) XXXXX-XXX"
+                            onChange={handlePhoneChange}
+                            maxLength={15}
                             className="w-full p-3 rounded border border-gray-300 bg-background"
                             required
                         />
@@ -99,7 +130,7 @@ export function DialogNewEvent({
                             type="email"
                             name="email"
                             id="email"
-                            defaultValue={selectedEvent?.email || ""}
+                            defaultValue={pacienteDetails?.email || ""}
                             placeholder="exemplo@email.com"
                             className="w-full p-3 rounded border border-gray-300 bg-background"
                         />
@@ -124,17 +155,39 @@ export function DialogNewEvent({
                     </div>
                     <div className="flex flex-col flex-1 mt-4 md:mt-0">
                         <label htmlFor="tempoAtendimento" className="mb-2 font-medium">Duração (minutos)</label>
-                        <input
-                            type="number"
+                        <select
                             name="tempoAtendimento"
                             id="tempoAtendimento"
                             defaultValue={60}
-                            min={1}
                             className="w-full p-3 rounded border border-gray-300 bg-background"
                             required
-                        />
+                        >
+                            {durationOptions.map((option) => (
+                                <option key={option.value} value={option.value}>
+                                    {option.label}
+                                </option>
+                            ))}
+                        </select>
                     </div>
                 </div>
+
+                {/* Status do Agendamento */}
+                <div className="flex flex-col">
+                    <label htmlFor="statusAgendamento" className="mb-2 font-medium">Status do Agendamento</label>
+                    <select
+                        name="statusAgendamento"
+                        id="statusAgendamento"
+                        defaultValue={eventDetails?.statusConfirmacao || "PENDENTE"}
+                        className="w-full p-3 rounded border border-gray-300 bg-background"
+                        required
+                    >
+                        <option value="PENDENTE">Pendente de Confirmação</option>
+                        <option value="MENSAGEM_ENVIADA">Mensagem Enviada</option>
+                        <option value="CONFIRMADO">Confirmado</option>
+                        <option value="NAO_CONFIRMADO">Não Confirmado</option>
+                    </select>
+                </div>
+
 
                 {/* Botões */}
                 <div className="flex justify-between gap-3 pt-4">
