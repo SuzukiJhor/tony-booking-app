@@ -1,12 +1,10 @@
 'use client';
-import { IlamyCalendar, EventFormProps, CalendarEvent } from "@ilamy/calendar";
+import { IlamyCalendar } from "@ilamy/calendar";
 import { DialogNewEvent } from "../components/DialogNewEvent";
 import { brasilTranslations } from "@/util/translations-calendar";
-import { fetchAppointments } from "@/util/api-calendar";
-import { useState, useEffect } from "react";
+
 import TitlePage from "@/app/components/TitlePage";
 import { mapEventsToCalendar } from "@/util/mapEventToCalendar";
-import { DataBaseEventType, PacienteEventInfo } from "../types/eventDBType";
 import { useCalendar } from "@/app/context/CalendarContext";
 
 export default function Calendar() {
@@ -20,7 +18,7 @@ export default function Calendar() {
         console.log("📥 Novo evento recebido do Dialog:", eventData);
     };
 
-    const handleDelete = (eventData: DataBaseEventType) => {
+    const handleDelete = (eventData: any) => {
         console.log("🗑 Evento deletado:", eventData);
     };
 
