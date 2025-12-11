@@ -1,13 +1,13 @@
 'use client';
-import { CalendarEvent, IlamyCalendar } from "@ilamy/calendar";
-import { DialogNewEvent } from "../components/DialogNewEvent";
-import { brasilTranslations } from "@/util/translations-calendar";
-import TitlePage from "@/app/dashboard/components/TitlePage";
-import { mapEventsToCalendar } from "@/util/map-event-to-calendar";
-import { useCalendar } from "@/app/context/CalendarContext";
-import { deleteAppointment, registerAppointment, updateAppointment } from "@/util/api/api-calendar";
-import toast, { Toaster } from "react-hot-toast";
 import Swal from "sweetalert2";
+import toast, { Toaster } from "react-hot-toast";
+import { useCalendar } from "@/app/context/CalendarContext";
+import TitlePage from "@/app/dashboard/components/TitlePage";
+import { DialogNewEvent } from "../components/DialogNewEvent";
+import { CalendarEvent, IlamyCalendar } from "@ilamy/calendar";
+import { brasilTranslations } from "@/util/translations-calendar";
+import { mapEventsToCalendar } from "@/util/map-event-to-calendar";
+import { deleteAppointment, registerAppointment, updateAppointment } from "@/util/api/api-calendar";
 
 const styleConfigureToast = {
     style: {
@@ -98,8 +98,8 @@ export default function Calendar() {
                     timeFormat="12-hour"
                     locale="pt-BR"
                     translations={brasilTranslations}
-                    timezone="America/Sao_Paulo" 
-                    headerClassName="text-secondary" 
+                    timezone="America/Sao_Paulo"
+                    headerClassName="text-secondary"
                     viewHeaderClassName="bg-background text-background font-semibold py-3"
                     selectedEvent={'null'}
                     renderEventForm={(props) => (

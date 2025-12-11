@@ -10,7 +10,7 @@ export default async function Layout({ children }: { children: React.ReactNode }
   // Opcional: Obter dados da sessão para exibição ou controle de acesso mais granular
 
   return (
-    <div className="flex h-screen bg-gray-50">
+    <div className="flex h-screen bg-gray-50 dark:bg-background">
 
       {/* Menu Lateral Fixo */}
       <SideNav />

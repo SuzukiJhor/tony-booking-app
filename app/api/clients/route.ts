@@ -3,7 +3,6 @@ import { getErrorMessage } from '@/util/errors/get-error-message';
 import { NextResponse } from 'next/server';
 
 export async function GET(request: Request) {
-
     try {
         const pacientsAll = await prisma.paciente.findMany({
             include: {

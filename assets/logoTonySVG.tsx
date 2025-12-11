@@ -1,9 +1,15 @@
-export function LogoTonySVG() {
+import React from 'react';
+
+type LogoTonySVGProps = React.SVGProps<SVGSVGElement>
+
+export function LogoTonySVG({ className, ...rest }: LogoTonySVGProps) {
     return (
         <svg
+            className={className}
+            {...rest}
             xmlns="http://www.w3.org/2000/svg"
             width="400"
-            height="140"
+            height="140" 
             viewBox="0 0 500 140"
             role="img"
             aria-labelledby="title desc"
@@ -58,7 +64,7 @@ export function LogoTonySVG() {
                     fontFamily="'Montserrat', sans-serif"
                     fontSize="42"
                     fontWeight="700"
-                    fill="#005CBE"
+                    fill="#0EA5E9"
                 >
                     Tony
                 </text>
@@ -67,7 +73,7 @@ export function LogoTonySVG() {
                     fontFamily="'Montserrat', sans-serif"
                     fontSize="17"
                     fontWeight="500"
-                    fill="#A0A0A0"
+                    fill="#ededed"
                 >
                     Agenda &amp; Confirmação
                 </text>

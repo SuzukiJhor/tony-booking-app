@@ -1,7 +1,7 @@
 import { NextResponse } from "next/server";
 import prisma from "@/lib/prisma";
-import { AgendamentoDTO } from "@/app/dashboard/DTO/AgendamentoDTO";
 import { getErrorMessage } from "@/util/errors/get-error-message";
+import { AgendamentoUpdateDTO } from "@/app/dashboard/DTO/AgendamentoUpdateDTO";
 
 export async function PATCH(
     request: Request,
@@ -10,17 +10,15 @@ export async function PATCH(
     try {
         const { id } = await context.params;
         const json = await request.json();
+        const data = AgendamentoUpdateDTO.partial().parse(json);
 
-        // Valida e sanitiza os dados enviados
-        const data = AgendamentoDTO.partial().parse(json);
-
-        // Atualiza o agendamento
         const updated = await prisma.agendamento.update({
             where: { id: Number(id) },
             data: {
                 dataHora: data.dataHora,
                 tempoAtendimento: data.tempoAtendimento,
                 tipoAgendamento: data.tipoAgendamento as any ?? undefined,
+                statusConfirmacao: data.statusConfirmacao as any ?? undefined,
                 paciente: data.paciente
                     ? {
                         update: {

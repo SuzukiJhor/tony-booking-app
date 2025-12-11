@@ -3,21 +3,57 @@ import { signIn } from "next-auth/react";
 import { useState } from "react";
 import { GoogleSVG } from "@/assets/googleSVG";
 import { LogoTonySVG } from "@/assets/logoTonySVG";
+import { motion } from "framer-motion";
+import type { Variants } from "framer-motion";
+import { useLoading } from "../components/LoadingProvider";
+
+const containerVariants: Variants = {
+    hidden: { opacity: 0 },
+    visible: {
+        opacity: 1,
+        transition: {
+            staggerChildren: 0.15,
+            delayChildren: 0.3,
+        },
+    },
+};
+
+const itemVariants: Variants = {
+    hidden: { y: 20, opacity: 0 },
+    visible: {
+        y: 0,
+        opacity: 1,
+        transition: {
+            type: "spring" as const,
+            stiffness: 150,
+            damping: 20,
+        }
+    },
+    hover: {
+        scale: 1.01,
+        transition: {
+            duration: 0.2
+        }
+    }
+};
 
 export default function LoginPage() {
     const [email, setEmail] = useState("");
     const [password, setPassword] = useState("");
     const [error, setError] = useState("");
+    const { setIsLoading } = useLoading();
 
     const handleSubmit = async (e: React.FormEvent) => {
         e.preventDefault();
-
+        setIsLoading(true);
         const res = await signIn("credentials", {
             email,
             password,
             redirect: true,
             callbackUrl: "/dashboard",
         });
+
+        setIsLoading(false);
 
         if (res?.error) {
             setError("Email ou senha inválidos");
@@ -27,55 +63,80 @@ export default function LoginPage() {
 
     return (
         <div className="h-screen w-full flex items-center justify-center from-primary/20 via-background to-primary/30">
-            <div className="backdrop-blur-xl bg-white/10 border border-white/20 shadow-2xl rounded-2xl p-8 w-[360px]">
+            <motion.div
+                className="backdrop-blur-xl bg-white/10 border border-white/20 shadow-2xl rounded-2xl p-8 w-[360px]"
+                initial={{ y: -50, opacity: 0 }}
+                animate={{ y: 0, opacity: 1 }}
+                transition={{ duration: 0.7 }}
+            >
 
-              <LogoTonySVG  />
+                <motion.div
+                    initial={{ scale: 0.8, opacity: 0 }}
+                    animate={{ scale: 1, opacity: 1 }}
+                    transition={{ duration: 0.5 }}
+                    whileHover={{ rotate: 2, scale: 1.05 }}
+                    className="w-full px-3 py-2 rounded-lg  text-background focus:ring-2 focus:ring-primary focus:outline-none"
 
+                >
+                    <LogoTonySVG className="animate-pulse duration-2000" />
+                </motion.div>
 
-
-                <form onSubmit={handleSubmit} className="space-y-4">
-
-                    <input
+                <motion.form
+                    onSubmit={handleSubmit}
+                    className="space-y-4"
+                    variants={containerVariants}
+                    initial="hidden"
+                    animate="visible"
+                >
+                    <motion.input
                         type="email"
                         placeholder="Seu e-mail"
                         value={email}
                         onChange={(e) => setEmail(e.target.value)}
                         className="w-full px-3 py-2 rounded-lg border text-background bg-secondary focus:ring-2 focus:ring-primary focus:outline-none"
                         required
+                        variants={itemVariants}
+                        whileHover="hover"
                     />
 
-                    <input
+                    <motion.input
                         type="password"
                         placeholder="Sua senha"
                         value={password}
                         onChange={(e) => setPassword(e.target.value)}
                         className="w-full px-3 py-2 rounded-lg border bg-secondary text-background focus:ring-2 focus:ring-primary focus:outline-none"
                         required
+                        variants={itemVariants}
+                        whileHover="hover"
                     />
 
-                    {error && <p className="text-red-500 text-center">{error}</p>}
+                    {error && <motion.p variants={itemVariants} className="text-red-500 text-center">{error}</motion.p>}
 
-                    <button
+                    <motion.button
                         type="submit"
-                        className="w-full bg-primary text-white font-semibold py-2 rounded-lg hover:opacity-90 transition-all"
+                        className="w-full bg-primary text-white font-semibold py-2 rounded-lg hover:opacity-90 transition-all cursor-pointer"
+                        variants={itemVariants}
+                        whileHover="hover"
                     >
                         Entrar
-                    </button>
+                    </motion.button>
 
-                    <div className="relative py-2 text-center text-sm text-gray-500">
+                    <motion.div variants={itemVariants} className="relative py-2 text-center text-sm text-gray-500">
                         <span className="text-primary px-2">ou</span>
-                    </div>
+                    </motion.div>
 
-                    <button
+                    <motion.button
                         type="button"
-                        className="w-full flex items-center justify-center gap-3 py-2 rounded-lg border hover:bg-gray-100 transition-all"
+                        className="w-full flex items-center justify-center gap-3 py-2 rounded-lg border hover:bg-primary transition-all cursor-pointer"
                         onClick={() => signIn("google", { callbackUrl: "/dashboard" })}
+                        variants={itemVariants}
+                        whileHover="hover"
                     >
                         <GoogleSVG />
                         Entrar com Google
-                    </button>
-                </form>
-            </div>
+                    </motion.button>
+                </motion.form>
+            </motion.div>
         </div>
     );
 }

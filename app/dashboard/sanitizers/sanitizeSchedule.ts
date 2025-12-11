@@ -1,3 +1,5 @@
+import { StatusConfirmacao } from "@/app/enum/statusConfirmacao";
+
 export function sanitizeSchedule(event) {
   return {
     paciente: {
@@ -5,6 +7,7 @@ export function sanitizeSchedule(event) {
       telefone: event.paciente.telefone.replace(/\D/g, ""),
       email: event.paciente.email?.trim().toLowerCase() ?? null,
     },
+    statusConfirmacao: event.statusConfirmacao as StatusConfirmacao,
     dataHora: new Date(event.start).toISOString(),
     tempoAtendimento: Number(event.tempoAtendimento),
     tipoAgendamento: event.tipoAgendamento?.toUpperCase(),
