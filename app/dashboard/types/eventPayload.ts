@@ -1,5 +1,4 @@
 import { StatusConfirmacao } from "@/app/enum/statusConfirmacao";
-
 export interface AgendamentoPayload {
     paciente: {
         nome: string;

@@ -1,7 +1,7 @@
 import { z } from "zod";
 
 export const AgendamentoUpdateDTO = z.object({
-    id: z.number().int().positive(), // obrigatório para editar
+    id: z.number().int().positive(),
 
     dataHora: z.coerce.date().optional(),
     tempoAtendimento: z.number().min(1).optional(),

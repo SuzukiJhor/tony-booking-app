@@ -1,4 +1,4 @@
-import { sanitizeSchedule } from "./sanitizeSchedule";
+import { sanitizeSchedule } from "@/app/dashboard/sanitizers/sanitizeSchedule";
 
 export async function fetchAppointments() {
     const response = await fetch(`/api/appointments`, {

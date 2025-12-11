@@ -2,17 +2,15 @@
 import { CalendarEvent, IlamyCalendar } from "@ilamy/calendar";
 import { DialogNewEvent } from "../components/DialogNewEvent";
 import { brasilTranslations } from "@/util/translations-calendar";
-
-import TitlePage from "@/app/components/TitlePage";
-import { mapEventsToCalendar } from "@/util/mapEventToCalendar";
+import TitlePage from "@/app/dashboard/components/TitlePage";
+import { mapEventsToCalendar } from "@/util/map-event-to-calendar";
 import { useCalendar } from "@/app/context/CalendarContext";
-import { deleteAppointment, registerAppointment, updateAppointment } from "@/util/api-calendar";
+import { deleteAppointment, registerAppointment, updateAppointment } from "@/util/api/api-calendar";
 
 export default function Calendar() {
-    const { events } = useCalendar();
+    const { events, reloadEvents } = useCalendar();
 
     const handleAdd = (eventData: any) => {
-        console.log("📥 Novo evento recebido do Dialog:", eventData);
         try {
             registerAppointment(eventData)
                 .then((response) => {
@@ -21,8 +19,9 @@ export default function Calendar() {
                     }
                     return response.json();
                 })
-                .then((data) => {
+                .then(async (data) => {
                     console.log("Agendamento registrado com sucesso:", data);
+                    await reloadEvents();
                 })
                 .catch((error) => {
                     console.error("Erro ao registrar o agendamento:", error);
@@ -33,8 +32,6 @@ export default function Calendar() {
     };
 
     const handleUpdate = (eventData: any) => {
-        console.log("✏️ Dados para atualização:", eventData);
-
         if (!eventData?.id) {
             console.error("❌ ID do agendamento não informado!");
             return;
@@ -54,7 +51,6 @@ export default function Calendar() {
                 .catch((error) => {
                     console.error("❌ Erro ao atualizar o agendamento:", error);
                 });
-
         } catch (error) {
             console.error("Erro inesperado ao processar atualização:", error);
         }
@@ -70,8 +66,9 @@ export default function Calendar() {
                 }
                 return response.json();
             })
-            .then((data) => {
+            .then(async (data) => {
                 console.log("Agendamento deletado:", data);
+                await reloadEvents();
             })
             .catch((error) => console.error(error));
     };
@@ -79,9 +76,7 @@ export default function Calendar() {
     return <>
         <div className="h-screen bg-background">
             <div className="p-4">
-
                 <TitlePage title="Calendário" />
-
                 <IlamyCalendar
                     events={mapEventsToCalendar(events)}
                     timeFormat="12-hour"
@@ -96,7 +91,6 @@ export default function Calendar() {
                         />
                     )}
                 />
-
             </div>
         </div>
     </>

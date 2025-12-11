@@ -1,7 +1,7 @@
 import { NextResponse } from "next/server";
 import prisma from "@/lib/prisma";
 import { AgendamentoDTO } from "@/app/dashboard/DTO/AgendamentoDTO";
-import { getErrorMessage } from "@/util/getErrorMessage";
+import { getErrorMessage } from "@/util/errors/get-error-message";
 
 export async function PATCH(
     request: Request,

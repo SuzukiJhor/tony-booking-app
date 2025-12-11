@@ -1,7 +1,7 @@
 'use client'
 import { CalendarCheck, Clock, Users, MessageSquare } from 'lucide-react'
-import DashboardCard from '../components/DashboardCard';
-import TitlePage from '../components/TitlePage';
+import DashboardCard from './components/DashboardCard';
+import TitlePage from './components/TitlePage';
 
 // Dados de Exemplo (FAKE)
 const dashboardMetrics = [

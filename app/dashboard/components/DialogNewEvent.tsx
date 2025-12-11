@@ -1,14 +1,14 @@
 /* eslint-disable @typescript-eslint/no-unused-expressions */
 /* eslint-disable react-hooks/rules-of-hooks */
 'use client';
-import { DataBaseEventType } from "@/app/dashboard/types/eventDBType";
-import dayjs from "@/util/dayjs-config";
 import { useState } from "react";
+import dayjs from "@/util/dayjs-config";
 import { useSession } from "next-auth/react";
-import { ExtendedEventFormProps } from "../types/eventDetailsType";
-import { durationOptions } from "@/util/optionsDurationInput";
+import { formatPhone } from "@/util/mask/mask-phone-br";
 import { useCalendar } from "@/app/context/CalendarContext";
-import { formatPhone } from "@/util/maskPhoneBr";
+import { durationOptions } from "@/util/options-duration-input";
+import { ExtendedEventFormProps } from "../types/eventDetailsType";
+import { DataBaseEventType } from "@/app/dashboard/types/eventDBType";
 
 export function DialogNewEvent({
     open,
@@ -32,11 +32,8 @@ export function DialogNewEvent({
     };
 
     const handleSubmit = (formData: FormData) => {
-
         const startDate = dayjs(formData.get("start") as string);
         const duration = Number(formData.get("tempoAtendimento") || 60);
-
-
         const eventData: DataBaseEventType = {
             id: selectedEvent?.id as number,
             paciente: {
@@ -59,12 +56,9 @@ export function DialogNewEvent({
             start: startDate,
             end: startDate.add(duration, "minute"),
         };
-
         selectedEvent?.id ? onUpdate?.(calendarEvent) : onAdd?.(calendarEvent);
         onClose();
     };
-
-
 
     function getEventById(id: number | null) {
         return events.find(event => event.id === id) || null;
@@ -86,7 +80,6 @@ export function DialogNewEvent({
                     {selectedEvent?.id ? "Editar Agendamento" : "Criar Agendamento"}
                 </h2>
 
-                {/* Data e hora */}
                 <div className="flex flex-col">
                     <label htmlFor="start" className="mb-2 font-medium">Data e Hora</label>
                     <input
@@ -101,7 +94,6 @@ export function DialogNewEvent({
                     />
                 </div>
 
-                {/* Paciente */}
                 <div className="flex flex-col">
                     <label htmlFor="pacientName" className="mb-2 font-medium">Nome do Paciente</label>
                     <input
@@ -115,7 +107,6 @@ export function DialogNewEvent({
                     />
                 </div>
 
-                {/* Telefone e Email lado a lado */}
                 <div className="flex flex-col md:flex-row md:gap-4">
 
                     <div className="flex flex-col flex-1">
@@ -145,7 +136,6 @@ export function DialogNewEvent({
                     </div>
                 </div>
 
-                {/* Tipo de agendamento e Duração lado a lado */}
                 <div className="flex flex-col md:flex-row md:gap-4">
                     <div className="flex flex-col flex-1">
                         <label htmlFor="tipoAgendamento" className="mb-2 font-medium">Tipo de Agendamento</label>
@@ -179,7 +169,6 @@ export function DialogNewEvent({
                     </div>
                 </div>
 
-                {/* Status do Agendamento */}
                 <div className="flex flex-col">
                     <label htmlFor="statusAgendamento" className="mb-2 font-medium">Status do Agendamento</label>
                     <select
@@ -196,8 +185,6 @@ export function DialogNewEvent({
                     </select>
                 </div>
 
-
-                {/* Botões */}
                 <div className="flex justify-between gap-3 pt-4">
                     {selectedEvent?.id && (
                         <button
