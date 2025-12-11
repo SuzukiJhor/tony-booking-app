@@ -1,95 +1,67 @@
-import { StatusAgendamento } from '@prisma/client';
 import { NextResponse } from 'next/server';
 import prisma from '@/lib/prisma'
-
-
-interface SchedulePayload {
-  clientName: string;
-  clientContact: string;
-  timeDate: string;
-}
+import { getErrorMessage } from '@/util/getErrorMessage';
+import { AgendamentoDTO } from '@/app/dashboard/DTO/AgendamentoDTO';
 
 export async function POST(request: Request) {
   try {
-    // 1. Obter e Desestruturar o corpo da requisição
-    const body: SchedulePayload = await request.json();
-    const { clientName, clientContact, timeDate } = body;
+    const json = await request.json();
 
-    if (!clientName || !clientContact || !timeDate) {
-      return NextResponse.json(
-        { message: 'Dados incompletos. Nome, telefone e data/hora são obrigatórios.' },
-        { status: 400 }
-      );
-    }
+    // valida + sanitiza + tipa
+    const data = AgendamentoDTO.parse(json);
 
-    // Preparação dos dados
-    const cleanedPhone = clientContact.replace(/\D/g, '');
-    const timeDateObject = new Date(timeDate);
-
-    // Validação básica
-    if (isNaN(timeDateObject.getTime())) {
-      return NextResponse.json(
-        { message: 'Formato de data e hora inválido.' },
-        { status: 400 }
-      );
-    }
-
-    // 2. Encontrar ou Criar o Paciente (usando o telefone como chave única)
-    const patient = await prisma.paciente.upsert({
-      where: { telefone: cleanedPhone },
-      update: { nome: clientName },
+    const paciente = await prisma.paciente.upsert({
+      where: {
+        telefone_empresaId: {
+          telefone: data.paciente.telefone,
+          empresaId: data.empresaId,
+        },
+      },
+      update: {
+        nome: data.paciente.nome,
+        email: data.paciente.email,
+      },
       create: {
-        nome: clientName,
-        telefone: cleanedPhone,
+        nome: data.paciente.nome,
+        telefone: data.paciente.telefone,
+        email: data.paciente.email,
+        empresaId: data.empresaId,
       },
     });
 
-    // 3. Criar o Novo Agendamento
-    const newAppointment = await prisma.agendamento.create({
+    const novoAgendamento = await prisma.agendamento.create({
       data: {
-        timeDate: timeDateObject,
-        statusConfirmacao: StatusAgendamento.PENDENTE,
-        pacienteId: patient.id,
+        dataHora: data.dataHora,
+        tempoAtendimento: data.tempoAtendimento,
+        tipoAgendamento: data.tipoAgendamento as any,
+        statusConfirmacao: "PENDENTE",
+        pacienteId: paciente.id,
+        empresaId: data.empresaId,
       },
     });
-
-    // 4. Acionar o Job de Confirmação (Próximo Passo)
-    // Se a confirmação for Imediata: Chamar aqui a rota /api/whatsapp/send
-    // Se a confirmação for Agendada: Chamar aqui o serviço de fila (QStash, Cron, etc.)
-
-    // Exemplo de chamada para serviço de fila AGENDADA:
-    // await scheduleWhatsappConfirmation({ agendamentoId: novoAgendamento.id, timeDate: timeDateObject });
-
 
     return NextResponse.json(
-      {
-        message: 'Agendamento criado com sucesso!',
-        agendamento: newAppointment
-      },
+      { message: "Agendamento criado!", agendamento: novoAgendamento },
       { status: 201 }
     );
 
-  } catch (error: Error | any) {
-    console.error('Erro ao criar agendamento:', error);
+  } catch (error: unknown) {
+    console.error("Erro ao buscar agendamentos:", error);
+
     return NextResponse.json(
-      {
-        message: 'Falha interna ao processar o agendamento.',
-        error: error.message
-      },
+      { message: "Falha ao buscar dados do NeonDB.", error: getErrorMessage(error) },
       { status: 500 }
     );
-  } finally {
-    // Em ambientes Serverless, desconectar o cliente Prisma é uma boa prática 
-    await prisma.$disconnect();
   }
 }
 
 export async function GET(request: Request) {
 
   try {
-
-
     const eventsAll = await prisma.agendamento.findMany({
+      where: {
+        isDeleted: false
+      },
       include: {
         paciente: {
           select: {
@@ -103,13 +75,12 @@ export async function GET(request: Request) {
 
     return NextResponse.json(eventsAll, { status: 200 });
 
-  } catch (error: any) {
-    console.error('Erro ao buscar agendamentos:', error);
+  } catch (error: unknown) {
+    console.error("Erro ao buscar agendamentos:", error);
+
     return NextResponse.json(
-      { message: 'Falha ao buscar dados do NeonDB.', error: error.message },
+      { message: "Falha ao buscar dados do NeonDB.", error: getErrorMessage(error) },
       { status: 500 }
     );
-  } finally {
-    await prisma.$disconnect();
   }
 }

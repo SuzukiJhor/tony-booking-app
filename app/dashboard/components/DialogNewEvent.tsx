@@ -19,7 +19,6 @@ export function DialogNewEvent({
     onClose,
 }: ExtendedEventFormProps) {
     if (!open) return null;
-
     const { events } = useCalendar();
     const { data: session, } = useSession();
     const eventDetails = getEventById(Number(selectedEvent?.id));
@@ -126,7 +125,6 @@ export function DialogNewEvent({
                             name="phone"
                             id="phone"
                             value={phoneValue}
-                            defaultValue={pacienteDetails?.telefone ?? ""}
                             placeholder="(XX) XXXXX-XXX"
                             onChange={handlePhoneChange}
                             maxLength={15}

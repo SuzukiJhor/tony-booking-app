@@ -85,6 +85,8 @@ model Agendamento {
   updatedAt         DateTime             @updatedAt
   tipoAgendamento   TipoAgendamento      @default(CONSULTA)
   tempoAtendimento  Int                  @default(60)
+   // Soft delete
+  isDeleted         Boolean           @default(false)
 }
 
 // -----------------------------------------------------
