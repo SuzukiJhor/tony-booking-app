@@ -44,7 +44,7 @@ export default function NotificationSettings() {
     };
 
     return (
-        <div className="p-6 border dark:border-background-secondary rounded-lg shadow-md bg-white dark:bg-background-secondary">
+        <div className="p-6 border rounded-lg shadow-md bg-white dark:bg-background-secondary dark:border-gray-700">
             <h3 className="text-xl font-semibold mb-4 text-gray-800 dark:text-white">
                 ⏰ Agendamento de Confirmações
             </h3>

@@ -57,7 +57,6 @@ export default function Dashboard() {
                         />
                     ))}
                 </section>
-                {/* ---------------------------------- */}
 
 
                 {/* 2. Conteúdo Principal (Gráficos e Listas) */}

@@ -64,7 +64,7 @@ export default function ScheduleSettings() {
     };
 
     return (
-        <div className="p-6 border border-gray-200 rounded-lg shadow-md bg-white dark:bg-background-secondary">
+        <div className="p-6 border dark:border-gray-700 rounded-lg shadow-md bg-white dark:bg-background-secondary">
             <h3 className="text-xl font-bold text-gray-800 dark:text-white mb-6 border-b pb-2">
                 🗓️ Horário de Funcionamento e Agenda
             </h3>

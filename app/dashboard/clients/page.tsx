@@ -1,6 +1,6 @@
 /* eslint-disable react-hooks/static-components */
 'use client';
-import React, { useState, useMemo, useEffect } from 'react'; // Importar useEffect
+import React, { useState, useMemo } from 'react';
 import TitlePage from "@/app/dashboard/components/TitlePage";
 import { DataBasePacienteType } from "../types/patientDBType";
 import { useClient } from "@/app/context/ClientsContext";
@@ -11,8 +11,7 @@ interface PatientListItemProps {
 }
 
 const PatientListItem: React.FC<PatientListItemProps> = ({ patient, onViewDetails }) => (
-    <div className="flex items-center justify-between p-4 mb-2 bg-card rounded-lg shadow-md hover:shadow-lg transition duration-100 ease-in-out border border-border">
-        {/* Informações do Paciente */}
+    <div className="flex items-center justify-between p-4 mb-4 bg-white dark:bg-background-secondary rounded-lg shadow-md hover:shadow-lg transition duration-200 border border-gray-200 dark:border-gray-700">        {/* Informações do Paciente */}
         <div className="flex flex-col">
             <h2 className="text-xl font-bold text-foreground">
                 {patient.nome}

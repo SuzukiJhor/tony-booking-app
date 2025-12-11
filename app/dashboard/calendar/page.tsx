@@ -98,7 +98,9 @@ export default function Calendar() {
                     timeFormat="12-hour"
                     locale="pt-BR"
                     translations={brasilTranslations}
-                    timezone="America/Sao_Paulo" headerClassName="text-secondary" viewHeaderClassName="bg-primary text-background font-semibold py-3"
+                    timezone="America/Sao_Paulo" 
+                    headerClassName="text-secondary" 
+                    viewHeaderClassName="bg-background text-background font-semibold py-3"
                     selectedEvent={'null'}
                     renderEventForm={(props) => (
                         <DialogNewEvent

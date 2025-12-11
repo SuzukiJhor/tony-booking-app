@@ -8,7 +8,7 @@ import { LogoTonySVG } from '@/assets/logoTonySVG';
 const navLinks = [
   { name: 'Dashboard', href: '/dashboard', icon: Home },
   { name: 'Calendário', href: '/dashboard/calendar', icon: Calendar },
-  { name: 'Pacientes', href: '/dashboard/patients', icon: Users },
+  { name: 'Pacientes', href: '/dashboard/clients', icon: Users },
   { name: 'Configurações', href: '/dashboard/settings', icon: Settings },
 ];
 
