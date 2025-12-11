@@ -38,11 +38,11 @@ const dashboardMetrics = [
 export default function Dashboard() {
     return (
         <div className=" p-4 bg-background">
-            <TitlePage title="Dashboard" />
+            <TitlePage title="Visão Geral da Clínica" />
             <div className="min-h-screen">
-                <h2 className="text-3xl font-bold mb-8 text-gray-900 dark:text-white">
+                {/* <h2 className="text-3xl font-bold mb-8 text-gray-900 dark:text-white">
                     Visão Geral da Clínica
-                </h2>
+                </h2> */}
 
                 {/* 1. GRADE DE MÉTRICAS (PREENCHIDA) */}
                 <section className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6 mb-10">

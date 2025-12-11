@@ -6,75 +6,91 @@ import TitlePage from "@/app/dashboard/components/TitlePage";
 import { mapEventsToCalendar } from "@/util/map-event-to-calendar";
 import { useCalendar } from "@/app/context/CalendarContext";
 import { deleteAppointment, registerAppointment, updateAppointment } from "@/util/api/api-calendar";
+import toast, { Toaster } from "react-hot-toast";
+import Swal from "sweetalert2";
+
+const styleConfigureToast = {
+    style: {
+        borderRadius: '10px',
+        background: '#333',
+        color: '#fff',
+    }
+};
 
 export default function Calendar() {
     const { events, reloadEvents } = useCalendar();
 
-    const handleAdd = (eventData: any) => {
-        try {
-            registerAppointment(eventData)
-                .then((response) => {
-                    if (!response.ok) {
-                        throw new Error("Erro ao registrar o agendamento");
-                    }
-                    return response.json();
-                })
-                .then(async (data) => {
-                    console.log("Agendamento registrado com sucesso:", data);
-                    await reloadEvents();
-                })
-                .catch((error) => {
-                    console.error("Erro ao registrar o agendamento:", error);
-                });
-        } catch (error) {
-            console.error("Erro ao processar o novo evento:", error);
-        }
+    const handleAdd = async (eventData: any) => {
+        await toast.promise(
+            registerAppointment(eventData),
+            {
+                loading: 'Registrando agendamento...',
+                success: 'Agendamento registrado com sucesso!',
+                error: 'Erro ao registrar o agendamento.',
+            },
+            {
+                style: styleConfigureToast.style,
+            }
+        );
+        await reloadEvents();
     };
 
-    const handleUpdate = (eventData: any) => {
+    const handleUpdate = async (eventData: any) => {
         if (!eventData?.id) {
             console.error("❌ ID do agendamento não informado!");
             return;
         }
 
-        try {
-            updateAppointment(eventData.id, eventData)
-                .then((response) => {
-                    if (!response.ok) {
-                        throw new Error("Erro ao atualizar o agendamento");
-                    }
-                    return response.json();
-                })
-                .then((data) => {
-                    console.log("✔️ Agendamento atualizado com sucesso:", data);
-                })
-                .catch((error) => {
-                    console.error("❌ Erro ao atualizar o agendamento:", error);
-                });
-        } catch (error) {
-            console.error("Erro inesperado ao processar atualização:", error);
-        }
+        await toast.promise(
+            updateAppointment(eventData.id, eventData),
+            {
+                loading: 'Atualizando agendamento...',
+                success: 'Agendamento atualizado com sucesso!',
+                error: 'Erro ao atualizar o agendamento.',
+            },
+            {
+                style: styleConfigureToast.style,
+            }
+        );
+        await reloadEvents();
     };
 
-    const handleDelete = (event: CalendarEvent) => {
-        const { id } = event;
+    const handleDelete = async (event: CalendarEvent) => {
+        const { id, title } = event;
         if (!id) return;
-        deleteAppointment(Number(id))
-            .then((response) => {
-                if (!response.ok) {
-                    throw new Error("Erro ao deletar o agendamento");
+        const result = await Swal.fire({
+            title: `Tem certeza que deseja excluir a reserva para "${title}"?`,
+            text: "Esta reserva sera desativada e não aparecerá mais no calendário",
+            icon: 'warning',
+            showCancelButton: true,
+            confirmButtonColor: '#d33',
+            cancelButtonColor: '#3085d6',
+            confirmButtonText: 'Sim, Excluir!',
+            cancelButtonText: 'Cancelar'
+        });
+
+        if (result.isConfirmed) {
+            await toast.promise(
+                deleteAppointment(Number(id)),
+                {
+                    loading: 'Excluindo agendamento...',
+                    success: 'Agendamento excluido com sucesso!',
+                    error: 'Erro ao excluir o agendamento.',
+                },
+                {
+                    style: styleConfigureToast.style,
                 }
-                return response.json();
-            })
-            .then(async (data) => {
-                console.log("Agendamento deletado:", data);
-                await reloadEvents();
-            })
-            .catch((error) => console.error(error));
+            );
+            await reloadEvents();
+        }
     };
 
     return <>
         <div className="h-screen bg-background">
+            <Toaster
+                position="top-right"
+                reverseOrder={true}
+            />
             <div className="p-4">
                 <TitlePage title="Calendário" />
                 <IlamyCalendar

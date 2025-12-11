@@ -3,6 +3,7 @@ import { Header } from './components/Header';
 import SideNav from './components/SideNav';
 import { NavigationUX } from './components/NavigationUX';
 import { CalendarProvider } from '../context/CalendarContext';
+import { ClientProvider } from '../context/ClientsContext';
 
 export default async function Layout({ children }: { children: React.ReactNode }) {
 
@@ -30,7 +31,9 @@ export default async function Layout({ children }: { children: React.ReactNode }
           />
           <NavigationUX>
             <CalendarProvider>
-              {children}
+              <ClientProvider>
+                {children}
+              </ClientProvider>
             </CalendarProvider>
           </NavigationUX>
         </main>

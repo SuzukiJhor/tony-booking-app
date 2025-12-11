@@ -209,7 +209,7 @@ export function DialogNewEvent({
 
                     <button
                         type="submit"
-                        className="px-4 py-2 rounded bg-primary text-background hover:opacity-90"
+                        className="px-4 py-2 rounded bg-primary hover:opacity-90"
                     >
                         {selectedEvent?.id ? "Salvar" : "Criar"}
                     </button>
