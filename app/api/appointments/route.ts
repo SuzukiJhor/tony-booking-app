@@ -1,7 +1,7 @@
 import { NextResponse } from 'next/server';
 import prisma from '@/lib/prisma'
 import { getErrorMessage } from '@/util/errors/get-error-message';
-import { AgendamentoDTO } from '@/app/dashboard/DTO/AgendamentoDTO';
+import { AgendamentoDTO } from '@/app/DTO/AgendamentoDTO';
 
 export async function POST(request: Request) {
   try {
