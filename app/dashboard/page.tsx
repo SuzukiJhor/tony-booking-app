@@ -37,7 +37,7 @@ const dashboardMetrics = [
 
 export default function Dashboard() {
     return (
-        <div className=" p-4 bg-background dark:bg-background-secondary">
+        <div className=" p-4 bg-background dark:bg-background-tertiary">
             <TitlePage title="Visão Geral da Clínica" />
             <div className="min-h-screen">
 

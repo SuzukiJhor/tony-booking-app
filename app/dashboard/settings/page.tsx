@@ -7,7 +7,7 @@ import ScheduleSettings from "./ScheduleSettings"; // NOVO: Client Component
 export default function SettingsPage() {
 
     return (
-        <div className="p-4 bg-background dark:bg-background-secondary min-h-screen">
+        <div className="p-4 bg-background dark:bg-background-tertiary min-h-screen">
             <TitlePage title=" Visão Geral das Configurações" />
 
             <div className="space-y-8">

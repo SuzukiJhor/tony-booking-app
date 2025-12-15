@@ -5,12 +5,14 @@ import TitlePage from "@/app/dashboard/components/TitlePage";
 import { DataBasePacienteType } from "../types/patientDBType";
 import { useClient } from "@/app/context/ClientsContext";
 import { ChevronLeft, ChevronRight } from 'lucide-react';
+import Link from 'next/link';
+
 interface PatientListItemProps {
     patient: DataBasePacienteType;
     onViewDetails: (patientId: number) => void;
 }
 
-const PatientListItem: React.FC<PatientListItemProps> = ({ patient, onViewDetails }) => (
+const ClientListItem: React.FC<PatientListItemProps> = ({ patient, onViewDetails }) => (
     <div className="flex items-center justify-between p-4 mb-4 bg-white dark:bg-background-secondary rounded-lg shadow-md hover:shadow-lg transition duration-200 border border-gray-200 dark:border-gray-700">
         <div className="flex flex-col">
             <h2 className="text-xl font-bold text-foreground dark:text-card">
@@ -27,18 +29,19 @@ const PatientListItem: React.FC<PatientListItemProps> = ({ patient, onViewDetail
         </div>
 
         <div className="flex space-x-2">
-            <button
+            <Link 
+                href={`/dashboard/clients/${patient.id}`}
                 type="submit"
-                className="bg-primary hover:bg-primary/80 text-white font-semibold py-2 px-4 rounded transition duration-150 text-sm cursor-pointer"
+                className="bg-sky-700 hover:bg-primary/80 text-white font-semibold py-2 px-4 rounded transition duration-150 text-sm cursor-pointer"
                 onClick={() => onViewDetails(patient.id)}
             >
-                Detalhes
-            </button>
+            Detalhes
+            </Link >
         </div>
     </div>
 );
 
-export default function Patients() {
+export default function Clients() {
     const [currentPage, setCurrentPage] = useState(1);
     const [isTransitioning, setIsTransitioning] = useState(false)
     const itemsPerPage = 6;
@@ -128,9 +131,8 @@ export default function Patients() {
         );
     };
 
-
     return (
-        <div className="p-4 bg-background dark:bg-background-secondary min-h-screen">
+        <div className="p-4 bg-background dark:bg-background-tertiary min-h-screen">
             <TitlePage title=" Visão Geral dos Pacientes" />
 
             <div className="space-y-8">
@@ -145,7 +147,7 @@ export default function Patients() {
                                 }`}
                         >
                             {currentItems.map((patient) => (
-                                <PatientListItem
+                                <ClientListItem
                                     key={patient.id}
                                     patient={patient}
                                     onViewDetails={handleViewDetails}

@@ -86,7 +86,7 @@ export default function Calendar() {
     };
 
     return <>
-        <div className="h-screen bg-background dark:bg-background-secondary">
+        <div className="h-screen bg-background dark:bg-background-tertiary">
             <Toaster
                 position="top-right"
                 reverseOrder={true}

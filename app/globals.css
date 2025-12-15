@@ -7,6 +7,7 @@
 .dark {
   --background: oklch(0.145 0 0);
   --background-secondary: #2C2C2C;
+  --background-tertiary: rgba(44, 44, 44, 0.85);
   --foreground: oklch(0.985 0 0);
   --color-primary: #0EA5E9;
   --color-secondary: #A0A0A0;
@@ -44,6 +45,7 @@
 @theme inline {
   --color-background: var(--background);
   --color-background-secondary: var(--background-secondary);
+  --color-background-tertiary: var(--background-tertiary);
   --color-foreground: var(--foreground);
   --color-primary: var(--color-primary);
   --color-secondary: var(--color-secondary);
