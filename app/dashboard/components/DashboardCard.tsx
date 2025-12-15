@@ -21,7 +21,7 @@ const colorMap = {
 export default function DashboardCard({ title, value, icon: Icon, description, color }: DashboardCardProps) {
     // A classe 'dark:bg-background-secondary' deve ser a cor de fundo dos seus cards no tema escuro
     return (
-        <div className="bg-white dark:bg-background-secondary p-6 rounded-xl shadow-lg transition duration-300 hover:shadow-xl border border-gray-100 dark:border-gray-700">
+        <div className="bg-white dark:bg-background-secondary p-6 rounded-xl shadow-lg transition duration-300 hover:shadow-xl border border-gray-200 dark:border-gray-700">
 
             <div className="flex items-start justify-between">
                 {/* Título e Valor */}

@@ -3,9 +3,7 @@ export interface CalendarEventType {
   title: string;
   start: Date;
   end: Date;
-  
   description?: string;
-
   backgroundColor?: string;
   color?: string;
 }

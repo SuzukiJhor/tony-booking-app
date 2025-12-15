@@ -1,15 +1,15 @@
-import React from 'react';
+import React from "react";
 
-type LogoTonySVGProps = React.SVGProps<SVGSVGElement>
+type LogoTonySVGProps = React.SVGProps<SVGSVGElement>;
 
 export function LogoTonySVG({ className, ...rest }: LogoTonySVGProps) {
     return (
         <svg
-            className={className}
             {...rest}
+            className={className}
             xmlns="http://www.w3.org/2000/svg"
             width="400"
-            height="140" 
+            height="140"
             viewBox="0 0 500 140"
             role="img"
             aria-labelledby="title desc"
@@ -17,7 +17,6 @@ export function LogoTonySVG({ className, ...rest }: LogoTonySVGProps) {
             <title id="title">Tony Agenda &amp; Confirmação</title>
             <desc id="desc">Logo corporativo com calendário e marca de verificação.</desc>
 
-            {/* Paleta corporativa */}
             <defs>
                 <linearGradient id="corporate" x1="0" y1="0" x2="1" y2="1">
                     <stop offset="0" stopColor="#005CBE" />
@@ -25,7 +24,6 @@ export function LogoTonySVG({ className, ...rest }: LogoTonySVGProps) {
                 </linearGradient>
             </defs>
 
-            {/* Ícone corporativo */}
             <g transform="translate(24,22)">
                 <rect
                     x="0"
@@ -33,7 +31,7 @@ export function LogoTonySVG({ className, ...rest }: LogoTonySVGProps) {
                     width="86"
                     height="86"
                     rx="12"
-                    fill="#ffffff"
+                    fill="white"
                     stroke="url(#corporate)"
                     strokeWidth="6"
                 />
@@ -58,22 +56,23 @@ export function LogoTonySVG({ className, ...rest }: LogoTonySVGProps) {
                 />
             </g>
 
-            {/* Texto institucional */}
-            <g transform="translate(140,55)">
+            <g
+                transform="translate(140,55)"
+                fill="currentColor"
+            >
                 <text
                     fontFamily="'Montserrat', sans-serif"
                     fontSize="42"
                     fontWeight="700"
-                    fill="#0EA5E9"
                 >
                     Tony
                 </text>
+
                 <text
                     y="34"
                     fontFamily="'Montserrat', sans-serif"
                     fontSize="17"
                     fontWeight="500"
-                    fill="#ededed"
                 >
                     Agenda &amp; Confirmação
                 </text>

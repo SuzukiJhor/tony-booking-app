@@ -62,9 +62,9 @@ export default function LoginPage() {
     };
 
     return (
-        <div className="h-screen w-full flex items-center justify-center from-primary/20 via-background to-primary/30">
+        <div className="h-screen w-full flex items-center justify-center from-primary/20 via-background to-primary/30 dark:bg-background-secondary">
             <motion.div
-                className="backdrop-blur-xl bg-white/10 border border-white/20 shadow-2xl rounded-2xl p-8 w-[360px]"
+                className="backdrop-blur-xl border border-white/20 shadow-2xl rounded-2xl p-8 w-90"
                 initial={{ y: -50, opacity: 0 }}
                 animate={{ y: 0, opacity: 1 }}
                 transition={{ duration: 0.7 }}
@@ -78,7 +78,7 @@ export default function LoginPage() {
                     className="w-full px-3 py-2 rounded-lg  text-background focus:ring-2 focus:ring-primary focus:outline-none"
 
                 >
-                    <LogoTonySVG className="animate-pulse duration-2000" />
+                    <LogoTonySVG className="text-sky-500 dark:text-sky-500 animate-pulse duration-2000" />
                 </motion.div>
 
                 <motion.form
@@ -93,7 +93,7 @@ export default function LoginPage() {
                         placeholder="Seu e-mail"
                         value={email}
                         onChange={(e) => setEmail(e.target.value)}
-                        className="w-full px-3 py-2 rounded-lg border text-background bg-secondary focus:ring-2 focus:ring-primary focus:outline-none"
+                        className="w-full px-3 py-2 rounded-lg border text-background bg-secondary focus:ring-2 focus:ring-primary focus:outline-none placeholder-black/50 dark:placeholder-white/50"
                         required
                         variants={itemVariants}
                         whileHover="hover"
@@ -104,7 +104,7 @@ export default function LoginPage() {
                         placeholder="Sua senha"
                         value={password}
                         onChange={(e) => setPassword(e.target.value)}
-                        className="w-full px-3 py-2 rounded-lg border bg-secondary text-background focus:ring-2 focus:ring-primary focus:outline-none"
+                        className="w-full px-3 py-2 rounded-lg border bg-secondary text-background focus:ring-2 focus:ring-primary focus:outline-none placeholder-black/50 dark:placeholder-white/50"
                         required
                         variants={itemVariants}
                         whileHover="hover"
@@ -114,7 +114,7 @@ export default function LoginPage() {
 
                     <motion.button
                         type="submit"
-                        className="w-full bg-primary text-white font-semibold py-2 rounded-lg hover:opacity-90 transition-all cursor-pointer"
+                        className="w-full dark:bg-primary bg-foreground text-white font-semibold py-2 rounded-lg hover:opacity-90 transition-all cursor-pointer hover:bg-sky-500"
                         variants={itemVariants}
                         whileHover="hover"
                     >
@@ -127,7 +127,7 @@ export default function LoginPage() {
 
                     <motion.button
                         type="button"
-                        className="w-full flex items-center justify-center gap-3 py-2 rounded-lg border hover:bg-primary transition-all cursor-pointer"
+                        className="w-full flex items-center justify-center gap-3 py-2 rounded-lg border transition-all cursor-pointer dark:text-background dark:hover:text-background-secondary"
                         onClick={() => signIn("google", { callbackUrl: "/dashboard" })}
                         variants={itemVariants}
                         whileHover="hover"

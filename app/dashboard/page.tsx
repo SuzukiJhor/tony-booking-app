@@ -37,14 +37,10 @@ const dashboardMetrics = [
 
 export default function Dashboard() {
     return (
-        <div className=" p-4 bg-background">
+        <div className=" p-4 bg-background dark:bg-background-secondary">
             <TitlePage title="Visão Geral da Clínica" />
             <div className="min-h-screen">
-                {/* <h2 className="text-3xl font-bold mb-8 text-gray-900 dark:text-white">
-                    Visão Geral da Clínica
-                </h2> */}
 
-                {/* 1. GRADE DE MÉTRICAS (PREENCHIDA) */}
                 <section className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6 mb-10">
                     {dashboardMetrics.map((metric, index) => (
                         <DashboardCard
@@ -53,20 +49,14 @@ export default function Dashboard() {
                             value={metric.value}
                             icon={metric.icon}
                             description={metric.description}
-                            color={metric.color as 'indigo' | 'green' | 'amber' | 'blue'} // Cast para garantir tipagem
+                            color={metric.color as 'indigo' | 'green' | 'amber' | 'blue'}
                         />
                     ))}
                 </section>
 
-
-                {/* 2. Conteúdo Principal (Gráficos e Listas) */}
                 <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
-
-                    {/* Coluna Principal (2/3 da largura) */}
                     <div className="lg:col-span-2 space-y-6">
-
-                        {/* Gráfico 1: Confirmações ao Longo do Tempo */}
-                        <div className="bg-white dark:bg-background-secondary p-6 rounded-xl shadow-md border dark:border-background-secondary">
+                        <div className="bg-white dark:bg-background-secondary p-6 rounded-xl shadow-md border dark:border-gray-700">
                             <h3 className="text-xl font-semibold mb-4 text-gray-800 dark:text-white">
                                 Histórico de Confirmações (Últimos 30 Dias)
                             </h3>
@@ -76,7 +66,7 @@ export default function Dashboard() {
                         </div>
 
                         {/* Lista de Agendamentos Recentes (Próximos) */}
-                        <div className="bg-white dark:bg-background-secondary p-6 rounded-xl shadow-md border dark:border-background-secondary ">
+                        <div className="bg-white dark:bg-background-secondary p-6 rounded-xl shadow-md border dark:border-gray-700 ">
                             <h3 className="text-xl font-semibold mb-4 text-gray-800 dark:text-white">
                                 Próximos Agendamentos (Hoje e Amanhã)
                             </h3>
@@ -87,14 +77,42 @@ export default function Dashboard() {
                                         <p className="font-medium text-gray-900 dark:text-white">Maria da Silva</p>
                                         <p className="text-sm text-gray-500">Hoje, 14:30 - Status: **CONFIRMADO**</p>
                                     </div>
-                                    <button className="text-indigo-600 hover:text-indigo-800 text-sm">Ver</button>
+                                    <button
+                                        className="
+                                        px-3 py-1.5
+                                        rounded-md
+                                        bg-indigo-50 text-sky-700
+                                        hover:bg-indigo-100 hover:text-indigo-800
+                                        dark:bg-primary/10 dark:text-primary
+                                        dark:hover:bg-primary/20 dark:hover:text-white
+                                        text-sm font-medium
+                                        transition-colors
+                                        cursor-pointer
+                                    "
+                                    >
+                                        Ver
+                                    </button>
                                 </li>
                                 <li className="py-3 flex justify-between items-center">
                                     <div>
                                         <p className="font-medium text-gray-900 dark:text-white">João Souza</p>
                                         <p className="text-sm text-gray-500">Amanhã, 09:00 - Status: **PENDENTE**</p>
                                     </div>
-                                    <button className="text-indigo-600 hover:text-indigo-800 text-sm">Ver</button>
+                                    <button
+                                        className="
+                                            px-3 py-1.5
+                                            rounded-md
+                                            bg-indigo-50 text-sky-700
+                                            hover:bg-indigo-100 hover:text-indigo-800
+                                            dark:bg-primary/10 dark:text-primary
+                                            dark:hover:bg-primary/20 dark:hover:text-white
+                                            text-sm font-medium
+                                            transition-colors
+                                            cursor-pointer
+                                        "
+                                    >
+                                        Ver
+                                    </button>
                                 </li>
                             </ul>
                         </div>
@@ -104,25 +122,24 @@ export default function Dashboard() {
                     <div className="lg:col-span-1 space-y-6">
 
                         {/* Card de Ações Rápidas */}
-                        <div className="bg-white dark:bg-background-secondary p-6 rounded-xl shadow-md border dark:border-background-secondary">
+                        <div className="bg-white dark:bg-background-secondary p-6 rounded-xl shadow-md border dark:border-gray-700">
                             <h3 className="text-xl font-semibold mb-4 text-gray-800 dark:text-white">
                                 Ações Rápidas
                             </h3>
                             <div className="space-y-3">
-                                <button className="w-full bg-indigo-600 text-white py-2 rounded-lg hover:bg-indigo-700 transition">
+                                <button onClick={() => console.log('novo agendamento')} className="w-full bg-indigo-600 text-white py-2 rounded-lg hover:bg-indigo-700 transition">
                                     + Novo Agendamento
                                 </button>
-                                <button className="w-full bg-yellow-500 text-white py-2 rounded-lg hover:bg-yellow-600 transition">
+                                <button onClick={() => console.log('Reenviar Não Confirmados')} className="w-full bg-yellow-500 text-white py-2 rounded-lg hover:bg-yellow-600 transition">
                                     Reenviar Não Confirmados
                                 </button>
-                                <button className="w-full bg-gray-200 text-gray-800 py-2 rounded-lg hover:bg-gray-300 transition">
+                                <button onClick={() => console.log('Configurações do WhatsApp')} className="w-full bg-gray-200 text-gray-800 py-2 rounded-lg hover:bg-gray-300 transition">
                                     Configurações do WhatsApp
                                 </button>
                             </div>
                         </div>
 
-                        {/* Gráfico 2: Distribuição de Status */}
-                        <div className="bg-white dark:bg-background-secondary p-6 rounded-xl shadow-md border dark:border-background-secondary">
+                        <div className="bg-white dark:bg-background-secondary p-6 rounded-xl shadow-md border dark:border-gray-700">
                             <h3 className="text-xl font-semibold mb-4 text-gray-800 dark:text-white">
                                 Status Atual dos Agendamentos
                             </h3>
@@ -130,7 +147,6 @@ export default function Dashboard() {
                                 [Placeholder: Gráfico de Pizza/Donut]
                             </div>
                         </div>
-
                     </div>
                 </div>
             </div>

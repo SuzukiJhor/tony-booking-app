@@ -16,7 +16,7 @@ export default async function Layout({ children }: { children: React.ReactNode }
       <SideNav />
 
       {/* Conteúdo Principal */}
-      <div className="grow ml-64 overflow-y-auto">
+      <div className="grow ml-54 overflow-y-auto">
 
         <Header />
 

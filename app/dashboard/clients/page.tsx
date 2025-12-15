@@ -11,9 +11,9 @@ interface PatientListItemProps {
 }
 
 const PatientListItem: React.FC<PatientListItemProps> = ({ patient, onViewDetails }) => (
-    <div className="flex items-center justify-between p-4 mb-4 bg-white dark:bg-background-secondary rounded-lg shadow-md hover:shadow-lg transition duration-200 border border-gray-200 dark:border-gray-700">        {/* Informações do Paciente */}
+    <div className="flex items-center justify-between p-4 mb-4 bg-white dark:bg-background-secondary rounded-lg shadow-md hover:shadow-lg transition duration-200 border border-gray-200 dark:border-gray-700">
         <div className="flex flex-col">
-            <h2 className="text-xl font-bold text-foreground">
+            <h2 className="text-xl font-bold text-foreground dark:text-card">
                 {patient.nome}
             </h2>
             <p className="text-sm text-muted-foreground mt-1">
@@ -26,10 +26,10 @@ const PatientListItem: React.FC<PatientListItemProps> = ({ patient, onViewDetail
             )}
         </div>
 
-        {/* Botões de Ação */}
         <div className="flex space-x-2">
             <button
-                className="bg-primary hover:bg-primary/80 text-white font-semibold py-2 px-4 rounded transition duration-150 text-sm"
+                type="submit"
+                className="bg-primary hover:bg-primary/80 text-white font-semibold py-2 px-4 rounded transition duration-150 text-sm cursor-pointer"
                 onClick={() => onViewDetails(patient.id)}
             >
                 Detalhes
@@ -63,32 +63,23 @@ export default function Patients() {
 
     const goToPage = (page: number) => {
         if (page > 0 && page <= totalPages && page !== currentPage) {
-
-            // 1. Inicia o fade-out (animação de saída)
             setIsTransitioning(true);
-
-            // 2. Após um pequeno atraso (duração da animação), muda a página
             setTimeout(() => {
                 setCurrentPage(page);
-
-                // 3. Após a mudança de dados, desliga a transição (inicia o fade-in)
-                // Usamos outro pequeno atraso para garantir que a re-renderização ocorreu
                 setTimeout(() => {
                     setIsTransitioning(false);
-                }, 50); // Tempo mínimo para re-renderização
-
-            }, 300); // Duração da animação em milissegundos (0.3s)
+                }, 50);
+            }, 300);
         }
     };
 
     const PaginationControls = () => {
         const pageNumbers = Array.from({ length: totalPages }, (_, i) => i + 1);
-
         return (
-            <div className="flex flex-col md:flex-row justify-between items-center mt-6 p-4 bg-card rounded-lg border border-border">
+            <div className="flex flex-col md:flex-row justify-between items-center mt-6 p-4 bg-chart-3 rounded-lg border border-border">
 
                 {/* Informação da Página */}
-                <span className="text-sm text-muted-foreground mb-4 md:mb-0">
+                <span className="text-sm b-4 md:mb-0 text-white">
                     Mostrando {((currentPage - 1) * itemsPerPage) + 1} - {Math.min(currentPage * itemsPerPage, totalItems)} de {totalItems} pacientes.
                 </span>
 
@@ -139,7 +130,7 @@ export default function Patients() {
 
 
     return (
-        <div className="p-4 bg-background min-h-screen">
+        <div className="p-4 bg-background dark:bg-background-secondary min-h-screen">
             <TitlePage title=" Visão Geral dos Pacientes" />
 
             <div className="space-y-8">

@@ -86,7 +86,7 @@ export default function Calendar() {
     };
 
     return <>
-        <div className="h-screen bg-background">
+        <div className="h-screen bg-background dark:bg-background-secondary">
             <Toaster
                 position="top-right"
                 reverseOrder={true}
@@ -99,8 +99,8 @@ export default function Calendar() {
                     locale="pt-BR"
                     translations={brasilTranslations}
                     timezone="America/Sao_Paulo"
-                    headerClassName="text-secondary"
-                    viewHeaderClassName="bg-background text-background font-semibold py-3"
+                    headerClassName="text-secondary bg-black/50 dark:bg-background-secondary dark:text-primary"
+                    viewHeaderClassName="bg-sky-700 text-background font-semibold py-3"
                     selectedEvent={'null'}
                     renderEventForm={(props) => (
                         <DialogNewEvent
