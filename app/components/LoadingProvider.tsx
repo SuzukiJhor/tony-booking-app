@@ -17,7 +17,7 @@ export const useLoading = () => {
     return context;
 };
 
-const LoadingSpinner = () => {
+export const LoadingSpinner = () => {
     return (
         <motion.div
             initial={{ opacity: 0 }}

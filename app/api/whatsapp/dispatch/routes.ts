@@ -1,9 +1,5 @@
-// app/api/whatsapp/send/route.ts
-
 import { PrismaClient, StatusAgendamento } from '@prisma/client';
 import { NextResponse } from 'next/server';
-// Use 'axios' ou a biblioteca oficial do seu provedor (Meta, Twilio, etc.)
-import axios from 'axios'; 
 
 const prisma = new PrismaClient();
 const WHATSAPP_API_URL = process.env.WHATSAPP_API_URL;
@@ -11,9 +7,11 @@ const WHATSAPP_AUTH_TOKEN = process.env.WHATSAPP_AUTH_TOKEN;
 
 export async function POST(request: Request) {
   try {
-    // 1. **SEGURANÇA**: Implementar aqui uma chave secreta/validação para garantir que
-    // a chamada veio do seu Cron Job/Fila, e não de um invasor externo.
-    // Ex: if (request.headers.get('Authorization') !== `Bearer ${process.env.INTERNAL_JOB_TOKEN}`) { ... }
+    // Segurança: checar token do Cron/Fila
+    const token = request.headers.get('Authorization');
+    if (token !== `Bearer ${process.env.INTERNAL_JOB_TOKEN}`) {
+      return NextResponse.json({ message: 'Não autorizado' }, { status: 401 });
+    }
 
     const { agendamentoId } = await request.json();
 
@@ -21,7 +19,7 @@ export async function POST(request: Request) {
       return NextResponse.json({ message: 'ID do agendamento é obrigatório.' }, { status: 400 });
     }
 
-    // 2. Buscar Agendamento e Paciente no NeonDB
+    // Buscar Agendamento e Paciente no NeonDB
     const agendamento = await prisma.agendamento.findUnique({
       where: { id: agendamentoId },
       include: { paciente: true },
@@ -33,29 +31,39 @@ export async function POST(request: Request) {
 
     const { paciente } = agendamento;
 
-    // 3. Preparar e Enviar a Mensagem
+    // Preparar e Enviar a Mensagem
     const dataFormatada = agendamento.dataHora.toLocaleDateString('pt-BR');
-    const horaFormatada = agendamento.dataHora.toLocaleTimeString('pt-BR', { hour: '2-digit', minute: '2-digit' });
-    
-    // NOTE: Sempre use o formato de telefone padrão E.164 (ex: +5511999999999)
+    const horaFormatada = agendamento.dataHora.toLocaleTimeString('pt-BR', {
+      hour: '2-digit',
+      minute: '2-digit',
+    });
+
     const mensagem = `Olá, ${paciente.nome}! Lembrete: Sua consulta é dia ${dataFormatada} às ${horaFormatada}. Confirme respondendo **SIM** ou cancele respondendo **NAO**.`;
 
     const whatsappPayload = {
-        // Ajuste este payload para o formato exato da API que você está usando
-        to: paciente.telefone,
-        body: mensagem,
+      to: paciente.telefone, // E.164
+      body: mensagem,
     };
 
-    const apiResponse = await axios.post(WHATSAPP_API_URL, whatsappPayload, {
+    // Enviar usando fetch
+    const response = await fetch(`${WHATSAPP_API_URL}/message/sendText`, {
+      method: 'POST',
       headers: {
         'Authorization': `Bearer ${WHATSAPP_AUTH_TOKEN}`,
-        'Content-Type': 'application/json'
-      }
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify(whatsappPayload),
     });
 
-    const messageId = apiResponse.data?.messageId || 'MOCK_ID_' + Date.now(); 
+    if (!response.ok) {
+      const errorText = await response.text();
+      throw new Error(`Erro na API WhatsApp: ${errorText}`);
+    }
 
-    // 4. Atualizar o Status do Agendamento no NeonDB
+    const responseData = await response.json();
+    const messageId = responseData?.messageId || 'MOCK_ID_' + Date.now();
+
+    // Atualizar o Status do Agendamento no NeonDB
     await prisma.agendamento.update({
       where: { id: agendamentoId },
       data: {
@@ -66,11 +74,12 @@ export async function POST(request: Request) {
     });
 
     return NextResponse.json({ success: true, messageId }, { status: 200 });
-
-  } catch (error) {
+  } catch (error: any) {
     console.error('Erro ao enviar mensagem via WhatsApp:', error);
-    // Se o envio falhar, mantemos o status PENDENTE para tentar novamente mais tarde
-    return NextResponse.json({ message: 'Falha no envio da mensagem', error: error.message }, { status: 500 });
+    return NextResponse.json(
+      { message: 'Falha no envio da mensagem', error: error.message },
+      { status: 500 }
+    );
   } finally {
     await prisma.$disconnect();
   }

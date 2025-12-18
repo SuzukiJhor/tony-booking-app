@@ -8,6 +8,8 @@ import { CalendarEvent, IlamyCalendar } from "@ilamy/calendar";
 import { brasilTranslations } from "@/util/translations-calendar";
 import { mapEventsToCalendar } from "@/util/map-event-to-calendar";
 import { deleteAppointment, registerAppointment, updateAppointment } from "@/util/api/api-calendar";
+import { useLoading } from "@/app/components/LoadingProvider";
+import { useEffect } from "react";
 
 const styleConfigureToast = {
     style: {
@@ -19,7 +21,7 @@ const styleConfigureToast = {
 
 export default function Calendar() {
     const { events, reloadEvents } = useCalendar();
-
+    const { setIsLoading } = useLoading();
     const handleAdd = async (eventData: any) => {
         await toast.promise(
             registerAppointment(eventData),
@@ -84,6 +86,19 @@ export default function Calendar() {
             await reloadEvents();
         }
     };
+
+    useEffect(() => {
+        const loadData = async () => {
+            setIsLoading(true);
+            try {
+                await reloadEvents();
+            } catch (error) {
+                console.error('Erro ao carregar dados do calendário:', error);
+            }
+            setIsLoading(false);
+        };
+        loadData();
+    }, []);
 
     return <>
         <div className="h-full bg-background dark:bg-background-tertiary">

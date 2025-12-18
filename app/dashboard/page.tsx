@@ -1,11 +1,12 @@
 'use client';
 
-import { CalendarCheck, Clock, Users, MessageSquare } from 'lucide-react';
-import DashboardCard from './components/DashboardCard';
-import TitlePage from './components/TitlePage';
-import { DataBasePacienteType } from './types/patientDBType';
-import { useClient } from '../context/ClientsContext';
 import { useEffect, useMemo } from 'react';
+import TitlePage from './components/TitlePage';
+import { useClient } from '../context/ClientsContext';
+import DashboardCard from './components/DashboardCard';
+import { useLoading } from '../components/LoadingProvider';
+import { DataBasePacienteType } from './types/patientDBType';
+import { CalendarCheck, Clock, Users, MessageSquare } from 'lucide-react';
 import {
     LineChart,
     Line,
@@ -24,10 +25,8 @@ export default function Dashboard() {
         clients: DataBasePacienteType[];
         reloadEvents: () => void;
     };
+    const { setIsLoading } = useLoading();
 
-    /* =========================
-     * Helpers de Data
-     * ========================= */
     const startOfToday = new Date();
     startOfToday.setHours(0, 0, 0, 0);
 
@@ -38,7 +37,6 @@ export default function Dashboard() {
     const formatDateLabel = (date: Date) => {
         const today = new Date();
         today.setHours(0, 0, 0, 0);
-
         const tomorrow = new Date(today);
         tomorrow.setDate(today.getDate() + 1);
 
@@ -61,9 +59,6 @@ export default function Dashboard() {
         MENSAGEM_ENVIADA: 'MENSAGEM ENVIADA',
     };
 
-    /* =========================
-     * Agendamentos Base
-     * ========================= */
     const schedules = useMemo(
         () =>
             clients.flatMap(client =>
@@ -214,8 +209,18 @@ export default function Dashboard() {
     }, [schedules]);
 
     useEffect(() => {
-        reloadEvents();
+        const loadData = async () => {
+            setIsLoading(true);
+            try {
+                await reloadEvents();
+            } catch (error) {
+                console.error('Erro ao carregar dados do dashboard:', error);
+            }
+            setIsLoading(false);
+        };
+        loadData();
     }, []);
+
 
     return (
         <div className="p-4 bg-background dark:bg-background-tertiary">

@@ -4,6 +4,7 @@ import { useClient } from "@/app/context/ClientsContext";
 import { ArrowLeft } from "lucide-react";
 import { DataBasePacienteType } from "../../types/patientDBType";
 import { useState } from "react";
+import { LoadingSpinner } from "@/app/components/LoadingProvider";
 
 export default function ClientDetailsPage() {
     const [showHistory, setShowHistory] = useState(false);
@@ -17,7 +18,11 @@ export default function ClientDetailsPage() {
     };
 
     if (!clients || clients.length === 0) {
-        return <p className="p-6 text-muted-foreground">Carregando cliente...</p>;
+        return <>
+            <div className="p-6 bg-background dark:bg-background-tertiary min-h-screen space-y-6">
+                <LoadingSpinner />;
+            </div>
+        </>
     }
 
     const client = clients.find((c) => String(c.id) === String(id));
@@ -78,14 +83,14 @@ export default function ClientDetailsPage() {
                 </div>
 
                 {/* Ações */}
-                <div className="bg-card dark:bg-background-secondary rounded-xl border dark:border-gray-700 p-6 flex flex-col gap-4 justify-center">
-                    <button className="bg-primary text-white px-6 py-2 rounded-lg hover:bg-primary/90 transition cursor-pointer">
+                <div className="bg-white dark:bg-background-secondary rounded-xl border text-white dark:border-gray-700 p-6 flex flex-col gap-4 justify-center">
+                    <button className="border border-primary dark:bg-background-tertiary bg-background-tertiary dark:hover:bg-background-tertiary text-primary dark:hover:text-primary/20 px-6 py-2 rounded-lg hover:bg-chart-2/90 transition cursor-pointer">
                         Editar paciente
                     </button>
 
                     <button
                         onClick={() => setShowHistory((prev) => !prev)}
-                        className="border border-border px-6 py-2 bg-amber-50 hover:bg-amber-100 rounded-lg transition text-foreground cursor-pointer"
+                        className="border border-primary dark:bg-background-tertiary bg-background-tertiary dark:hover:bg-background-tertiary text-primary dark:hover:text-primary/20 px-6 py-2 rounded-lg hover:bg-chart-2/90 transition cursor-pointer"
                     >
                         {showHistory ? "Ocultar histórico" : "Histórico de agendamentos"}
                     </button>

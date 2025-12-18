@@ -1,11 +1,12 @@
 /* eslint-disable react-hooks/static-components */
 'use client';
-import React, { useState, useMemo } from 'react';
+import React, { useState, useMemo, useEffect } from 'react';
 import TitlePage from "@/app/dashboard/components/TitlePage";
 import { DataBasePacienteType } from "../types/patientDBType";
 import { useClient } from "@/app/context/ClientsContext";
 import { ChevronLeft, ChevronRight } from 'lucide-react';
 import Link from 'next/link';
+import { useLoading } from '@/app/components/LoadingProvider';
 
 interface PatientListItemProps {
     patient: DataBasePacienteType;
@@ -29,13 +30,13 @@ const ClientListItem: React.FC<PatientListItemProps> = ({ patient, onViewDetails
         </div>
 
         <div className="flex space-x-2">
-            <Link 
+            <Link
                 href={`/dashboard/clients/${patient.id}`}
                 type="submit"
                 className="bg-sky-700 hover:bg-primary/80 text-white font-semibold py-2 px-4 rounded transition duration-150 text-sm cursor-pointer"
                 onClick={() => onViewDetails(patient.id)}
             >
-            Detalhes
+                Detalhes
             </Link >
         </div>
     </div>
@@ -46,8 +47,8 @@ export default function Clients() {
     const [isTransitioning, setIsTransitioning] = useState(false)
     const itemsPerPage = 6;
 
-    const { clients } = useClient() as { clients: DataBasePacienteType[], reloadEvents: () => void };
-
+    const { clients, reloadEvents } = useClient() as { clients: DataBasePacienteType[], reloadEvents: () => void };
+    const { setIsLoading } = useLoading();
     const handleViewDetails = (patientId: number) => {
         console.log(`Visualizar detalhes do paciente ID: ${patientId}`);
         console.log(`clients:`, clients);
@@ -130,6 +131,19 @@ export default function Clients() {
             </div>
         );
     };
+
+    useEffect(() => {
+        const loadData = async () => {
+            setIsLoading(true);
+            try {
+                await reloadEvents();
+            } catch (error) {
+                console.error('Erro ao carregar dados dos clientes:', error);
+            }
+            setIsLoading(false);
+        };
+        loadData();
+    }, []);
 
     return (
         <div className="p-4 bg-background dark:bg-background-tertiary min-h-screen">

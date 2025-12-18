@@ -27,7 +27,7 @@ export default async function Layout({ children }: { children: React.ReactNode }
             showSpinner={false}
             easing="ease"
             speed={350}
-            color="var(--color-primary)"
+            color="#0EA5E9"
           />
           <NavigationUX>
             <CalendarProvider>
