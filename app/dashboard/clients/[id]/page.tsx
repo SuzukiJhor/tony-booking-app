@@ -84,13 +84,13 @@ export default function ClientDetailsPage() {
 
                 {/* Ações */}
                 <div className="bg-white dark:bg-background-secondary rounded-xl border text-white dark:border-gray-700 p-6 flex flex-col gap-4 justify-center">
-                    <button className="border border-primary dark:bg-background-tertiary bg-background-tertiary dark:hover:bg-background-tertiary text-primary dark:hover:text-primary/20 px-6 py-2 rounded-lg hover:bg-chart-2/90 transition cursor-pointer">
+                    <button className="border border-primary dark:bg-background-tertiary bg-gray-700 dark:hover:bg-background-tertiary text-primary dark:hover:text-primary/20 px-6 py-2 rounded-lg hover:bg-chart-2/90 transition cursor-pointer">
                         Editar paciente
                     </button>
 
                     <button
                         onClick={() => setShowHistory((prev) => !prev)}
-                        className="border border-primary dark:bg-background-tertiary bg-background-tertiary dark:hover:bg-background-tertiary text-primary dark:hover:text-primary/20 px-6 py-2 rounded-lg hover:bg-chart-2/90 transition cursor-pointer"
+                        className="border border-primary dark:bg-background-tertiary bg-gray-700 dark:hover:bg-background-tertiary text-primary dark:hover:text-primary/20 px-6 py-2 rounded-lg hover:bg-chart-2/90 transition cursor-pointer"
                     >
                         {showHistory ? "Ocultar histórico" : "Histórico de agendamentos"}
                     </button>

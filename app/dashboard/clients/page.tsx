@@ -33,7 +33,7 @@ const ClientListItem: React.FC<PatientListItemProps> = ({ patient, onViewDetails
             <Link
                 href={`/dashboard/clients/${patient.id}`}
                 type="submit"
-                className="bg-sky-700 hover:bg-primary/80 text-white font-semibold py-2 px-4 rounded transition duration-150 text-sm cursor-pointer"
+                className="bg-sky-700 hover:bg-amber-950 text-white font-semibold py-2 px-4 rounded transition duration-150 text-sm cursor-pointer"
                 onClick={() => onViewDetails(patient.id)}
             >
                 Detalhes

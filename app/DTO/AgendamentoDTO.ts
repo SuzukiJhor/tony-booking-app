@@ -11,7 +11,6 @@ export const PacienteDTO = z.object({
     .transform((v) => v.replace(/\D/g, "")),
   email: z
     .string()
-    .email("Email inválido")
     .optional()
     .transform((v) => (v ? v.trim().toLowerCase() : null)),
 });

@@ -10,7 +10,7 @@ export const AgendamentoUpdateDTO = z.object({
     paciente: z.object({
         nome: z.string().trim().min(1).optional(),
         telefone: z.string().regex(/^\d+$/).optional(),
-        email: z.string().email().trim().optional(),
+        email: z.string().trim().optional(),
     }).optional(),
 });
 
