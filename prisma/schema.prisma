@@ -31,6 +31,7 @@ model Empresa {
   
   // Relacionamentos Inversos (back-relations)
   pacientes        Paciente[]
+  profissionais    Profissional[]
   agendamentos     Agendamento[]
   configuracoes    Configuracao[] 
   acessos          AcessoSistema[]
@@ -54,10 +55,33 @@ model Paciente {
   
   agendamentos   Agendamento[]
 
+  isDeleted Boolean  @default(false)
+
   // **IMPORTANTE:** O telefone deve ser único APENAS DENTRO DE UMA EMPRESA.
   @@unique([telefone, empresaId]) 
   // O campo 'email' original tinha @unique, se precisar manter a unicidade:
   @@unique([email, empresaId])
+}
+
+model Profissional {
+  id            Int      @id @default(autoincrement())
+  nome          String
+  documento     String?  // Pode ser CRO, CRM, CPF, etc.
+  especialidade String?  // Ex: "Ortodontia", "Clínico Geral"
+  ativo         Boolean  @default(true)
+
+  // Chave de Isolamento (Tenant ID)
+  empresaId     Int
+  empresa       Empresa  @relation(fields: [empresaId], references: [id])
+
+  // Relação: Um profissional tem muitos agendamentos
+  agendamentos  Agendamento[]
+
+  createdAt     DateTime @default(now())
+  updatedAt     DateTime @updatedAt
+
+  // Garante que o documento profissional seja único por empresa
+  @@unique([documento, empresaId])
 }
 
 // -----------------------------------------------------
@@ -74,6 +98,10 @@ model Agendamento {
   // Relacionamento com Paciente (que já pertence a uma empresa)
   pacienteId        Int
   paciente          Paciente             @relation(fields: [pacienteId], references: [id])
+
+  // NOVA RELAÇÃO: Vínculo com o Profissional
+  profissionalId    Int?
+  profissional      Profissional?      @relation(fields: [profissionalId], references: [id])
   
   // Chave de Isolamento (Tenant ID) - Recomendado para consultas mais rápidas
   empresaId         Int

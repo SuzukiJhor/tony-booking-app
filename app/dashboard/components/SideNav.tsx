@@ -1,7 +1,7 @@
 'use client';
 import Link from 'next/link';
 import { usePathname } from 'next/navigation';
-import { LogOut, Calendar, Home, Settings, Users } from 'lucide-react';
+import { LogOut, Calendar, Home, Settings, Users, BriefcaseMedical  } from 'lucide-react';
 import { signOut } from "next-auth/react"
 import { LogoTonySVG } from '@/assets/logoTonySVG';
 
@@ -9,6 +9,7 @@ const navLinks = [
   { name: 'Dashboard', href: '/dashboard', icon: Home },
   { name: 'Calendário', href: '/dashboard/calendar', icon: Calendar },
   { name: 'Pacientes', href: '/dashboard/clients', icon: Users },
+  { name: 'Dentistas', href: '/dashboard/professionals', icon: BriefcaseMedical },
   { name: 'Configurações', href: '/dashboard/settings', icon: Settings },
 ];
 

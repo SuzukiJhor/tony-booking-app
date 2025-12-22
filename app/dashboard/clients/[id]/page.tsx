@@ -43,7 +43,7 @@ export default function ClientDetailsPage() {
 
     return (
         <div className="p-6 bg-background dark:bg-background-tertiary min-h-screen space-y-6">
-            {/* Header */}
+
             <div className="flex items-center gap-4">
                 <button
                     onClick={() => router.back()}
@@ -51,15 +51,11 @@ export default function ClientDetailsPage() {
                 >
                     <ArrowLeft size={20} />
                 </button>
-
-                <h1 className="text-xl font-semibold text-foreground dark:text-card">
-                    Detalhes do Paciente
-                </h1>
             </div>
 
-            {/* Cards */}
+
             <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
-                {/* Dados pessoais */}
+
                 <div className="md:col-span-2 bg-white dark:bg-background-secondary rounded-xl shadow-md border dark:border-gray-700 p-6 space-y-3">
                     <h2 className="text-2xl font-bold text-sky-700 dark:text-card">
                         Dados do Paciente
@@ -98,7 +94,7 @@ export default function ClientDetailsPage() {
                 </div>
             </div>
 
-            {/* Histórico */}
+
             {showHistory && (
                 <div className="bg-white dark:bg-background-secondary rounded-xl shadow-md border dark:border-gray-700 p-6 space-y-4">
                     <h2 className="text-2xl font-bold text-sky-700">
@@ -117,7 +113,7 @@ export default function ClientDetailsPage() {
                                     className="flex flex-col md:flex-row md:items-center md:justify-between gap-3 p-4 rounded-lg border border-border bg-background dark:bg-background-tertiary"
                                 >
                                     <div className="space-y-1">
-                                        <p className="font-medium text-foreground">
+                                        <p className="font-medium text-foreground dark:text-card">
                                             {formatDate(agendamento.dataHora)}
                                         </p>
 
