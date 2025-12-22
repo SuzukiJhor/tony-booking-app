@@ -22,15 +22,7 @@ export default function WhatsAppConnectButton() {
             </div>
             <Link
                 href="/dashboard/settings/connect-whatsapp"
-                className="
-          inline-flex items-center gap-2
-          rounded-lg bg-green-600 px-5 py-3
-          text-sm font-semibold text-white
-          hover:bg-green-700
-          focus:outline-none focus:ring-2 focus:ring-green-500 focus:ring-offset-2
-          dark:focus:ring-offset-background-secondary
-          transition-all
-        "
+               className="px-4 py-2 rounded bg-green-600 text-card hover:opacity-90 cursor-pointer"
             >
                 <span className="text-lg">📱</span>
                 Conectar

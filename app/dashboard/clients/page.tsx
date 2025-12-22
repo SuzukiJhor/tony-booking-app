@@ -1,12 +1,11 @@
-/* eslint-disable react-hooks/static-components */
 'use client';
 import React, { useState, useMemo, useEffect } from 'react';
 import TitlePage from "@/app/dashboard/components/TitlePage";
 import { DataBasePacienteType } from "../types/patientDBType";
 import { useClient } from "@/app/context/ClientsContext";
 import { ChevronLeft, ChevronRight } from 'lucide-react';
-import Link from 'next/link';
 import { useLoading } from '@/app/components/LoadingProvider';
+import ButtonRedirectPrimary from '@/app/components/ButtonRedirectPrimary';
 
 interface PatientListItemProps {
     patient: DataBasePacienteType;
@@ -30,17 +29,80 @@ const ClientListItem: React.FC<PatientListItemProps> = ({ patient, onViewDetails
         </div>
 
         <div className="flex space-x-2">
-            <Link
+            <ButtonRedirectPrimary
                 href={`/dashboard/clients/${patient.id}`}
-                type="submit"
-                className="bg-sky-700 hover:bg-amber-950 text-white font-semibold py-2 px-4 rounded transition duration-150 text-sm cursor-pointer"
                 onClick={() => onViewDetails(patient.id)}
             >
-                Detalhes
-            </Link >
+                Ver Mais
+            </ButtonRedirectPrimary>
         </div>
     </div>
 );
+interface PaginationControlsProps {
+    currentPage: number;
+    totalPages: number;
+    itemsPerPage: number;
+    totalItems: number;
+    isTransitioning: boolean;
+    goToPage: (page: number) => void;
+}
+
+const PaginationControls: React.FC<PaginationControlsProps> = ({
+    currentPage,
+    totalPages,
+    itemsPerPage,
+    totalItems,
+    isTransitioning,
+    goToPage,
+}) => {
+    const pageNumbers = Array.from({ length: totalPages }, (_, i) => i + 1);
+    return (
+        <div className="flex flex-col md:flex-row justify-between items-center mt-6 p-4 bg-chart-3 rounded-lg border border-border">
+
+            <span className="text-sm b-4 md:mb-0 text-white">
+                Mostrando {((currentPage - 1) * itemsPerPage) + 1} - {Math.min(currentPage * itemsPerPage, totalItems)} de {totalItems} pacientes.
+            </span>
+
+            <div className="flex space-x-1">
+                <button
+                    onClick={() => goToPage(currentPage - 1)}
+                    disabled={currentPage === 1 || isTransitioning}
+                    className={`p-2 rounded-lg transition border border-border ${currentPage === 1 || isTransitioning
+                        ? 'bg-muted text-muted-foreground cursor-not-allowed'
+                        : 'bg-background text-foreground hover:bg-muted cursor-pointer'
+                        }`}
+                >
+                    <ChevronLeft size={20} />
+                </button>
+
+                {pageNumbers.map((page) => (
+                    <button
+                        key={page}
+                        onClick={() => goToPage(page)}
+                        disabled={isTransitioning}
+                        className={`px-4 py-2 rounded-lg font-medium transition text-sm ${currentPage === page
+                            ? 'bg-primary text-white shadow-md cursor-default'
+                            : 'bg-background text-foreground hover:bg-muted border border-border cursor-pointer'
+                            }`}
+                    >
+                        {page}
+                    </button>
+                ))}
+
+                <button
+                    onClick={() => goToPage(currentPage + 1)}
+                    disabled={currentPage === totalPages || isTransitioning}
+                    className={`p-2 rounded-lg transition border border-border ${currentPage === totalPages || isTransitioning
+                        ? 'bg-muted text-muted-foreground cursor-not-allowed'
+                        : 'bg-background text-foreground hover:bg-muted cursor-pointer'
+                        }`}
+                >
+                    <ChevronRight size={20} />
+                </button>
+            </div>
+        </div>
+    );
+};
 
 export default function Clients() {
     const [currentPage, setCurrentPage] = useState(1);
@@ -77,61 +139,6 @@ export default function Clients() {
         }
     };
 
-    const PaginationControls = () => {
-        const pageNumbers = Array.from({ length: totalPages }, (_, i) => i + 1);
-        return (
-            <div className="flex flex-col md:flex-row justify-between items-center mt-6 p-4 bg-chart-3 rounded-lg border border-border">
-
-                {/* Informação da Página */}
-                <span className="text-sm b-4 md:mb-0 text-white">
-                    Mostrando {((currentPage - 1) * itemsPerPage) + 1} - {Math.min(currentPage * itemsPerPage, totalItems)} de {totalItems} pacientes.
-                </span>
-
-                {/* Botões de Navegação */}
-                <div className="flex space-x-1">
-                    {/* Botão Anterior */}
-                    <button
-                        onClick={() => goToPage(currentPage - 1)}
-                        disabled={currentPage === 1 || isTransitioning}
-                        className={`p-2 rounded-lg transition border border-border ${currentPage === 1 || isTransitioning
-                            ? 'bg-muted text-muted-foreground cursor-not-allowed'
-                            : 'bg-background text-foreground hover:bg-muted cursor-pointer'
-                            }`}
-                    >
-                        <ChevronLeft size={20} />
-                    </button>
-
-                    {/* Números das Páginas */}
-                    {pageNumbers.map((page) => (
-                        <button
-                            key={page}
-                            onClick={() => goToPage(page)}
-                            disabled={isTransitioning}
-                            className={`px-4 py-2 rounded-lg font-medium transition text-sm ${currentPage === page
-                                ? 'bg-primary text-white shadow-md cursor-default'
-                                : 'bg-background text-foreground hover:bg-muted border border-border cursor-pointer'
-                                }`}
-                        >
-                            {page}
-                        </button>
-                    ))}
-
-                    {/* Botão Próximo */}
-                    <button
-                        onClick={() => goToPage(currentPage + 1)}
-                        disabled={currentPage === totalPages || isTransitioning}
-                        className={`p-2 rounded-lg transition border border-border ${currentPage === totalPages || isTransitioning
-                            ? 'bg-muted text-muted-foreground cursor-not-allowed'
-                            : 'bg-background text-foreground hover:bg-muted cursor-pointer'
-                            }`}
-                    >
-                        <ChevronRight size={20} />
-                    </button>
-                </div>
-            </div>
-        );
-    };
-
     useEffect(() => {
         const loadData = async () => {
             setIsLoading(true);
@@ -150,12 +157,8 @@ export default function Clients() {
             <TitlePage title=" Visão Geral dos Pacientes" />
 
             <div className="space-y-8">
-                {/* <h2 className="text-3xl font-bold mb-8 text-gray-900 dark:text-white">
-                    Visão Geral dos Pacientes
-                </h2> */}
                 {totalItems > 0 ? (
                     <>
-                        {/* Lista de Pacientes Atuais com Animação */}
                         <div
                             className={`space-y-4 transition-opacity duration-100 ease-in-out ${isTransitioning ? 'opacity-0' : 'opacity-100' // CLASSE DE TRANSIÇÃO
                                 }`}
@@ -169,11 +172,18 @@ export default function Clients() {
                             ))}
                         </div>
 
-                        {/* Controles de Paginação */}
-                        {totalPages > 1 && <PaginationControls />}
+                        {totalPages > 1 && (
+                            <PaginationControls
+                                currentPage={currentPage}
+                                totalPages={totalPages}
+                                itemsPerPage={itemsPerPage}
+                                totalItems={totalItems}
+                                isTransitioning={isTransitioning}
+                                goToPage={goToPage}
+                            />
+                        )}
                     </>
                 ) : (
-                    // Se a lista estiver vazia (Mantido igual)
                     <div className="text-center p-12 bg-card rounded-xl shadow-inner text-muted-foreground">
                         <p className="text-lg mb-4">Nenhum paciente cadastrado encontrado.</p>
                         <button

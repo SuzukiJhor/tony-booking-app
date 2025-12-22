@@ -5,6 +5,7 @@ import { ArrowLeft } from "lucide-react";
 import { DataBasePacienteType } from "../../types/patientDBType";
 import { useState } from "react";
 import { LoadingSpinner } from "@/app/components/LoadingProvider";
+import ButtonPrimary from "@/app/components/ButtonPrimary";
 
 export default function ClientDetailsPage() {
     const [showHistory, setShowHistory] = useState(false);
@@ -46,12 +47,12 @@ export default function ClientDetailsPage() {
             <div className="flex items-center gap-4">
                 <button
                     onClick={() => router.back()}
-                    className="p-2 rounded-lg border border-sky-700 text-sky-700 hover:bg-sky-700 hover:text-white transition cursor-pointer"
+                    className="p-2 rounded-lg border border-sky-700 text-sky-700 hover:bg-sky-700 hover:text-white transition cursor-pointer dark:border-card dark:text-card"
                 >
                     <ArrowLeft size={20} />
                 </button>
 
-                <h1 className="text-xl font-semibold text-foreground">
+                <h1 className="text-xl font-semibold text-foreground dark:text-card">
                     Detalhes do Paciente
                 </h1>
             </div>
@@ -60,23 +61,23 @@ export default function ClientDetailsPage() {
             <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
                 {/* Dados pessoais */}
                 <div className="md:col-span-2 bg-white dark:bg-background-secondary rounded-xl shadow-md border dark:border-gray-700 p-6 space-y-3">
-                    <h2 className="text-2xl font-bold text-sky-700">
+                    <h2 className="text-2xl font-bold text-sky-700 dark:text-card">
                         Dados do Paciente
                     </h2>
 
                     <p className="text-sm text-muted-foreground">
-                        <span className="font-medium text-foreground">Nome:</span>{" "}
+                        <span className="font-medium text-foreground dark:text-card">Nome:</span>{" "}
                         {client.nome}
                     </p>
 
                     <p className="text-sm text-muted-foreground">
-                        <span className="font-medium text-foreground">Telefone:</span>{" "}
+                        <span className="font-medium text-foreground dark:text-card">Telefone:</span>{" "}
                         {client.telefone}
                     </p>
 
                     {client.email && (
                         <p className="text-sm text-muted-foreground">
-                            <span className="font-medium text-foreground">Email:</span>{" "}
+                            <span className="font-medium text-foreground dark:text-card">Email:</span>{" "}
                             {client.email}
                         </p>
                     )}
@@ -84,16 +85,16 @@ export default function ClientDetailsPage() {
 
                 {/* Ações */}
                 <div className="bg-white dark:bg-background-secondary rounded-xl border text-white dark:border-gray-700 p-6 flex flex-col gap-4 justify-center">
-                    <button className="border border-primary dark:bg-background-tertiary bg-gray-700 dark:hover:bg-background-tertiary text-primary dark:hover:text-primary/20 px-6 py-2 rounded-lg hover:bg-chart-2/90 transition cursor-pointer">
-                        Editar paciente
-                    </button>
 
-                    <button
+                    <ButtonPrimary>
+                        Editar paciente
+                    </ButtonPrimary>
+
+                    <ButtonPrimary
                         onClick={() => setShowHistory((prev) => !prev)}
-                        className="border border-primary dark:bg-background-tertiary bg-gray-700 dark:hover:bg-background-tertiary text-primary dark:hover:text-primary/20 px-6 py-2 rounded-lg hover:bg-chart-2/90 transition cursor-pointer"
                     >
-                        {showHistory ? "Ocultar histórico" : "Histórico de agendamentos"}
-                    </button>
+                        {showHistory ? "Ocultar histórico" : "Histórico"}
+                    </ButtonPrimary>
                 </div>
             </div>
 

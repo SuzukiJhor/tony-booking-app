@@ -1,17 +1,9 @@
-// ./app/dashboard/settings/NotificationSettings.jsx
-
-'use client'; // <-- ESSENCIAL para usar hooks e interatividade
-
-import { durationOptions } from '@/util/options-duration-input';
-import { advanceTimeOptions, cancellationLimitOptions, resendIntervalOptions } from '@/util/options-notification-interval';
+'use client';
 import React, { useState } from 'react';
+import ButtonPrimary from '@/app/components/ButtonPrimary';
+import { advanceTimeOptions, cancellationLimitOptions, resendIntervalOptions } from '@/util/options-notification-interval';
 
-/**
- * Componente focado nas configurações de Notificações e Confirmações.
- * Agora é um Client Component.
- */
 export default function NotificationSettings() {
-    // 1. Estado inicial das configurações
     const [notificationConfig, setNotificationConfig] = useState({
         antecedenciaConfirmacao: 120, // Minutos: 2 horas antes
         intervaloReenvio: 6,         // Horas: Reenviar 6h depois, se não responder
@@ -21,7 +13,6 @@ export default function NotificationSettings() {
 
     const handleChange = (e) => {
         const { name, value, type, checked } = e.target;
-        // Converte valores numéricos de volta para number (caso não seja checkbox)
         const finalValue = type === 'number' ? parseInt(value) : value;
 
         setNotificationConfig(prevConfig => ({
@@ -30,12 +21,9 @@ export default function NotificationSettings() {
         }));
     };
 
-    // 2. A função de salvar AGORA VAI AQUI (no Client Component)
     const handleSave = async () => {
-        // Simulação de chamada de API:
         console.log("Enviando para API:", notificationConfig);
         try {
-            // Lógica de sucesso
             alert("Configurações de Notificação salvas com sucesso!");
         } catch (error) {
             console.error("Erro ao salvar:", error);
@@ -49,10 +37,8 @@ export default function NotificationSettings() {
                 ⏰ Agendamento de Confirmações
             </h3>
 
-            {/* Início dos Inputs de Configuração */}
             <div className="grid grid-cols-1 md:grid-cols-2 gap-6 mb-6">
 
-                {/* Configuração 1: Antecedência da Primeira Confirmação */}
                 <div>
                     <label htmlFor="antecedenciaConfirmacao" className="block text-sm font-medium text-gray-800 dark:text-white">
                         Tempo de Antecedência para Confirmação:
@@ -122,7 +108,7 @@ export default function NotificationSettings() {
                         name="metodoPadrao"
                         value={notificationConfig.metodoPadrao}
                         onChange={handleChange}
-                            className="w-full p-2 border border-gray-300 rounded-md shadow-sm focus:ring-blue-500 focus:border-blue-500 bg-white dark:bg-gray-700 dark:text-white"
+                        className="w-full p-2 border border-gray-300 rounded-md shadow-sm focus:ring-blue-500 focus:border-blue-500 bg-white dark:bg-gray-700 dark:text-white"
                     >
                         <option value="whatsapp">WhatsApp (Recomendado)</option>
                         <option value="sms">SMS</option>
@@ -160,16 +146,11 @@ export default function NotificationSettings() {
                 </div>
             </div>
 
-            {/* Fim dos Inputs de Configuração */}
-
-            <div className="pt-6 border-t mt-6 flex justify-end">
-                <button
-                    onClick={handleSave}
-                    className="px-4 py-2 rounded bg-sky-500 text-card hover:opacity-90 cursor-pointer"
-                >
+            <div className="pt-6 border-t mt-6 flex justify-start">
+                <ButtonPrimary onClick={handleSave}>
                     Salvar Configurações de Notificação
-                </button>
+                </ButtonPrimary>
             </div>
-        </div>
+        </div >
     );
 }

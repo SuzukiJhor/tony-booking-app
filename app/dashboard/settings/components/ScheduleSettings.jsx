@@ -1,10 +1,8 @@
-// ./app/dashboard/settings/ScheduleSettings.jsx
-
 'use client';
 
+import ButtonPrimary from '@/app/components/ButtonPrimary';
 import React, { useState } from 'react';
 
-// Dados base para os dias da semana
 const daysOfWeek = [
     { key: 'sun', label: 'Domingo' },
     { key: 'mon', label: 'Segunda-feira' },
@@ -184,14 +182,10 @@ export default function ScheduleSettings() {
                 </div>
             </div>
 
-            {/* Botão de salvar */}
-            <div className="pt-6 border-t mt-6 flex justify-end">
-                <button
-                    onClick={handleSave}
-                    className="px-4 py-2 rounded bg-sky-500 text-card  hover:opacity-90 cursor-pointer"
-                >
+            <div className="pt-6 border-t mt-6 flex justify-start">
+                <ButtonPrimary onClick={handleSave}>
                     Salvar Horário
-                </button>
+                </ButtonPrimary>
             </div>
         </div>
     );
