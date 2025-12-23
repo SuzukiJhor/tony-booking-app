@@ -1,5 +1,7 @@
 'use client';
-import ButtonRedirectPrimary from "@/app/components/ButtonRedirectPrimary";
+import ButtonCard from "@/app/components/ButtonCard";
+import ButtonCardSecondary from "@/app/components/ButtonCardSecondary";
+import { Edit2, Eye } from "lucide-react";
 
 interface ProfessionalType {
     id: number;
@@ -11,10 +13,12 @@ interface ProfessionalType {
 
 export default function ProfessionalListItem({
     professional,
-    onEdit
+    onEdit,
+    onViewDetails
 }: {
     professional: ProfessionalType;
     onEdit: (id: number) => void;
+    onViewDetails: (id: number) => void;
 }) {
     return (
         <div className="flex items-center justify-between p-4 mb-4 bg-white dark:bg-background-secondary rounded-lg shadow-md hover:shadow-lg transition duration-200 border border-gray-200 dark:border-gray-700">
@@ -43,13 +47,23 @@ export default function ProfessionalListItem({
                 </div>
             </div>
 
-            <div className="flex space-x-2">
-                <ButtonRedirectPrimary
-                    href={`/dashboard/professionals`}
+            <div className="flex items-center gap-2 w-full sm:w-auto border-t sm:border-t-0 pt-3 sm:pt-0">
+                <ButtonCard
                     onClick={() => onEdit(professional.id)}
                 >
+                    <Edit2 size={16} />
                     Editar
-                </ButtonRedirectPrimary>
+                </ButtonCard>
+
+
+                <ButtonCard
+                    onClick={() => onViewDetails(professional.id)}
+                >
+                    <Eye size={16} />
+                    Ver Mais
+                </ButtonCard>
+
+
             </div>
         </div>
     );

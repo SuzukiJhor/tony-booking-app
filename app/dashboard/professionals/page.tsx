@@ -66,7 +66,12 @@ export default function Professionals() {
         setIsModalOpen(true);
     };
 
-    const handleOpenEditModal = (id: number) => {
+    const handleViewDetails = (id: number) => {
+       console.log(`Visualizar detalhes do profissional ID: ${id}`);
+       console.log(`profissionais:`, professionals);
+    };
+
+     const handleOpenEditModal = (id: number) => {
         const professional = professionals.find(p => p.id === id);
         if (professional) {
             setSelectedProfessional(professional);
@@ -185,6 +190,7 @@ export default function Professionals() {
                                 key={pro.id}
                                 professional={pro}
                                 onEdit={() => handleOpenEditModal(pro.id)}
+                                onViewDetails={() => handleViewDetails(pro.id)}
                             />
                         ))}
                     </div>

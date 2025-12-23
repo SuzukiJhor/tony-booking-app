@@ -62,7 +62,6 @@ export default function CheckConnectionPage() {
             <div className="flex-1 flex items-start justify-center pt-10">
                 <div className="max-w-md w-full bg-card dark:bg-slate-900 border border-border rounded-2xl p-8 shadow-lg flex flex-col items-center text-center space-y-6">
 
-                    {/* ÍCONE DINÂMICO */}
                     <div className="relative">
                         {status === 'loading' && (
                             <>
@@ -89,7 +88,6 @@ export default function CheckConnectionPage() {
                         )}
                     </div>
 
-                    {/* MENSAGEM DINÂMICA */}
                     <div className="space-y-2">
                         <h2 className={`text-xl font-bold ${status === 'error' ? 'text-red-500' : 'text-foreground'} dark:text-card`}>
                             {status === 'loading' && "Verificando..."}
@@ -102,9 +100,7 @@ export default function CheckConnectionPage() {
                         </p>
                     </div>
 
-                    {/* SEÇÃO DE AÇÃO DINÂMICA */}
                     <div className="w-full pt-4">
-                        {/* 1. ESTADO: CARREGANDO */}
                         {status === 'loading' && (
                             <div className="space-y-3 animate-pulse">
                                 <div className="flex items-center gap-3 text-sm text-sky-700 dark:text-sky-400 bg-sky-50 dark:bg-sky-900/20 p-4 rounded-xl border border-sky-200 dark:border-sky-800">
@@ -114,7 +110,6 @@ export default function CheckConnectionPage() {
                             </div>
                         )}
 
-                        {/* 2. ESTADO: INSTÂNCIA DESCONECTADA (A API funciona, mas o zap não) */}
                         {status === 'disconnected' && (
                             <Link
                                 href="/dashboard/settings/connect-whatsapp"
@@ -125,7 +120,6 @@ export default function CheckConnectionPage() {
                             </Link>
                         )}
 
-                        {/* 3. ESTADO: ERRO OU FALHA (Token inválido, servidor fora) */}
                         {status === 'error' && (
                             <>
                                 <div className="space-y-3 animate-pulse">
@@ -148,7 +142,6 @@ export default function CheckConnectionPage() {
                             </>
                         )}
 
-                        {/* 4. ESTADO: SUCESSO (Opcional: mostrar um botão de 'Continuar' ou 'Voltar') */}
                         {status === 'connected' && (
                             <button
                                 onClick={() => router.push('/dashboard')}

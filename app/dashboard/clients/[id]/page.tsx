@@ -1,11 +1,12 @@
 "use client";
 import { useParams, useRouter } from "next/navigation";
 import { useClient } from "@/app/context/ClientsContext";
-import { ArrowLeft } from "lucide-react";
+import { ArrowLeft, Edit2, History } from "lucide-react";
 import { DataBasePacienteType } from "../../types/patientDBType";
 import { useState } from "react";
 import { LoadingSpinner } from "@/app/components/LoadingProvider";
 import ButtonPrimary from "@/app/components/ButtonPrimary";
+import ButtonCard from "@/app/components/ButtonCard";
 
 export default function ClientDetailsPage() {
     const [showHistory, setShowHistory] = useState(false);
@@ -81,16 +82,18 @@ export default function ClientDetailsPage() {
 
                 {/* Ações */}
                 <div className="bg-white dark:bg-background-secondary rounded-xl border text-white dark:border-gray-700 p-6 flex flex-col gap-4 justify-center">
-
-                    <ButtonPrimary>
+                    <ButtonCard
+                        onClick={() => console.log('Editar paciente')}
+                    >
+                        <Edit2 size={16} />
                         Editar paciente
-                    </ButtonPrimary>
-
-                    <ButtonPrimary
+                    </ButtonCard>
+                    <ButtonCard
                         onClick={() => setShowHistory((prev) => !prev)}
                     >
+                        <History size={16} />
                         {showHistory ? "Ocultar histórico" : "Histórico"}
-                    </ButtonPrimary>
+                    </ButtonCard>
                 </div>
             </div>
 
