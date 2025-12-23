@@ -7,11 +7,11 @@ datasource db {
 }
 
 enum StatusAgendamento {
-  PENDENTE           // Recém-criado, esperando o momento de envio da mensagem
-  MENSAGEM_ENVIADA   // Mensagem enviada, aguardando resposta do paciente
-  CONFIRMADO         // Paciente respondeu SIM
-  NAO_CONFIRMADO     // Paciente respondeu NÃO ou prazo de resposta expirou
-  CANCELADO          // Cancelado pelo usuário (admin)
+  PENDENTE
+  MENSAGEM_ENVIADA
+  CONFIRMADO
+  NAO_CONFIRMADO
+  CANCELADO
 }
 
 enum TipoAgendamento {
@@ -26,7 +26,7 @@ enum TipoAgendamento {
 model Empresa {
   id               Int            @id @default(autoincrement())
   nome             String
-  slug             String         @unique // URL amigável, ex: 'clinica-alfa'
+  slug             String         @unique
   planoAtivo       String         @default("FREE")
   
   // Relacionamentos Inversos (back-relations)
@@ -57,9 +57,7 @@ model Paciente {
 
   isDeleted Boolean  @default(false)
 
-  // **IMPORTANTE:** O telefone deve ser único APENAS DENTRO DE UMA EMPRESA.
   @@unique([telefone, empresaId]) 
-  // O campo 'email' original tinha @unique, se precisar manter a unicidade:
   @@unique([email, empresaId])
 }
 
@@ -67,7 +65,7 @@ model Profissional {
   id            Int      @id @default(autoincrement())
   nome          String
   documento     String?  // Pode ser CRO, CRM, CPF, etc.
-  especialidade String?  // Ex: "Ortodontia", "Clínico Geral"
+  especialidade String?
   telefone       String?
   ativo         Boolean  @default(true)
 
@@ -75,13 +73,11 @@ model Profissional {
   empresaId     Int
   empresa       Empresa  @relation(fields: [empresaId], references: [id])
 
-  // Relação: Um profissional tem muitos agendamentos
   agendamentos  Agendamento[]
 
   createdAt     DateTime @default(now())
   updatedAt     DateTime @updatedAt
 
-  // Garante que o documento profissional seja único por empresa
   @@unique([documento, empresaId])
 }
 
@@ -96,15 +92,12 @@ model Agendamento {
   mensagemEnviadaEm DateTime?
   mensagemId        String?
   
-  // Relacionamento com Paciente (que já pertence a uma empresa)
   pacienteId        Int
   paciente          Paciente             @relation(fields: [pacienteId], references: [id])
 
-  // NOVA RELAÇÃO: Vínculo com o Profissional
   profissionalId    Int?
   profissional      Profissional?      @relation(fields: [profissionalId], references: [id])
   
-  // Chave de Isolamento (Tenant ID) - Recomendado para consultas mais rápidas
   empresaId         Int
   empresa           Empresa              @relation(fields: [empresaId], references: [id])
 
@@ -112,7 +105,7 @@ model Agendamento {
   updatedAt         DateTime             @updatedAt
   tipoAgendamento   TipoAgendamento      @default(CONSULTA)
   tempoAtendimento  Int                  @default(60)
-   // Soft delete
+
   isDeleted         Boolean           @default(false)
 }
 
@@ -124,18 +117,16 @@ model Configuracao {
   chave   String
   valor   String?
 
-  // Chave de Isolamento (Tenant ID)
   empresaId Int
   empresa   Empresa @relation(fields: [empresaId], references: [id])
 
-  // Garante que uma chave (ex: 'WHATSAPP_TOKEN') seja única POR EMPRESA
   @@unique([chave, empresaId]) 
 }
 
 model AcessoSistema {
   id            Int     @id @default(autoincrement())
   email         String  @unique 
-  password      String  // hash da senha
+  password      String
   empresaId     Int?
   empresa       Empresa?   @relation(fields: [empresaId], references: [id])
   @@map("acesso_sistema")

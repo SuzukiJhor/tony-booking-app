@@ -1,12 +1,11 @@
 "use client";
+import { useState } from "react";
+import ButtonCard from "@/app/components/ButtonCard";
 import { useParams, useRouter } from "next/navigation";
 import { useClient } from "@/app/context/ClientsContext";
 import { ArrowLeft, Edit2, History } from "lucide-react";
 import { DataBasePacienteType } from "../../types/patientDBType";
-import { useState } from "react";
 import { LoadingSpinner } from "@/app/components/LoadingProvider";
-import ButtonPrimary from "@/app/components/ButtonPrimary";
-import ButtonCard from "@/app/components/ButtonCard";
 
 export default function ClientDetailsPage() {
     const [showHistory, setShowHistory] = useState(false);
@@ -80,7 +79,6 @@ export default function ClientDetailsPage() {
                     )}
                 </div>
 
-                {/* Ações */}
                 <div className="bg-white dark:bg-background-secondary rounded-xl border text-white dark:border-gray-700 p-6 flex flex-col gap-4 justify-center">
                     <ButtonCard
                         onClick={() => console.log('Editar paciente')}
@@ -88,6 +86,7 @@ export default function ClientDetailsPage() {
                         <Edit2 size={16} />
                         Editar paciente
                     </ButtonCard>
+
                     <ButtonCard
                         onClick={() => setShowHistory((prev) => !prev)}
                     >
@@ -131,7 +130,7 @@ export default function ClientDetailsPage() {
 
                                     <span
                                         className={`text-xs font-semibold px-3 py-1 rounded-full w-fit
-                      ${agendamento.statusConfirmacao === "PENDENTE"
+                                        ${agendamento.statusConfirmacao === "PENDENTE"
                                                 ? "bg-yellow-100 text-yellow-800"
                                                 : "bg-red-100 text-red-800"
                                             }`}
