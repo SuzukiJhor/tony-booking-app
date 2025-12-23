@@ -1,8 +1,6 @@
 'use client';
 import ButtonCard from "@/app/components/ButtonCard";
-import ButtonCardSecondary from "@/app/components/ButtonCardSecondary";
 import { Edit2, Eye } from "lucide-react";
-
 interface ProfessionalType {
     id: number;
     nome: string;
@@ -55,15 +53,12 @@ export default function ProfessionalListItem({
                     Editar
                 </ButtonCard>
 
-
                 <ButtonCard
                     onClick={() => onViewDetails(professional.id)}
                 >
                     <Eye size={16} />
                     Ver Mais
                 </ButtonCard>
-
-
             </div>
         </div>
     );
