@@ -292,9 +292,9 @@ export default function Dashboard() {
                                                 </p>
                                             </div>
 
-                                            <button className="px-3 py-1.5 rounded-md bg-indigo-50 text-sky-700 hover:bg-indigo-100 dark:bg-primary/10 dark:text-primary text-sm font-medium">
+                                            {/* <button className="px-3 py-1.5 rounded-md bg-indigo-50 text-sky-700 hover:bg-indigo-100 dark:bg-primary/10 dark:text-primary text-sm font-medium">
                                                 Ver
-                                            </button>
+                                            </button> */}
                                         </li>
                                     );
                                 })}
