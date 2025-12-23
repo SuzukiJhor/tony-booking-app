@@ -7,9 +7,13 @@ import { DataBasePacienteType } from "../types/patientDBType";
 import { useLoading } from '@/app/components/LoadingProvider';
 import PaginationControls from '../components/PaginationControls';
 import ButtonCreateNewEmpty from '../components/ButtonCreateNewEmpty';
+import DialogNewClient from '../components/DialogNewClient';
 
 export default function Clients() {
+    const [isModalOpen, setIsModalOpen] = useState(false);
     const [currentPage, setCurrentPage] = useState(1);
+    const [selectedClient, setSelectedClient] = useState<any | null>(null);
+
     const [isTransitioning, setIsTransitioning] = useState(false)
     const itemsPerPage = 6;
 
@@ -44,6 +48,32 @@ export default function Clients() {
         }
     };
 
+    function handleAdd(data: any) {
+        setIsModalOpen(false)
+        setIsLoading(true);
+        console.log('Adicionar novo paciente:', data);
+        setIsLoading(false);
+    }
+
+    function handleUpdate(data: any) {
+        setIsModalOpen(false)
+        setIsLoading(true);
+        console.log('Atualizar paciente:', data);
+        setIsLoading(false);
+    }
+
+    function handleDelete(data: any) {
+        setIsModalOpen(false)
+        setIsLoading(true);
+        console.log('Excluir paciente:', data);
+        setIsLoading(false);
+    }
+
+    function handleOpenModal() {
+        setSelectedClient(null);
+        setIsModalOpen(true);
+    }
+
     useEffect(() => {
         const loadData = async () => {
             setIsLoading(true);
@@ -63,12 +93,12 @@ export default function Clients() {
 
             <div className="mb-6 flex justify-between items-center">
                 <p className="text-muted-foreground">Total: {totalItems} pacientes</p>
-                <button
-                    onClick={() => console.log('Abrir modal/página para Novo Paciente')}
+                {/* <button
+                    onClick={handleOpenModal}
                     className="bg-sky-500 text-white py-2 px-6 rounded-lg hover:bg-sky-400 font-medium transition cursor-pointer"
                 >
                     + Novo Paciente
-                </button>
+                </button> */}
             </div>
 
             <div className="space-y-8">
@@ -105,6 +135,15 @@ export default function Clients() {
                         descriptionButton="Cadastrar Novo Paciente"
                     />
                 )}
+
+                <DialogNewClient
+                    open={isModalOpen}
+                    selectedProfessional={selectedClient}
+                    onClose={() => setIsModalOpen(false)}
+                    onAdd={handleAdd}
+                    onUpdate={handleUpdate}
+                    onDelete={handleDelete}
+                />
             </div>
         </div>
     );
