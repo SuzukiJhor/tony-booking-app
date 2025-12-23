@@ -54,7 +54,7 @@ export default function ProfessionalListItem({
                 </ButtonCard>
 
                 <ButtonCard
-                    onClick={() => onViewDetails(professional.id)}
+                    href={`/dashboard/professionals/${professional.id}`}
                 >
                     <Eye size={16} />
                     Ver Mais
