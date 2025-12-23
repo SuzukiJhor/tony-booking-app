@@ -18,7 +18,13 @@ export async function GET() {
             },
             cache: 'no-store',
         });
-        const { data } = await response.json();
+        const { data, error } = await response.json();
+
+        if (error == 'unauthorized') {
+            return NextResponse.json(
+                { data: { connected: false }, error: 'unauthorized' },
+            );
+        }
 
         if (data?.connected) {
             return NextResponse.json(

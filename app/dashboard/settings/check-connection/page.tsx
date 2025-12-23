@@ -1,10 +1,11 @@
 'use client';
 import { ArrowLeft, Loader2, ShieldCheck, Wifi, CheckCircle2, XCircle, RefreshCcw } from "lucide-react";
+import Link from "next/link";
 import { useRouter } from 'next/navigation';
 import { useEffect, useState } from "react";
 
 export default function CheckConnectionPage() {
-    const [status, setStatus] = useState<'loading' | 'connected' | 'error'>('loading');
+    const [status, setStatus] = useState<'loading' | 'connected' | 'error' | 'disconnected'>('loading');
     const [message, setMessage] = useState("Estamos verificando a sincronização com seu WhatsApp.");
     const router = useRouter();
 
@@ -13,8 +14,12 @@ export default function CheckConnectionPage() {
         setMessage("Estamos verificando a sincronização com seu WhatsApp.");
         try {
             const res = await fetch('/api/whatsapp/check-connection');
-            const { data } = await res.json();
-
+            const { data, error } = await res.json();
+            if (error) {
+                setStatus('disconnected');
+                setMessage("A instância está desconectada!");
+                return;
+            }
             if (res.ok && data?.connected) {
                 setStatus('connected');
                 setMessage("Sua instância está conectada e pronta para uso!");
@@ -77,36 +82,79 @@ export default function CheckConnectionPage() {
                                 <XCircle className="w-12 h-12 text-red-500" />
                             </div>
                         )}
+                        {status === 'disconnected' && (
+                            <div className="relative bg-red-100 dark:bg-red-500/20 p-5 rounded-full">
+                                <XCircle className="w-12 h-12 text-red-500" />
+                            </div>
+                        )}
                     </div>
 
                     {/* MENSAGEM DINÂMICA */}
                     <div className="space-y-2">
-                        <h2 className={`text-xl font-bold ${status === 'error' ? 'text-red-500' : 'text-foreground'}`}>
+                        <h2 className={`text-xl font-bold ${status === 'error' ? 'text-red-500' : 'text-foreground'} dark:text-card`}>
                             {status === 'loading' && "Verificando..."}
                             {status === 'connected' && "Tudo pronto!"}
                             {status === 'error' && "Ops! Algo deu errado"}
+                            {status === 'disconnected' && "A instância está desconectada!"}
                         </h2>
                         <p className="text-muted-foreground text-sm px-4">
                             {message}
                         </p>
                     </div>
 
-                    {/* CHECKLIST OU BOTÃO DE RETENTATIVA */}
+                    {/* SEÇÃO DE AÇÃO DINÂMICA */}
                     <div className="w-full pt-4">
-                        {status === 'loading' ? (
-                            <div className="space-y-3">
-                                <div className="flex items-center gap-3 text-sm text-foreground/70 bg-muted/50 p-3 rounded-lg border border-border/50">
-                                    <div className="h-2 w-2 rounded-full bg-green-500 animate-pulse"></div>
+                        {/* 1. ESTADO: CARREGANDO */}
+                        {status === 'loading' && (
+                            <div className="space-y-3 animate-pulse">
+                                <div className="flex items-center gap-3 text-sm text-sky-700 dark:text-sky-400 bg-sky-50 dark:bg-sky-900/20 p-4 rounded-xl border border-sky-200 dark:border-sky-800">
+                                    <div className="h-2 w-2 rounded-full bg-sky-500 animate-bounce"></div>
                                     <span>Comunicando com Wuzapi...</span>
                                 </div>
                             </div>
-                        ) : (
-                            <button
-                                onClick={checkConnection}
-                                className="flex items-center justify-center gap-2 w-full py-3 px-4 rounded-xl bg-secondary hover:bg-secondary/80 text-secondary-foreground transition-all font-medium"
+                        )}
+
+                        {/* 2. ESTADO: INSTÂNCIA DESCONECTADA (A API funciona, mas o zap não) */}
+                        {status === 'disconnected' && (
+                            <Link
+                                href="/dashboard/settings/connect-whatsapp"
+                                className="flex items-center justify-center gap-2 w-full py-3 px-4 rounded-xl bg-green-50 dark:bg-red-950 text-green-600 dark:text-green-400 border border-green-200 dark:border-red-900 hover:bg-green-100 transition-all font-medium"
                             >
-                                <RefreshCcw size={18} />
-                                Tentar novamente
+                                <span className="text-lg">📱</span>
+                                Conectar instância
+                            </Link>
+                        )}
+
+                        {/* 3. ESTADO: ERRO OU FALHA (Token inválido, servidor fora) */}
+                        {status === 'error' && (
+                            <>
+                                <div className="space-y-3 animate-pulse">
+                                    <button
+                                        onClick={checkConnection}
+                                        className="flex items-center justify-center gap-2 w-full py-3 px-4 rounded-xl bg-red-50 dark:bg-red-950 text-red-600 dark:text-red-400 border border-red-200 dark:border-red-900 hover:bg-red-100 transition-all font-medium cursor-pointer"
+                                    >
+                                        <RefreshCcw size={18} />
+                                        Tentar novamente
+                                    </button>
+                                    <Link
+                                        href="/dashboard/settings/connect-whatsapp"
+                                        className="flex items-center justify-center gap-2 w-full py-3 px-4 rounded-xl bg-green-50 dark:bg-green-950 text-green-600 dark:text-green-400 border border-green-200 dark:border-green-900 hover:bg-green-100 transition-all font-medium"
+                                    >
+                                        <span className="text-lg">📱</span>
+                                        Conectar instância
+                                    </Link>
+                                </div>
+
+                            </>
+                        )}
+
+                        {/* 4. ESTADO: SUCESSO (Opcional: mostrar um botão de 'Continuar' ou 'Voltar') */}
+                        {status === 'connected' && (
+                            <button
+                                onClick={() => router.push('/dashboard')}
+                                className="flex items-center justify-center gap-2 w-full py-3 px-4 rounded-xl bg-green-600 hover:bg-green-700 text-white transition-all font-semibold shadow-lg shadow-green-500/20 cursor-pointer"
+                            >
+                                Ir para o Dashboard
                             </button>
                         )}
                     </div>
