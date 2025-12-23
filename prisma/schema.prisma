@@ -68,6 +68,7 @@ model Profissional {
   nome          String
   documento     String?  // Pode ser CRO, CRM, CPF, etc.
   especialidade String?  // Ex: "Ortodontia", "Clínico Geral"
+  telefone       String?
   ativo         Boolean  @default(true)
 
   // Chave de Isolamento (Tenant ID)

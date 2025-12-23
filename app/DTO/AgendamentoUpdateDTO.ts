@@ -1,4 +1,5 @@
 import { z } from "zod";
+import { ProfissionalDTO } from "./ProfessionalDTO";
 
 export const AgendamentoUpdateDTO = z.object({
     id: z.number().int().positive(),
@@ -7,10 +8,12 @@ export const AgendamentoUpdateDTO = z.object({
     tipoAgendamento: z.string().optional(),
     empresaId: z.number().int().positive(),
     statusConfirmacao: z.enum(['PENDENTE', 'CONFIRMADO', 'CANCELADO', 'MENSAGEM_ENVIADA', 'NAO_CONFIRMADO']),
+    professionalId: z.number().int().nullable(),
     paciente: z.object({
         nome: z.string().trim().min(1).optional(),
         telefone: z.string().regex(/^\d+$/).optional(),
-        email: z.string().trim().optional(),
+        email: z.string().optional().nullable().or(z.literal("")),
+
     }).optional(),
 });
 

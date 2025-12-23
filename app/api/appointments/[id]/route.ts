@@ -1,3 +1,4 @@
+'use server';
 import { NextResponse } from "next/server";
 import prisma from "@/lib/prisma";
 import { getErrorMessage } from "@/util/errors/get-error-message";
@@ -19,12 +20,15 @@ export async function PATCH(
                 tempoAtendimento: data.tempoAtendimento,
                 tipoAgendamento: data.tipoAgendamento as any ?? undefined,
                 statusConfirmacao: data.statusConfirmacao as any ?? undefined,
+                profissional: data.professionalId
+                    ? { connect: { id: Number(data.professionalId) } }
+                    : undefined,
                 paciente: data.paciente
                     ? {
                         update: {
                             nome: data.paciente.nome,
                             telefone: data.paciente.telefone,
-                            email: data.paciente.email,
+                            email: data.paciente.email ?? undefined,
                         },
                     }
                     : undefined,
@@ -32,7 +36,7 @@ export async function PATCH(
         });
 
         return NextResponse.json(
-            { message: "Agendamento atualizado!", agendamento: updated },
+            { message: "Agendamento atualizado com sucesso!", agendamento: updated },
             { status: 200 }
         );
 
@@ -40,7 +44,7 @@ export async function PATCH(
         console.error("Erro ao buscar agendamentos:", error);
 
         return NextResponse.json(
-            { message: "Falha ao buscar dados do NeonDB.", error: getErrorMessage(error) },
+            { message: "Falha ao atualizar agendamento.", error: getErrorMessage(error) },
             { status: 500 }
         );
     }

@@ -61,6 +61,16 @@ export default function Clients() {
         <div className="p-4 bg-background dark:bg-background-tertiary min-h-screen">
             <TitlePage title=" Visão Geral dos Pacientes" />
 
+            <div className="mb-6 flex justify-between items-center">
+                <p className="text-muted-foreground">Total: {totalItems} pacientes</p>
+                <button
+                    onClick={() => console.log('Abrir modal/página para Novo Paciente')}
+                    className="bg-sky-500 text-white py-2 px-6 rounded-lg hover:bg-sky-400 font-medium transition cursor-pointer"
+                >
+                    + Novo Paciente
+                </button>
+            </div>
+
             <div className="space-y-8">
                 {totalItems > 0 ? (
                     <>

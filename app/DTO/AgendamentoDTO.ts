@@ -1,4 +1,5 @@
 import { z } from "zod";
+import { ProfissionalDTO } from "./ProfessionalDTO";
 
 export const PacienteDTO = z.object({
   nome: z
@@ -9,14 +10,12 @@ export const PacienteDTO = z.object({
     .string()
     .min(8, "Telefone inválido")
     .transform((v) => v.replace(/\D/g, "")),
-  email: z
-    .string()
-    .optional()
-    .transform((v) => (v ? v.trim().toLowerCase() : null)),
+  email: z.string().email().optional().nullable().or(z.literal("")),
 });
 
 export const AgendamentoDTO = z.object({
   paciente: PacienteDTO,
+  professionalId: z.number().int().nullable(),
   dataHora: z
     .string()
     .datetime("Formato de dataHora inválido")
@@ -33,6 +32,7 @@ export const AgendamentoDTO = z.object({
   empresaId: z
     .number()
     .min(1, "empresaId é obrigatório"),
+  statusConfirmacao: z.enum(['PENDENTE', 'CONFIRMADO', 'CANCELADO', 'MENSAGEM_ENVIADA', 'NAO_CONFIRMADO']),
 });
-  
+
 export type AgendamentoPayload = z.infer<typeof AgendamentoDTO>;

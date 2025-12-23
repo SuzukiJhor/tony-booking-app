@@ -22,6 +22,7 @@ const styleConfigureToast = {
 export default function Calendar() {
     const { events, reloadEvents } = useCalendar();
     const { setIsLoading } = useLoading();
+
     const handleAdd = async (eventData: any) => {
         await toast.promise(
             registerAppointment(eventData),

@@ -6,8 +6,6 @@ import { AgendamentoDTO } from '@/app/DTO/AgendamentoDTO';
 export async function POST(request: Request) {
   try {
     const json = await request.json();
-
-    // valida + sanitiza + tipa
     const data = AgendamentoDTO.parse(json);
 
     const paciente = await prisma.paciente.upsert({
@@ -29,14 +27,24 @@ export async function POST(request: Request) {
       },
     });
 
+    const profissional = data.professionalId
+      ? await prisma.profissional.findUnique({
+        where: {
+          id: data.professionalId,
+        },
+        select: { id: true },
+      })
+      : null;
+
     const novoAgendamento = await prisma.agendamento.create({
       data: {
         dataHora: data.dataHora,
         tempoAtendimento: data.tempoAtendimento,
         tipoAgendamento: data.tipoAgendamento as any,
-        statusConfirmacao: "PENDENTE",
+        statusConfirmacao: data.statusConfirmacao as any ?? "PENDENTE",
         pacienteId: paciente.id,
         empresaId: data.empresaId,
+        profissionalId: profissional?.id,
       },
     });
 
@@ -68,6 +76,15 @@ export async function GET(request: Request) {
             nome: true,
             telefone: true,
             email: true
+          }
+        },
+        profissional: {
+          select: {
+            id: true,
+            nome: true,
+            especialidade: true,
+            documento: true,
+            ativo: true
           }
         }
       }

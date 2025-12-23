@@ -1,6 +1,7 @@
 import { StatusConfirmacao } from "@/app/enum/statusConfirmacao";
 
 export function sanitizeSchedule(event) {
+  console.log("Sanitizing event data:", event);
   return {
     paciente: {
       nome: event.paciente.nome.trim(),
@@ -11,6 +12,7 @@ export function sanitizeSchedule(event) {
     dataHora: new Date(event.start).toISOString(),
     tempoAtendimento: Number(event.tempoAtendimento),
     tipoAgendamento: event.tipoAgendamento?.toUpperCase(),
+    professionalId: event.profissionalId ? Number(event.profissionalId) : null,
     empresaId: Number(event.empresaId),
   };
 }
