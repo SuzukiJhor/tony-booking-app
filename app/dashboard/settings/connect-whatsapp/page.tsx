@@ -15,7 +15,7 @@ export default function WhatsAppIntegrationPage() {
 
   const [qrCode, setQrCode] = useState<string | null>(null);
   const [status, setStatus] = useState<Status>('IDLE');
-  const [message, setMessage] = useState<string>(''); // Nova state para mensagem
+  const [message, setMessage] = useState<string>('');
 
   const pollingRef = useRef<NodeJS.Timeout | null>(null);
   const isFetchingRef = useRef(false);

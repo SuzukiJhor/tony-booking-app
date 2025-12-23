@@ -1,8 +1,9 @@
-'use server';
 import { NextResponse } from "next/server";
 import prisma from "@/lib/prisma";
 import { getErrorMessage } from "@/util/errors/get-error-message";
 import { AgendamentoUpdateDTO } from "@/app/DTO/AgendamentoUpdateDTO";
+import { StatusAgendamento } from "@prisma/client";
+import { TipoAgendamento } from "@/app/enum/tipoAgendamento";
 
 export async function PATCH(
     request: Request,
@@ -18,8 +19,8 @@ export async function PATCH(
             data: {
                 dataHora: data.dataHora,
                 tempoAtendimento: data.tempoAtendimento,
-                tipoAgendamento: data.tipoAgendamento as any ?? undefined,
-                statusConfirmacao: data.statusConfirmacao as any ?? undefined,
+                tipoAgendamento: data.tipoAgendamento as TipoAgendamento ?? undefined,
+                statusConfirmacao: data.statusConfirmacao as StatusAgendamento ?? undefined,
                 profissional: data.professionalId
                     ? { connect: { id: Number(data.professionalId) } }
                     : undefined,

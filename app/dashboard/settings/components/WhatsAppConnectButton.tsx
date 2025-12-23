@@ -5,12 +5,12 @@ export default function WhatsAppConnectButton() {
     return (
         <div
             className="
-        flex items-center justify-between
-        p-6 rounded-xl border
-        bg-white dark:bg-background-secondary
-        border-gray-200 dark:border-gray-700
-        shadow-sm
-      "
+            flex items-center justify-between
+            p-6 rounded-xl border
+            bg-white dark:bg-background-secondary
+            border-gray-200 dark:border-gray-700
+            shadow-sm
+        "
         >
             <div>
                 <h3 className="text-lg font-semibold text-gray-900 dark:text-white">
@@ -21,8 +21,8 @@ export default function WhatsAppConnectButton() {
                 </p>
             </div>
             <Link
-                href="/dashboard/settings/connect-whatsapp"
-               className="px-4 py-2 rounded bg-green-600 text-card hover:opacity-90 cursor-pointer"
+                href="/dashboard/settings/check-connection"
+                className="px-4 py-2 rounded bg-green-600 text-card hover:opacity-90 cursor-pointer"
             >
                 <span className="text-lg">📱</span>
                 Conectar

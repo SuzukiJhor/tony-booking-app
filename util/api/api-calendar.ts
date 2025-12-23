@@ -33,7 +33,7 @@ export function updateAppointment(id: number, data: any) {
 }
 
 export function deleteAppointment(id: number) {
-  return fetch(`/api/appointments/${id}`, {
-    method: "DELETE",
-  });
+    return fetch(`/api/appointments/${id}`, {
+        method: "DELETE",
+    });
 }
