@@ -80,12 +80,12 @@ export default function ClientDetailsPage() {
                 </div>
 
                 <div className="bg-white dark:bg-background-secondary rounded-xl border text-white dark:border-gray-700 p-6 flex flex-col gap-4 justify-center">
-                    <ButtonCard
+                    {/* <ButtonCard
                         onClick={() => console.log('Editar paciente')}
                     >
                         <Edit2 size={16} />
                         Editar paciente
-                    </ButtonCard>
+                    </ButtonCard> */}
 
                     <ButtonCard
                         onClick={() => setShowHistory((prev) => !prev)}
