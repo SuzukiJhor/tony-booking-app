@@ -13,6 +13,20 @@ export async function fetchProfessionals() {
     return response.json();
 }
 
+export async function fetchProfessionalById(id: number) {
+    const response = await fetch(`${base_endpoint}/${id}`, {
+        method: "GET",
+        cache: "no-cache",
+    });
+
+    if (!response.ok) {
+        const errorData = await response.json();
+        throw new Error(errorData.message || "Erro ao buscar detalhes do profissional");
+    }
+
+    return response.json();
+}
+
 export async function registerProfessional(professionalData: ProfissionalPayload) {
     const response = await fetch(`${base_endpoint}`, {
         method: "POST",
