@@ -1,6 +1,6 @@
 'use client';
 import { useState, useMemo, useEffect } from 'react';
-import { Calendar, Clock, ListFilter, Phone, MessageCircle, Eye, UserCheck, Timer, ArrowLeft } from 'lucide-react';
+import { Calendar, Clock, ListFilter, Phone, Eye, UserCheck, Timer, ArrowLeft } from 'lucide-react';
 import { useLoading } from '@/app/components/LoadingProvider';
 import { selectColorByStatus } from '@/util/selectColorByStatus';
 import { NextSchedulesModalDetails } from '@/app/components/NextSchedulesModalDetails';
@@ -8,6 +8,7 @@ import ButtonCard from '@/app/components/ButtonCard';
 import { useRouter } from "next/navigation";
 import { fetchAppointments } from '@/util/api/api-calendar';
 import { DataBaseEventType } from '../types/eventDBType';
+import ButtonWhatsApp from '@/app/components/ButtonWhatsApp';
 
 export default function ScheduleList() {
     const [events, setEvents] = useState<DataBaseEventType[]>([]);
@@ -59,12 +60,6 @@ export default function ScheduleList() {
             .sort((a, b) => new Date(a.dataHora).getTime() - new Date(b.dataHora).getTime());
     }, [filtro, events]);
 
-    const handleWhatsApp = (phone: string | undefined, name: string | undefined) => {
-        if (!phone) return;
-        const message = encodeURIComponent(`Olá ${name || ''}, confirmamos seu agendamento.`);
-        window.open(`https://wa.me/55${phone.replace(/\D/g, '')}?text=${message}`, '_blank');
-    };
-
     return (
         <div className="p-6 bg-background dark:bg-background-tertiary min-h-screen space-y-6">
             <div className="flex items-center gap-4">
@@ -78,6 +73,7 @@ export default function ScheduleList() {
             </div>
 
             <div className="bg-white dark:bg-background-secondary rounded-2xl shadow-sm border dark:border-gray-800 overflow-hidden mt-6">
+
                 <div className="p-5 border-b dark:border-gray-800 flex flex-col sm:flex-row justify-between items-center gap-4 bg-gray-50/50 dark:bg-white/5">
                     <div className="flex items-center gap-2">
                         <div className="p-2 bg-sky-100 dark:bg-sky-900/30 rounded-lg text-sky-600">
@@ -85,7 +81,7 @@ export default function ScheduleList() {
                         </div>
                         <div>
                             <h3 className="font-bold text-gray-700 dark:text-gray-200">Listagem de Agendamentos</h3>
-                            <p className="text-xs text-gray-500">Filtrando por: {filtro === 'hoje' ? 'Hoje' : 'Próximos 7 dias'}</p>
+                            <p className="text-xs text-gray-500 italic">Filtrando por: {filtro === 'hoje' ? 'Hoje' : 'Próximos 7 dias'}</p>
                         </div>
                     </div>
 
@@ -109,9 +105,9 @@ export default function ScheduleList() {
                     {filteredAppointments.length > 0 ? (
                         filteredAppointments.map((s) => (
                             <div key={s.id} className="p-5 hover:bg-gray-50 dark:hover:bg-white/5 transition-all flex flex-col md:flex-row md:items-center justify-between gap-4">
-                                <div className="flex gap-5 items-center">
-                                    {/* Badge de Data */}
-                                    <div className="text-center min-w-17.5 p-2 bg-white dark:bg-gray-800 rounded-xl border border-gray-200 dark:border-gray-700 shadow-sm">
+
+                                <div className="flex gap-5 items-center flex-1 min-w-0">
+                                    <div className="text-center min-w-17.5 p-2 bg-white dark:bg-gray-800 rounded-xl border border-gray-200 dark:border-gray-700 shadow-sm shrink-0">
                                         <p className="text-[10px] uppercase font-bold text-sky-600">
                                             {new Date(s.dataHora).toLocaleDateString('pt-BR', { weekday: 'short' })}
                                         </p>
@@ -120,17 +116,17 @@ export default function ScheduleList() {
                                         </p>
                                     </div>
 
-                                    <div className="space-y-1">
-                                        <div className="flex items-center gap-2">
-                                            <p className="font-bold text-gray-900 dark:text-white text-lg">
+                                    <div className="space-y-1 overflow-hidden">
+                                        <div className="flex items-center gap-2 flex-wrap">
+                                            <p className="font-bold text-gray-900 dark:text-white text-lg truncate max-w-62.5">
                                                 {s.paciente?.nome || 'Paciente não identificado'}
                                             </p>
-                                            <span className={`px-2 py-0.5 rounded-md text-[10px] font-bold border ${selectColorByStatus(s.statusConfirmacao).classes}`}>
+                                            <span className={`px-2 py-0.5 rounded-md text-[10px] font-bold border shrink-0 ${selectColorByStatus(s.statusConfirmacao).classes}`}>
                                                 {selectColorByStatus(s.statusConfirmacao).label}
                                             </span>
                                         </div>
 
-                                        <div className="flex flex-wrap items-center gap-4 text-sm text-gray-500">
+                                        <div className="flex flex-wrap items-center gap-x-4 gap-y-1 text-sm text-gray-500">
                                             <span className="flex items-center gap-1.5 font-medium text-sky-600 dark:text-sky-400">
                                                 <Clock size={14} />
                                                 {new Date(s.dataHora).toLocaleTimeString('pt-BR', { hour: '2-digit', minute: '2-digit' })}
@@ -143,12 +139,12 @@ export default function ScheduleList() {
                                                 </span>
                                             )}
 
-                                            <span className="flex items-center gap-1.5">
+                                            <span className="flex items-center gap-1.5 shrink-0">
                                                 <Timer size={14} /> {s.tempoAtendimento || 0} min
                                             </span>
 
                                             {s.profissional && (
-                                                <span className="flex items-center gap-1.5 text-indigo-600 dark:text-indigo-400">
+                                                <span className="flex items-center gap-1.5 text-indigo-600 dark:text-indigo-400 font-medium">
                                                     <UserCheck size={14} /> {s.profissional.nome}
                                                 </span>
                                             )}
@@ -156,23 +152,18 @@ export default function ScheduleList() {
                                     </div>
                                 </div>
 
-                                <div className="flex items-center gap-2 ml-auto md:ml-0">
-                                    <button
-                                        onClick={() => handleWhatsApp(s.paciente?.telefone ?? undefined, s.paciente?.nome ?? undefined)}
-                                        className="flex items-center gap-2 px-4 py-2.5 text-green-600 bg-green-50/50 hover:bg-green-100 dark:bg-green-900/10 dark:text-green-400 dark:hover:bg-green-900/30 rounded-xl transition-all border border-green-100 dark:border-green-800/50 font-semibold text-sm cursor-pointer group"
-                                        title="Enviar WhatsApp"
-                                    >
-                                        <MessageCircle size={18} className="transition-transform group-hover:scale-110" />
-                                        <span>Enviar WhatsApp</span>
-                                    </button>
-
-                                    <ButtonCard
-                                        onClick={() => setSelectedSchedule(s)}
-                                        className="flex items-center gap-2"
-                                    >
-                                        <Eye size={16} />
-                                        Detalhes
-                                    </ButtonCard>
+                                <div className="flex flex-row items-center gap-2 shrink-0 md:ml-4">
+                                    <div className="flex-none">
+                                        <ButtonWhatsApp schedule={s} />
+                                    </div>
+                                    <div className="flex-none">
+                                        <ButtonCard onClick={() => setSelectedSchedule(s)}>
+                                            <div className="flex items-center gap-2">
+                                                <Eye size={16} />
+                                                <span>Detalhes</span>
+                                            </div>
+                                        </ButtonCard>
+                                    </div>
                                 </div>
                             </div>
                         ))

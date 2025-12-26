@@ -126,7 +126,7 @@ export default function Dashboard() {
                     </div>
 
                     <div className="transition-all hover:shadow-lg">
-                        <NextSchedulesCard groupedSchedules={groupedSchedules} />
+                        <NextSchedulesCard />
                     </div>
                 </div>
 

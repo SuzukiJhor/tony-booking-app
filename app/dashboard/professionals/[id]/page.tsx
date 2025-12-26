@@ -6,6 +6,7 @@ import { ArrowLeft, History, User, Phone, Mail, FileText, Activity, Calendar, Se
 import { useLoading } from "@/app/components/LoadingProvider";
 import { fetchProfessionalById } from "@/util/api/api-professionals";
 import { formatDate } from "@/util/date/date-br";
+import SubTitlePage from "../../components/SubTitlePage";
 
 export default function ProfessionalDetails() {
     const [showHistory, setShowHistory] = useState(true);
@@ -79,7 +80,7 @@ export default function ProfessionalDetails() {
                 </button>
                 <h2 className="text-xl font-bold text-gray-800 dark:text-white">Voltar</h2>
             </div>
-
+            <SubTitlePage text="Visão Detalhada do Dentista" />
             <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
                 <div className="md:col-span-2 bg-white dark:bg-background-secondary rounded-xl shadow-sm border dark:border-gray-700 p-6">
                     <div className="flex items-start justify-between mb-6">
@@ -174,7 +175,14 @@ export default function ProfessionalDetails() {
                                                 </p>
                                             </td>
                                             <td className="p-4 text-sm dark:text-card">
-                                                {formatDate(agendamento.dataHora)}
+                                                <div className="flex flex-col">
+                                                    <span className="font-medium text-foreground dark:text-card">
+                                                        {formatDate(agendamento.dataHora)}
+                                                    </span>
+                                                    <span className="text-[10px] text-sky-600 dark:text-sky-400 font-bold uppercase">
+                                                        {new Date(agendamento.dataHora).toLocaleDateString('pt-BR', { weekday: 'long' })}
+                                                    </span>
+                                                </div>
                                             </td>
                                             <td className="p-4 text-center">
                                                 <span className={`text-[10px] font-bold px-2.5 py-1 rounded-full uppercase
