@@ -54,7 +54,6 @@ export default function LoginPage() {
         });
 
         setIsLoading(false);
-
         if (res?.error) {
             setError("Email ou senha inválidos");
             return;
@@ -93,7 +92,7 @@ export default function LoginPage() {
                         placeholder="Seu e-mail"
                         value={email}
                         onChange={(e) => setEmail(e.target.value)}
-                        className="w-full px-3 py-2 rounded-lg border text-background bg-secondary focus:ring-2 focus:ring-primary focus:outline-none placeholder-black/50 dark:placeholder-white/50"
+                        className="w-full px-3 py-2 rounded-lg border text-black bg-secondary dark:bg-background-tertiary focus:ring-2 focus:ring-primary focus:outline-none placeholder-black/50 dark:placeholder-white/50"
                         required
                         variants={itemVariants}
                         whileHover="hover"
@@ -104,7 +103,7 @@ export default function LoginPage() {
                         placeholder="Sua senha"
                         value={password}
                         onChange={(e) => setPassword(e.target.value)}
-                        className="w-full px-3 py-2 rounded-lg border bg-secondary text-background focus:ring-2 focus:ring-primary focus:outline-none placeholder-black/50 dark:placeholder-white/50"
+                        className="w-full px-3 py-2 rounded-lg border text-black bg-secondary dark:bg-background-tertiary focus:ring-2 focus:ring-primary focus:outline-none placeholder-black/50 dark:placeholder-white/50"
                         required
                         variants={itemVariants}
                         whileHover="hover"

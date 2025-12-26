@@ -1,5 +1,6 @@
 'use client';
 import Link from 'next/link';
+import SubTitlePage from '../../components/SubTitlePage';
 
 export default function WhatsAppConnectButton() {
     return (
@@ -13,9 +14,7 @@ export default function WhatsAppConnectButton() {
         "
         >
             <div>
-                <h3 className="text-lg font-semibold text-gray-900 dark:text-white">
-                    Integração com WhatsApp
-                </h3>
+                 <SubTitlePage text="Integração com WhatsApp" />
                 <p className="mt-1 text-sm text-gray-600 dark:text-gray-400">
                     Conecte sua conta escaneando um QR Code
                 </p>

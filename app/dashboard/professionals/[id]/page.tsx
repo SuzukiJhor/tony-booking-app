@@ -5,6 +5,7 @@ import { useRouter, useParams } from "next/navigation";
 import { ArrowLeft, History, User, Phone, Mail, FileText, Activity, Calendar, Search } from "lucide-react";
 import { useLoading } from "@/app/components/LoadingProvider";
 import { fetchProfessionalById } from "@/util/api/api-professionals";
+import { formatDate } from "@/util/date/date-br";
 
 export default function ProfessionalDetails() {
     const [showHistory, setShowHistory] = useState(true);
@@ -66,12 +67,6 @@ export default function ProfessionalDetails() {
     const agendamentos = professional?.agendamentos
         ?.filter((a: any) => !a.isDeleted)
         .sort((a: any, b: any) => new Date(b.dataHora).getTime() - new Date(a.dataHora).getTime()) ?? [];
-
-    const formatDate = (date: string) =>
-        new Intl.DateTimeFormat("pt-BR", {
-            dateStyle: "short",
-            timeStyle: "short",
-        }).format(new Date(date));
 
     return (
         <div className="p-6 bg-background dark:bg-background-tertiary min-h-screen space-y-6">

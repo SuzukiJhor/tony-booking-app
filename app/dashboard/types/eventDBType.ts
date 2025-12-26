@@ -9,7 +9,7 @@ export interface DataBaseEventType {
     mensagemId?: string | null;
     pacienteId?: number;
     profissionalId?: number;
-    paciente?: PacienteEventInfo;
+    paciente: PacienteEventInfo;
     empresaId: number;
     tipoAgendamento: TipoAgendamento;
     tempoAtendimento: number;

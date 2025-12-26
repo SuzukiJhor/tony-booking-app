@@ -4,4 +4,11 @@ export type DataBasePacienteType = {
     telefone: string;
     email: string | null;
     empresaId: number;
+    agendamentos: {
+        statusConfirmacao: string;
+        id: number;
+        dataHora: string;
+        status: string;
+        isDeleted: boolean;
+    }[];
 };

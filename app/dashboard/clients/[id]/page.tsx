@@ -6,6 +6,7 @@ import { useClient } from "@/app/context/ClientsContext";
 import { ArrowLeft, Edit2, History } from "lucide-react";
 import { DataBasePacienteType } from "../../types/patientDBType";
 import { LoadingSpinner } from "@/app/components/LoadingProvider";
+import { formatDate } from "@/util/date/date-br";
 
 export default function ClientDetailsPage() {
     const [showHistory, setShowHistory] = useState(false);
@@ -34,12 +35,6 @@ export default function ClientDetailsPage() {
 
     const agendamentos =
         client.agendamentos?.filter((a) => !a.isDeleted) ?? [];
-
-    const formatDate = (date: string) =>
-        new Intl.DateTimeFormat("pt-BR", {
-            dateStyle: "short",
-            timeStyle: "short",
-        }).format(new Date(date));
 
     return (
         <div className="p-6 bg-background dark:bg-background-tertiary min-h-screen space-y-6">

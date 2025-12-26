@@ -113,9 +113,10 @@ model Agendamento {
 // ⚙️ Modelo Configuração - Isolado por Empresa
 // -----------------------------------------------------
 model Configuracao {
-  id      Int     @id @default(autoincrement())
-  chave   String
-  valor   String?
+  id        Int         @id @default(autoincrement())
+  chave     String
+  valor     String?
+  telefone  String?
 
   empresaId Int
   empresa   Empresa @relation(fields: [empresaId], references: [id])

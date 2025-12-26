@@ -1,15 +1,17 @@
 'use client';
+import { useEffect } from "react";
 import Swal from "sweetalert2";
 import toast, { Toaster } from "react-hot-toast";
 import { useCalendar } from "@/app/context/CalendarContext";
 import TitlePage from "@/app/dashboard/components/TitlePage";
 import { DialogNewEvent } from "../components/DialogNewEvent";
+import { useLoading } from "@/app/components/LoadingProvider";
 import { CalendarEvent, IlamyCalendar } from "@ilamy/calendar";
 import { brasilTranslations } from "@/util/translations-calendar";
 import { mapEventsToCalendar } from "@/util/map-event-to-calendar";
 import { deleteAppointment, registerAppointment, updateAppointment } from "@/util/api/api-calendar";
-import { useLoading } from "@/app/components/LoadingProvider";
-import { useEffect } from "react";
+import { formatDate } from "@/util/date/date-br";
+import { DataBaseEventType } from "../types/eventDBType";
 
 const styleConfigureToast = {
     style: {
@@ -24,18 +26,35 @@ export default function Calendar() {
     const { setIsLoading } = useLoading();
 
     const handleAdd = async (eventData: any) => {
-        await toast.promise(
-            registerAppointment(eventData),
-            {
-                loading: 'Registrando agendamento...',
-                success: 'Agendamento registrado com sucesso!',
-                error: 'Erro ao registrar o agendamento.',
-            },
-            {
-                style: styleConfigureToast.style,
-            }
-        );
-        await reloadEvents();
+        const { paciente, dataHora } = eventData;
+
+        const title = `Confirma a reserva para "${paciente.nome}" no dia "${formatDate(dataHora as string)}"?`
+        const result = await Swal.fire({
+            title: title,
+            text: "Esta reserva sera criada e aparecerá no calendário",
+            icon: "info",
+            showCancelButton: true,
+            confirmButtonColor: 'oklch(0.696 0.17 162.48)',
+            cancelButtonColor: '#d33 ',
+            confirmButtonText: 'Sim, Agendar!',
+            cancelButtonText: 'Cancelar'
+        });
+
+        if (result.isConfirmed) {
+            await toast.promise(
+                registerAppointment(eventData),
+                {
+                    loading: 'Registrando agendamento...',
+                    success: 'Agendamento registrado com sucesso!',
+                    error: 'Erro ao registrar o agendamento.',
+                },
+                {
+                    style: styleConfigureToast.style,
+                }
+            );
+            await reloadEvents();
+        }
+
     };
 
     const handleUpdate = async (eventData: any) => {
@@ -116,8 +135,7 @@ export default function Calendar() {
                     translations={brasilTranslations}
                     timezone="America/Sao_Paulo"
                     headerClassName="text-secondary bg-black/50 dark:bg-background-secondary dark:text-primary"
-                    viewHeaderClassName="bg-sky-700 text-background font-semibold py-3"
-                    selectedEvent={'null'}
+                    viewHeaderClassName="bg-sky-700 text-card font-semibold"
                     renderEventForm={(props) => (
                         <DialogNewEvent
                             {...props}

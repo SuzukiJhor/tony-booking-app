@@ -1,5 +1,4 @@
 import { z } from "zod";
-import { ProfissionalDTO } from "./ProfessionalDTO";
 
 export const PacienteDTO = z.object({
   nome: z

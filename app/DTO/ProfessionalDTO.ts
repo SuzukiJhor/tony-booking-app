@@ -27,10 +27,7 @@ export const ProfissionalDTO = z.object({
         .default(true),
 
     empresaId: z
-        .number({
-            required_error: "O ID da empresa é obrigatório",
-            invalid_type_error: "ID da empresa deve ser um número",
-        })
+        .number()
         .min(1, "empresaId inválido"),
 });
 
