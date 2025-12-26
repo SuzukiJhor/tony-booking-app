@@ -5,6 +5,8 @@ export type DataBasePacienteType = {
     email: string | null;
     empresaId: number;
     agendamentos: {
+        profissionalId?: number;
+        tempoAtendimento?: string;
         statusConfirmacao: string;
         id: number;
         dataHora: string;

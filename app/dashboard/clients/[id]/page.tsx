@@ -3,7 +3,7 @@ import { useState } from "react";
 import ButtonCard from "@/app/components/ButtonCard";
 import { useParams, useRouter } from "next/navigation";
 import { useClient } from "@/app/context/ClientsContext";
-import { ArrowLeft, Edit2, History } from "lucide-react";
+import { ArrowLeft, History } from "lucide-react";
 import { DataBasePacienteType } from "../../types/patientDBType";
 import { LoadingSpinner } from "@/app/components/LoadingProvider";
 import { formatDate } from "@/util/date/date-br";

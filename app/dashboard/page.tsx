@@ -7,8 +7,10 @@ import { useLoading } from '../components/LoadingProvider';
 import StatusPizzaChart from '../components/StatusPizzaChart';
 import { DataBasePacienteType } from './types/patientDBType';
 import NextSchedulesCard from '../components/NextSchedulesCard';
-import { CalendarCheck, Clock, Users, MessageSquare } from 'lucide-react';
+import { CalendarCheck, Clock, Users, MessageSquare, ListFilter, ArrowRight } from 'lucide-react';
 import HistoryConfirmationCard from '../components/HistoryConfirmationCard';
+import Link from 'next/link';
+import RedirectToDetailsSchedules from '../components/RedirectToDetailsSchedules';
 
 export default function Dashboard() {
     const { clients, reloadEvents } = useClient() as {
@@ -129,6 +131,10 @@ export default function Dashboard() {
                 </div>
 
                 <div className="lg:col-span-4 sticky top-8">
+                    <div className="transition-all hover:shadow-lg mb-6">
+                        <RedirectToDetailsSchedules />
+                    </div>
+
                     <div className="transition-all hover:shadow-lg">
                         <StatusPizzaChart statusChartData={statusChartData} />
                     </div>
