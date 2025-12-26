@@ -1,6 +1,9 @@
-import { Clock } from "lucide-react";
-import SubTitlePage from "../dashboard/components/SubTitlePage";
+import { useState } from "react";
+import ButtonCard from "./ButtonCard";
+import { Clock, Eye } from "lucide-react";
 import { statusStyleMap } from "../dashboard/constants";
+import SubTitlePage from "../dashboard/components/SubTitlePage";
+import { NextSchedulesModalDetails } from "./NextSchedulesModalDetails";
 
 interface NextSchedulesCardProps {
     groupedSchedules: {
@@ -45,7 +48,7 @@ const renderItem = (s: {
     status: string;
     isDeleted: boolean;
     statusConfirmacao: string;
-}) => {
+}, setSelectedSchedule: (id: number) => void) => {
     const date = new Date(s.dataHora);
     return (
         <div key={s.id} className="group py-3 px-2 flex justify-between items-center rounded-lg hover:bg-gray-50 dark:hover:bg-white/5 transition-colors border-b border-gray-100 dark:border-gray-800 last:border-0">
@@ -60,12 +63,21 @@ const renderItem = (s: {
             </div>
             <div className="flex items-end">
                 <StatusBadge status={s.statusConfirmacao} />
+                <div className="ml-50">
+                    <ButtonCard
+                        onClick={() => setSelectedSchedule(s.id)}
+                    >
+                        <Eye size={16} />
+                        Ver Mais
+                    </ButtonCard>
+                </div>
             </div>
         </div>
     );
 };
 
 export default function NextSchedulesCard({ groupedSchedules }: NextSchedulesCardProps) {
+    const [selectedSchedule, setSelectedSchedule] = useState<NextSchedulesCardProps['groupedSchedules']['hoje'][number] | null>(null);
     return (
         <div className="bg-white dark:bg-background-secondary p-6 rounded-xl shadow-md border dark:border-gray-700">
             <SubTitlePage text="Próximos Agendamentos" />
@@ -81,21 +93,37 @@ export default function NextSchedulesCard({ groupedSchedules }: NextSchedulesCar
                             <h4 className="text-xs font-bold uppercase tracking-widest text-sky-600 dark:text-sky-400">Hoje</h4>
                             <div className="grow border-t border-sky-100 dark:border-sky-900/30"></div>
                         </div>
-                        <div className="space-y-1">{groupedSchedules.hoje.map((s: NextSchedulesCardProps['groupedSchedules']['hoje'][number]) => renderItem(s))}</div>
-                    </li>
-                )}
-
-                {groupedSchedules.amanha.length > 0 && (
-                    <li>
-                        <div className="flex items-center gap-2 mb-4">
-                            <span className="w-2 h-2 rounded-full bg-gray-300"></span>
-                            <h4 className="text-xs font-bold uppercase tracking-widest text-gray-500">Amanhã</h4>
-                            <div className="grow border-t border-gray-100 dark:border-gray-800"></div>
-                        </div>
-                        <div className="space-y-1">{groupedSchedules.amanha.map((s: NextSchedulesCardProps['groupedSchedules']['amanha'][number]) => renderItem(s))}</div>
+                        <div className="space-y-1">{groupedSchedules.hoje.map((s: NextSchedulesCardProps['groupedSchedules']['hoje'][number]) => renderItem(s, (id: number) => {
+                            const found = groupedSchedules.hoje.find(item => item.id === id);
+                            setSelectedSchedule(found ?? null);
+                        }))}</div>
+                        {groupedSchedules.amanha.length > 0 && (
+                            <li>
+                                <div className="flex items-center gap-2 mb-4">
+                                    <span className="w-2 h-2 rounded-full bg-sky-500"></span>
+                                    <h4 className="text-xs font-bold uppercase tracking-widest text-gray-500">Amanhã</h4>
+                                    <div className="grow border-t border-gray-100 dark:border-gray-800"></div>
+                                </div>
+                                <div className="space-y-1">{groupedSchedules.amanha.map((s: NextSchedulesCardProps['groupedSchedules']['amanha'][number]) => renderItem(s, (id: number) => {
+                                    const found = groupedSchedules.amanha.find(item => item.id === id);
+                                    setSelectedSchedule(found ?? null);
+                                }))}</div>
+                            </li>
+                        )}
+                        <div className="space-y-1">{groupedSchedules.amanha.map((s: NextSchedulesCardProps['groupedSchedules']['amanha'][number]) => renderItem(s, (id: number) => {
+                            const found = groupedSchedules.amanha.find(item => item.id === id);
+                            setSelectedSchedule(found ?? null);
+                        }))}</div>
                     </li>
                 )}
             </ul>
+            {selectedSchedule && (
+                <NextSchedulesModalDetails
+                    schedule={selectedSchedule}
+                    onClose={() => setSelectedSchedule(null)}
+                />
+            )}
         </div>
+
     );
 }
