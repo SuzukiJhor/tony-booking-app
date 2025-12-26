@@ -46,6 +46,7 @@ export default function ClientDetailsPage() {
                 >
                     <ArrowLeft size={20} />
                 </button>
+                <h2 className="text-xl font-bold text-gray-800 dark:text-white">Voltar</h2>
             </div>
 
 

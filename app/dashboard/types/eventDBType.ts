@@ -2,6 +2,7 @@ import { StatusConfirmacao } from "@/app/enum/statusConfirmacao";
 import { TipoAgendamento } from "@prisma/client";
 
 export interface DataBaseEventType {
+    isDeleted?: boolean;
     id: number;
     dataHora: string | Date;
     statusConfirmacao: StatusConfirmacao;

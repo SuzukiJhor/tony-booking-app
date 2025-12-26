@@ -48,6 +48,7 @@ export default function CheckConnectionPage() {
                 >
                     <ArrowLeft size={20} />
                 </button>
+                <h2 className="text-xl font-bold text-gray-800 dark:text-white">Voltar</h2>
             </div>
 
             <h1 className="text-2xl font-bold mb-6 mt-8 text-gray-900 dark:text-white flex items-center gap-2">

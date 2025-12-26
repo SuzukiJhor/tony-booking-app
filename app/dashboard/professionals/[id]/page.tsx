@@ -77,6 +77,7 @@ export default function ProfessionalDetails() {
                 >
                     <ArrowLeft size={20} />
                 </button>
+                <h2 className="text-xl font-bold text-gray-800 dark:text-white">Voltar</h2>
             </div>
 
             <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
