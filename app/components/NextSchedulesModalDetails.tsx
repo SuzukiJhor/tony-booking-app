@@ -1,19 +1,15 @@
+import { selectColorByStatus } from "@/util/selectColorByStatus";
 import {
     Clock, User, Calendar as CalendarIcon, X,
     Activity, Timer, CalendarCheck,
     ShieldCheck, Info
 } from "lucide-react";
-import { statusStyleMap } from "../dashboard/constants";
 
 interface ModalDetailsProps {
     schedule: any;
     onClose: () => void;
 }
 
-function selectColorByStatus(status: string) {
-    const config = statusStyleMap[status] || statusStyleMap.PENDENTE;
-    return config;
-}
 
 export function NextSchedulesModalDetails({ schedule, onClose }: ModalDetailsProps) {
     if (!schedule) return null;
