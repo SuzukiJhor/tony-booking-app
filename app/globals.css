@@ -95,7 +95,7 @@ body {
 
 :root {
   --radius: 0.625rem;
-  --background: oklch(0.97 0.01 90);  
+  --background: oklch(0.97 0.01 90);
   --foreground: oklch(0.145 0 0);
   --card: oklch(1 0 0);
   --card-foreground: oklch(0.145 0 0);
@@ -132,7 +132,21 @@ body {
   * {
     @apply border-border outline-ring/50;
   }
+
   body {
     @apply bg-background text-foreground;
   }
+}
+
+[data-testid="day-number-today"] {
+  border: 2px solid #0ea5e9;
+  color: #0ea5e9;
+  transition: all 0.2s;
+  background-color: rgba(14, 165, 233, 0.15);
+}
+
+.dark [data-testid="day-number-today"] {
+  border-color: #38bdf8;
+  color: #38bdf8;
+  background-color: rgba(14, 165, 233, 0.15);
 }

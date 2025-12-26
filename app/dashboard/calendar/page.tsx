@@ -1,6 +1,7 @@
 'use client';
-import { useEffect } from "react";
 import Swal from "sweetalert2";
+import { useEffect } from "react";
+import { formatDate } from "@/util/date/date-br";
 import toast, { Toaster } from "react-hot-toast";
 import { useCalendar } from "@/app/context/CalendarContext";
 import TitlePage from "@/app/dashboard/components/TitlePage";
@@ -10,8 +11,6 @@ import { CalendarEvent, IlamyCalendar } from "@ilamy/calendar";
 import { brasilTranslations } from "@/util/translations-calendar";
 import { mapEventsToCalendar } from "@/util/map-event-to-calendar";
 import { deleteAppointment, registerAppointment, updateAppointment } from "@/util/api/api-calendar";
-import { formatDate } from "@/util/date/date-br";
-import { DataBaseEventType } from "../types/eventDBType";
 
 const styleConfigureToast = {
     style: {
@@ -134,8 +133,8 @@ export default function Calendar() {
                     locale="pt-BR"
                     translations={brasilTranslations}
                     timezone="America/Sao_Paulo"
-                    headerClassName="text-secondary bg-black/50 dark:bg-background-secondary dark:text-primary"
-                    viewHeaderClassName="bg-sky-700 text-card font-semibold"
+                    headerClassName="text-secondary rounded-t-xl border-b  bg-black/50 dark:bg-background-secondary dark:text-primary"
+                    viewHeaderClassName="bg-sky-600 text-white font-medium uppercase text-xs tracking-wider"
                     renderEventForm={(props) => (
                         <DialogNewEvent
                             {...props}

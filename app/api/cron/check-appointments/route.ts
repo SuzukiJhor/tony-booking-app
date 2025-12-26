@@ -8,29 +8,39 @@ export async function GET(request: Request) {
     // }
 
     try {
-        // 2. Definir janela: Agendamentos de AMANHÃ
-        const amanha = new Date();
-        amanha.setDate(amanha.getDate() + 1);
-        const inicioAmanha = new Date(amanha.setHours(0, 0, 0, 0));
-        const fimAmanha = new Date(amanha.setHours(23, 59, 59, 999));
-        console.log('Janela de agendamentos:', inicioAmanha, fimAmanha);
+        const hoje = new Date();       
+        const inicioHoje = new Date(hoje);
+        inicioHoje.setHours(0, 0, 0, 0);
+
+        // Configuramos o fim do dia (23:59:59)
+        const fimHoje = new Date(hoje);
+        fimHoje.setHours(23, 59, 59, 999);
+
+        console.log('Buscando agendamentos entre:', inicioHoje.toISOString(), 'e', fimHoje.toISOString());
+
         const agendamentos = await prisma.agendamento.findMany({
             where: {
-                dataHora: { gte: inicioAmanha, lte: fimAmanha },
+                dataHora: {
+                    gte: inicioHoje,
+                    lte: fimHoje
+                },
                 statusConfirmacao: 'PENDENTE',
                 isDeleted: false,
             },
             include: {
                 paciente: true,
+                profissional: true
             }
         });
 
         return NextResponse.json({
             processados: agendamentos.length,
+            hoje: inicioHoje.toLocaleDateString('pt-BR'),
             detalhes: agendamentos
         });
 
     } catch (error) {
+        console.error('Erro no Cron:', error);
         return NextResponse.json({ error: 'Erro interno no cron' }, { status: 500 });
     }
 }

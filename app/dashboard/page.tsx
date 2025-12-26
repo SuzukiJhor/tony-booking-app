@@ -100,7 +100,7 @@ export default function Dashboard() {
     return (
         <div className="p-6 lg:p-8 bg-background dark:bg-background-tertiary min-h-screen max-w-400 mx-auto">
 
-            <header className="mb-8">
+            <header className="mb-2">
                 <TitlePage title="Visão Geral da Clínica" />
             </header>
 
