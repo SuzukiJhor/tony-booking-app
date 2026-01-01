@@ -1,26 +1,31 @@
 'use client';
-import { ArrowLeft, Loader2, ShieldCheck, Wifi, CheckCircle2, XCircle, RefreshCcw } from "lucide-react";
 import Link from "next/link";
-import { useRouter } from 'next/navigation';
 import { useEffect, useState } from "react";
+import { useSession } from "next-auth/react";
+import { useRouter } from 'next/navigation';
+import { ArrowLeft, Loader2, ShieldCheck, Wifi, CheckCircle2, XCircle, RefreshCcw } from "lucide-react";
+import { checkConnectionWppService } from "@/app/api-client/check-connection-wpp";
 
 export default function CheckConnectionPage() {
+        const { data: session } = useSession();
+    
     const [status, setStatus] = useState<'loading' | 'connected' | 'error' | 'disconnected'>('loading');
     const [message, setMessage] = useState("Estamos verificando a sincronização com seu WhatsApp.");
     const router = useRouter();
+    const empresaId = session?.user?.empresaID;
 
     async function checkConnection() {
         setStatus('loading');
         setMessage("Estamos verificando a sincronização com seu WhatsApp.");
         try {
-            const res = await fetch('/api/whatsapp/check-connection');
-            const { data, error } = await res.json();
-            if (error) {
+            if (!empresaId) return;
+            const { data } = await checkConnectionWppService(empresaId!);
+            if (data.error) {
                 setStatus('disconnected');
                 setMessage("A instância está desconectada!");
                 return;
             }
-            if (res.ok && data?.connected) {
+            if (data?.connected) {
                 setStatus('connected');
                 setMessage("Sua instância está conectada e pronta para uso!");
                 return;

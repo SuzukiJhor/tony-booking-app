@@ -1,4 +1,3 @@
-import ButtonRedirectPrimary from "@/app/components/ButtonRedirectPrimary";
 import { DataBasePacienteType } from "../../types/patientDBType";
 import ButtonCard from "@/app/components/ButtonCard";
 import { Eye } from "lucide-react";

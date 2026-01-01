@@ -5,8 +5,7 @@ const statusColorMap: Record<string, string> = {
     CONFIRMADO: "#16a34a",
     PENDENTE: "#eab308",
     MENSAGEM_ENVIADA: "#3b82f6",
-    NAO_CONFIRMADO: "#A0A0A0",
-    CANCELADO: "#dc2626",
+    NAO_CONFIRMADO: "#dc2626",
 };
 
 export function mapEventsToCalendar(events: DataBaseEventType[]): CalendarEventType[] {

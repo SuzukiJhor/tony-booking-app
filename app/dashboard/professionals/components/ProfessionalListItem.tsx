@@ -46,12 +46,18 @@ export default function ProfessionalListItem({
             </div>
 
             <div className="flex items-center gap-2 w-full sm:w-auto border-t sm:border-t-0 pt-3 sm:pt-0">
-                <ButtonCard
-                    onClick={() => onEdit(professional.id)}
-                >
-                    <Edit2 size={16} />
-                    Editar
-                </ButtonCard>
+
+                {!professional.ativo ? (
+                    <ButtonCard disabled>
+                        <Edit2 size={16} />
+                        Editar
+                    </ButtonCard>
+                ) : (
+                    <ButtonCard onClick={() => onEdit(professional.id)}>
+                        <Edit2 size={16} />
+                        Editar
+                    </ButtonCard>
+                )}
 
                 <ButtonCard
                     href={`/dashboard/professionals/${professional.id}`}

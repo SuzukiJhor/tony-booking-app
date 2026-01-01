@@ -12,7 +12,6 @@ export default function DialogNewClient({
     onClose,
 }: any) {
     const { data: session } = useSession();
-    // Extrai os detalhes se estiver editando, ou inicia vazio
     const clientDetails = selectedClient || null;
     const [phoneValue, setPhoneValue] = useState(clientDetails?.telefone ?? "");
 
@@ -71,7 +70,7 @@ export default function DialogNewClient({
 
                 <div className="p-6 space-y-5">
                     <div className="flex flex-col">
-                        <label htmlFor="clientName" className="mb-2 font-medium  dark:text-background">Nome do(a) Dentista</label>
+                        <label htmlFor="clientName" className="mb-2 font-medium  dark:text-background">Nome do(a) Paciente</label>
                         <input
                             type="text"
                             name="clientName"

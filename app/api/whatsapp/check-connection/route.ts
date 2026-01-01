@@ -1,20 +1,31 @@
-import { NextResponse } from "next/server";
-
+import { NextResponse } from 'next/server';
+import prisma from '@/lib/prisma'
 const WUZAPI_BASE_URL = process.env.WUZAPI_URL || "https://wuzapi.tonyv1.cloud";
-const WUZAPI_ADMIN_TOKEN = process.env.WUZAPI_ADMIN_TOKEN!;
 
-export async function GET() {
-    if (!WUZAPI_ADMIN_TOKEN)
-        return NextResponse.json(
-            { status: 'error', message: 'Configuração do servidor ausente (Token).' },
-            { status: 500 }
-        );
+export async function POST(request: Request) {
+
+    const { companyId } = await request.json();
+
+    if (!companyId) return NextResponse.json({ message: 'Company ID é obrigatório' }, { status: 400 });
+
+    const settingsData = await prisma.configuracao.findMany({
+        where: { empresaId: companyId },
+    });
+
+    const settings = settingsData.reduce((acc: any, curr) => {
+        acc[curr.chave] = curr.valor || curr.telefone;
+        return acc;
+    }, {});
+
+    const authToken = settings['wuzapiInstance'];
+    if (!authToken)
+        return NextResponse.json({ message: 'Token de autenticação não encontrado' }, { status: 400 });
 
     try {
         const response = await fetch(`${WUZAPI_BASE_URL}/session/status`, {
             headers: {
                 accept: 'application/json',
-                token: WUZAPI_ADMIN_TOKEN!,
+                token: authToken!,
             },
             cache: 'no-store',
         });

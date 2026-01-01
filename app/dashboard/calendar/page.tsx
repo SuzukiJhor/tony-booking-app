@@ -10,7 +10,9 @@ import { useLoading } from "@/app/components/LoadingProvider";
 import { CalendarEvent, IlamyCalendar } from "@ilamy/calendar";
 import { brasilTranslations } from "@/util/translations-calendar";
 import { mapEventsToCalendar } from "@/util/map-event-to-calendar";
-import { deleteAppointment, registerAppointment, updateAppointment } from "@/util/api/api-calendar";
+import { createSchedule } from "@/app/api-client/create-schedule";
+import { updateSchedule } from "@/app/api-client/update-schedule";
+import { deleteSchedule } from "@/app/api-client/delete-schedule";
 
 const styleConfigureToast = {
     style: {
@@ -41,7 +43,7 @@ export default function Calendar() {
 
         if (result.isConfirmed) {
             await toast.promise(
-                registerAppointment(eventData),
+                createSchedule(eventData),
                 {
                     loading: 'Registrando agendamento...',
                     success: 'Agendamento registrado com sucesso!',
@@ -63,7 +65,7 @@ export default function Calendar() {
         }
 
         await toast.promise(
-            updateAppointment(eventData.id, eventData),
+            updateSchedule(eventData.id, eventData),
             {
                 loading: 'Atualizando agendamento...',
                 success: 'Agendamento atualizado com sucesso!',
@@ -92,7 +94,7 @@ export default function Calendar() {
 
         if (result.isConfirmed) {
             await toast.promise(
-                deleteAppointment(Number(id)),
+                deleteSchedule(Number(id)),
                 {
                     loading: 'Excluindo agendamento...',
                     success: 'Agendamento excluido com sucesso!',

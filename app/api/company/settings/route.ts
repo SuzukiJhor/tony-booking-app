@@ -57,7 +57,7 @@ export async function POST(request: Request) {
         const updatedSetting = await prisma.configuracao.upsert({
             where: {
                 chave_empresaId: {
-                    chave: "wuzapiInstance",
+                    chave: "WUZAPI_TOKEN",
                     empresaId: companyId,
                 },
             },
@@ -65,7 +65,7 @@ export async function POST(request: Request) {
                 telefone: cleanPhone,
             },
             create: {
-                chave: "wuzapiInstance",
+                chave: "WUZAPI_TOKEN",
                 telefone: cleanPhone,
                 empresaId: companyId,
             },

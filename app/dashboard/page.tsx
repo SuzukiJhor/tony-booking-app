@@ -7,9 +7,8 @@ import { useLoading } from '../components/LoadingProvider';
 import StatusPizzaChart from '../components/StatusPizzaChart';
 import { DataBasePacienteType } from './types/patientDBType';
 import NextSchedulesCard from '../components/NextSchedulesCard';
-import { CalendarCheck, Clock, Users, MessageSquare, ListFilter, ArrowRight } from 'lucide-react';
+import { CalendarCheck, Clock, Users, MessageSquare } from 'lucide-react';
 import HistoryConfirmationCard from '../components/HistoryConfirmationCard';
-import Link from 'next/link';
 import RedirectToDetailsSchedules from '../components/RedirectToDetailsSchedules';
 
 export default function Dashboard() {
@@ -23,27 +22,6 @@ export default function Dashboard() {
         () => clients.flatMap(client => client.agendamentos.filter(a => !a.isDeleted)),
         [clients]
     );
-
-    const groupedSchedules = useMemo(() => {
-        const todayStr = new Date().toDateString();
-        const tomorrow = new Date();
-        tomorrow.setDate(tomorrow.getDate() + 1);
-        const tomorrowStr = tomorrow.toDateString();
-
-        const flatSchedules = clients.flatMap(client =>
-            client.agendamentos
-                .filter(a => {
-                    const d = new Date(a.dataHora);
-                    return !a.isDeleted && (d.toDateString() === todayStr || d.toDateString() === tomorrowStr);
-                })
-                .map(a => ({ ...a, patientName: client.nome }))
-        ).sort((a, b) => new Date(a.dataHora).getTime() - new Date(b.dataHora).getTime());
-
-        return {
-            hoje: flatSchedules.filter(s => new Date(s.dataHora).toDateString() === todayStr),
-            amanha: flatSchedules.filter(s => new Date(s.dataHora).toDateString() === tomorrowStr),
-        };
-    }, [clients]);
 
     const todayKey = new Date().toDateString();
     const schedulesToday = schedules.filter(a => new Date(a.dataHora).toDateString() === todayKey).length;

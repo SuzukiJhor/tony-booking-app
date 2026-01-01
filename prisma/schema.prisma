@@ -29,6 +29,8 @@ model Empresa {
   slug             String         @unique
   planoAtivo       String         @default("FREE")
   
+  endereco      Endereco?
+
   // Relacionamentos Inversos (back-relations)
   pacientes        Paciente[]
   profissionais    Profissional[]
@@ -107,6 +109,20 @@ model Agendamento {
   tempoAtendimento  Int                  @default(60)
 
   isDeleted         Boolean           @default(false)
+}
+
+model Endereco {
+  id          Int      @id @default(autoincrement())
+  logradouro  String
+  numero      String
+  complemento String?
+  bairro      String?
+  cidade      String
+  estado      String?
+  cep         String?
+
+  empresaId   Int      @unique
+  empresa     Empresa  @relation(fields: [empresaId], references: [id], onDelete: Cascade)
 }
 
 // -----------------------------------------------------

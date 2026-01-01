@@ -13,11 +13,9 @@ export default function DialogNewProfessional({
     onClose,
 }: any) {
     const { data: session } = useSession();
-    // Extrai os detalhes se estiver editando, ou inicia vazio
     const professionalDetails = selectedProfessional || null;
     const [phoneValue, setPhoneValue] = useState(professionalDetails?.telefone ?? "");
 
-    // Sincroniza o telefone quando o modal abre ou o profissional selecionado muda
     useEffect(() => {
         if (professionalDetails?.telefone) {
             // eslint-disable-next-line react-hooks/set-state-in-effect
@@ -42,12 +40,10 @@ export default function DialogNewProfessional({
             empresaId: session?.user?.empresaID,
         };
 
-        if (professionalDetails?.id) {
-            await onUpdate?.({ ...data, id: professionalDetails.id });
-        } else {
-            await onAdd?.(data);
-        }
-        onClose();
+        if (professionalDetails?.id)
+            return onUpdate?.({ ...data, id: professionalDetails.id });
+
+        return onAdd?.(data);
     };
 
     return (
