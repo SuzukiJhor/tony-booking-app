@@ -1,4 +1,5 @@
 'use server'
+import { ZodError } from 'zod';
 import { revalidatePath } from 'next/cache';
 import { getValidatedCompanyId } from '@/lib/auth-utils';
 import { PatientService } from '@/app/services/ClientService';
@@ -11,8 +12,7 @@ export async function getAllClientsAction() {
         const patients = await service.getAll();
         return { success: true, data: patients };
     } catch (error: any) {
-        console.error("Action Error (Get All):", error);
-        return { success: false, error: "Erro ao buscar profissionais" };
+        return { success: false, error: "Erro ao buscar pacientes" };
     }
 }
 
@@ -25,7 +25,13 @@ export async function createClientAction(data: any) {
         revalidatePath('/dashboard/clients');
         return { success: true };
     } catch (error: any) {
-        console.error("Action Error (Create):", error);
+        if (error instanceof ZodError) {
+            const mensagem = error.issues[0]?.message;
+            return {
+                success: false,
+                error: mensagem || "Dados de formulário inválidos"
+            };
+        }
         return {
             success: false,
             error: error.message || "Erro ao registrar cliente"
@@ -42,8 +48,14 @@ export async function updateClientAction(id: number, data: any) {
         revalidatePath('/dashboard/clients');
         return { success: true };
     } catch (error: any) {
-        console.error("Action Error (Update):", error);
-        return { success: false, error: "Erro ao atualizar cliente" };
+        if (error instanceof ZodError) {
+            const mensagem = error.issues[0]?.message;
+            return {
+                success: false,
+                error: mensagem || "Dados de formulário inválidos"
+            };
+        }
+        return { success: false, error: error.message || "Erro ao atualizar cliente" };
     }
 }
 
@@ -56,7 +68,13 @@ export async function deleteClientAction(id: number) {
         revalidatePath('/dashboard/clients');
         return { success: true };
     } catch (error: any) {
-        console.error("Action Error (Delete):", error);
+        if (error instanceof ZodError) {
+            const mensagem = error.issues[0]?.message;
+            return {
+                success: false,
+                error: mensagem || "Dados de formulário inválidos"
+            };
+        }
         return { success: false, error: "Erro ao inativar cliente" };
     }
 }

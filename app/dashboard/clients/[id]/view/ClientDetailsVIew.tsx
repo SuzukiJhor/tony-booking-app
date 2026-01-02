@@ -1,14 +1,16 @@
 "use client";
 
 import { useState } from "react";
+import { Toaster } from "react-hot-toast";
 import { useRouter } from "next/navigation";
-import { User, Phone, FileText, Mail, Calendar, ArrowLeft, History, Activity, Clock } from "lucide-react";
-import SubTitlePage from "@/app/dashboard/components/SubTitlePage";
-import { useClientsController } from "../../controller/ClientsController";
-import { ActionButtons } from "../../../../components/ActionsButtons";
-import { ProfessionalInfo } from "@/app/dashboard/professionals/components/ProfessionalInfo";
 import GoToBack from "@/app/components/GoToBack";
 import { formatPhone } from "@/util/mask/mask-phone-br";
+import HistoryTable from "../../components/HistoryTable";
+import SubTitlePage from "@/app/dashboard/components/SubTitlePage";
+import { ActionButtons } from "../../../../components/ActionsButtons";
+import { useClientsController } from "../../controller/ClientsController";
+import { User, Phone, FileText, Mail, Calendar, ArrowLeft, History } from "lucide-react";
+import { ProfessionalInfo } from "@/app/dashboard/professionals/components/ProfessionalInfo";
 
 interface Props {
     initialPatient: any;
@@ -30,8 +32,8 @@ export default function ClientDetailsView({ initialPatient }: Props) {
         router.push("/dashboard/professionals");
     };
 
-    const handlePhoneChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-        setFormData({ ...formData, telefone: formatPhone(e.target.value) });
+    const handlePhoneChange = (val: string) => {
+        setFormData({ ...formData, telefone: formatPhone(val) });
     };
 
     const agendamentos = initialPatient.agendamentos
@@ -40,6 +42,9 @@ export default function ClientDetailsView({ initialPatient }: Props) {
 
     return (
         <div className="p-6 bg-background dark:bg-background-tertiary min-h-screen space-y-6">
+            <Toaster position="top-right" reverseOrder={true} containerStyle={{
+                zIndex: 99999,
+            }} />
             <div className="flex items-center justify-between">
                 <GoToBack SubTitlePage="Detalhes do Paciente" />
 
@@ -92,13 +97,6 @@ export default function ClientDetailsView({ initialPatient }: Props) {
                             isEditing={isEditing}
                             onChange={(val) => setFormData({ ...formData, email: val })}
                         />
-                        <ProfessionalInfo
-                            icon={<FileText size={18} />}
-                            label="Documento"
-                            value={formData.documento || "---"}
-                            isEditing={isEditing}
-                            onChange={(val) => setFormData({ ...formData, documento: val })}
-                        />
                         <div className="flex items-center gap-3">
                             <Calendar size={18} className="text-muted-foreground" />
                             <div>
@@ -128,75 +126,3 @@ export default function ClientDetailsView({ initialPatient }: Props) {
     );
 }
 
-function HistoryTable({ agendamentos }: { agendamentos: any[] }) {
-    return (
-        <div className="bg-white dark:bg-background-secondary rounded-xl shadow-sm border dark:border-gray-700 overflow-hidden animate-in fade-in slide-in-from-top-2 duration-300">
-            <div className="p-6 border-b dark:border-gray-700 flex justify-between items-center">
-                <h2 className="text-lg font-bold flex items-center gap-2 dark:text-card">
-                    <Activity size={20} className="text-sky-600" />
-                    Histórico de Atendimentos
-                </h2>
-                <span className="text-xs bg-sky-50 dark:bg-sky-900/30 text-sky-700 dark:text-sky-300 px-3 py-1 rounded-full font-medium">
-                    {agendamentos.length} Registros
-                </span>
-            </div>
-
-            <div className="overflow-x-auto">
-                <table className="w-full text-left border-collapse">
-                    <thead className="bg-gray-50 dark:bg-background-tertiary">
-                        <tr>
-                            <th className="p-4 text-xs font-bold uppercase text-muted-foreground">Procedimento</th>
-                            <th className="p-4 text-xs font-bold uppercase text-muted-foreground">Data / Hora</th>
-                            <th className="p-4 text-xs font-bold uppercase text-muted-foreground">Duração</th>
-                            <th className="p-4 text-xs font-bold uppercase text-muted-foreground text-center">Status</th>
-                        </tr>
-                    </thead>
-                    <tbody className="divide-y dark:divide-gray-700">
-                        {agendamentos.length === 0 ? (
-                            <tr>
-                                <td colSpan={4} className="p-12 text-center text-muted-foreground italic">
-                                    Nenhum agendamento registrado.
-                                </td>
-                            </tr>
-                        ) : (
-                            agendamentos.map((ag) => (
-                                <tr key={ag.id} className="hover:bg-gray-50 dark:hover:bg-gray-800/50 transition-colors">
-                                    <td className="p-4">
-                                        <p className="font-semibold text-sky-700 dark:text-sky-400">{ag.tipoAgendamento}</p>
-                                    </td>
-                                    <td className="p-4 text-sm dark:text-card">
-                                        <div className="flex flex-col">
-                                            <span className="font-medium">{new Date(ag.dataHora).toLocaleString('pt-BR')}</span>
-                                            <span className="text-[10px] text-sky-600 uppercase font-bold">
-                                                {new Date(ag.dataHora).toLocaleDateString('pt-BR', { weekday: 'long' })}
-                                            </span>
-                                        </div>
-                                    </td>
-                                    <td className="p-4 text-sm text-muted-foreground">
-                                        <div className="flex items-center gap-1"><Clock size={14} /> {ag.tempoAtendimento} min</div>
-                                    </td>
-                                    <td className="p-4 text-center">
-                                        <StatusBadge status={ag.statusConfirmacao} />
-                                    </td>
-                                </tr>
-                            ))
-                        )}
-                    </tbody>
-                </table>
-            </div>
-        </div>
-    );
-}
-
-function StatusBadge({ status }: { status: string }) {
-    const colors: any = {
-        CONFIRMADO: 'bg-green-100 text-green-700 dark:bg-green-900/30 dark:text-green-400',
-        PENDENTE: 'bg-yellow-100 text-yellow-700 dark:bg-yellow-900/30 dark:text-yellow-400',
-        CANCELADO: 'bg-red-100 text-red-700 dark:bg-red-900/30 dark:text-red-400',
-    };
-    return (
-        <span className={`text-[10px] font-bold px-2.5 py-1 rounded-full uppercase ${colors[status] || 'bg-gray-100 text-gray-600'}`}>
-            {status}
-        </span>
-    );
-}

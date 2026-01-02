@@ -23,9 +23,7 @@ export default function DialogNewClient({
             setPhoneValue("");
         }
     }, [clientDetails, open]);
-
     if (!open) return null;
-
     const handlePhoneChange = (e: React.ChangeEvent<HTMLInputElement>) => {
         setPhoneValue(formatPhone(e.target.value));
     };
@@ -37,13 +35,9 @@ export default function DialogNewClient({
             email: formData.get("clientEmail"),
             empresaId: session?.user?.empresaID,
         };
-
-        if (clientDetails?.id) {
-            await onUpdate?.({ ...data, id: clientDetails.id });
-        } else {
-            await onAdd?.(data);
-        }
-        onClose();
+        if (clientDetails?.id)
+            return await onUpdate?.({ ...data, id: clientDetails.id });
+        return await onAdd?.(data);
     };
 
     return (

@@ -7,6 +7,7 @@ import ClientListItem from '../components/ClientListItem';
 import PaginationControls from '../../components/PaginationControls';
 import ButtonCreateNewEmpty from '../../components/ButtonCreateNewEmpty';
 import DialogNewClient from '../../components/DialogNewClient';
+import { Toaster } from 'react-hot-toast';
 
 export default function ClientsView({ initialData }: { initialData: any[] }) {
     const [isModalOpen, setIsModalOpen] = useState(false);
@@ -30,6 +31,9 @@ export default function ClientsView({ initialData }: { initialData: any[] }) {
 
     return (
         <div className="p-4 bg-background dark:bg-background-tertiary min-h-screen">
+            <Toaster position="top-right" reverseOrder={true} containerStyle={{
+                zIndex: 99999,
+            }} />
             <TitlePage title="Visão Geral dos Pacientes" />
 
             <div className="mb-6 flex justify-between items-center">
@@ -77,12 +81,10 @@ export default function ClientsView({ initialData }: { initialData: any[] }) {
                 selectedClient={selectedClient}
                 onClose={() => setIsModalOpen(false)}
                 onAdd={async (data: any) => {
-                    await controller.onAdd(data);
-                    setIsModalOpen(false);
+                    await controller.onAdd(data, () => setIsModalOpen(false));
                 }}
                 onUpdate={async (data: any) => {
-                    await controller.onUpdate(selectedClient.id, data);
-                    setIsModalOpen(false);
+                    await controller.onUpdate(selectedClient.id, data, () => setIsModalOpen(false));
                 }}
                 onDelete={async () => {
                     await controller.onDelete(selectedClient.id, selectedClient.data);
