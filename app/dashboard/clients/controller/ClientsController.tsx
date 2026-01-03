@@ -46,7 +46,6 @@ export const useClientsController = () => {
             createClientAction(data),
             { loading: 'Cadastrando paciente...', success: 'Paciente cadastrado!' }
         );
-        console.log("Add Success:", success);
         if (success && callback) callback();
     };
 

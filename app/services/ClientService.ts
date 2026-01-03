@@ -51,6 +51,16 @@ export class PatientService extends BaseService {
             });
             if (emailExists) throw new Error("Email já cadastrado para outro paciente.");
         }
+        if (data.telefone) {
+            const telefoneExists = await this.db.paciente.findFirst({
+                where: {
+                    telefone: data.telefone,
+                    empresaId: this.empresaId,
+                    isDeleted: false
+                }
+            });
+            if (telefoneExists) throw new Error("Telefone já cadastrado para outro paciente.");
+        }
         return await this.db.paciente.create({
             data: {
                 nome: data.nome!,
@@ -63,22 +73,24 @@ export class PatientService extends BaseService {
     }
 
     async update(id: number, data: Partial<Paciente>) {
+        if (data.telefone) {
+            const phoneExists = await this.db.paciente.findFirst({
+                where: { telefone: data.telefone, empresaId: this.empresaId, isDeleted: false, id: { not: id } }
+            });
+            if (phoneExists) throw new Error('Telefone já cadastrado.');
+        }
         if (data.email) {
             const emailExists = await this.db.paciente.findFirst({
                 where: {
                     email: data.email,
                     empresaId: this.empresaId,
-                    isDeleted: false
+                    isDeleted: false,
+                    id: { not: id }
                 }
             });
             if (emailExists) throw new Error("Email já cadastrado para outro paciente.");
         }
-        if (data.telefone) {
-            const phoneExists = await this.db.paciente.findFirst({
-                where: { telefone: data.telefone, empresaId: this.empresaId, isDeleted: false }
-            });
-            if (phoneExists) throw new Error('Telefone já cadastrado.');
-        }
+
         return await this.db.paciente.update({
             where: {
                 id,

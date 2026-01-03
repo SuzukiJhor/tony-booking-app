@@ -7,6 +7,7 @@ export class ProfessionalService extends BaseService {
         return await this.db.profissional.findMany({
             where: {
                 empresaId: this.empresaId,
+                ativo: true,
             },
             include: { agendamentos: true },
             orderBy: { nome: 'desc' },

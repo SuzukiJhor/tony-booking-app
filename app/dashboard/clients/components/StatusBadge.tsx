@@ -1,3 +1,5 @@
+import { selectColorByStatus } from "@/util/selectColorByStatus";
+
 export default function StatusBadge({ status }: { status: string }) {
     const colors: any = {
         CONFIRMADO: 'bg-green-100 text-green-700 dark:bg-green-900/30 dark:text-green-400',
@@ -6,7 +8,7 @@ export default function StatusBadge({ status }: { status: string }) {
     };
     return (
         <span className={`text-[10px] font-bold px-2.5 py-1 rounded-full uppercase ${colors[status] || 'bg-gray-100 text-gray-600'}`}>
-            {status}
+            {selectColorByStatus(status).label}
         </span>
     );
 }

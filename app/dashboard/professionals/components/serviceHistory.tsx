@@ -1,4 +1,5 @@
 import { formatDate } from "@/util/date/date-br";
+import { selectColorByStatus } from "@/util/selectColorByStatus";
 import { Activity } from "lucide-react";
 
 export default function ServiceHistory({ title, agendamentos }: any) {
@@ -25,9 +26,15 @@ export default function ServiceHistory({ title, agendamentos }: any) {
                                 <td className="p-4 font-semibold text-sky-700 dark:text-sky-400">{ag.paciente?.nome}</td>
                                 <td className="p-4 text-sm dark:text-card">{formatDate(ag.dataHora)}</td>
                                 <td className="p-4 text-center">
-                                    <span className="text-[10px] font-bold px-2 py-1 rounded-full bg-green-100 text-green-700">
-                                        {ag.statusConfirmacao}
-                                    </span>
+                                    {(() => {
+                                        const status = selectColorByStatus(ag.statusConfirmacao);
+                                        return (
+                                            <span className={`text-[10px] font-bold px-2 py-1 rounded-full ${status.classes}`}>
+                                                {status.icon && <span className="mr-1">{status.icon}</span>}
+                                                {status.label}
+                                            </span>
+                                        );
+                                    })()}
                                 </td>
                             </tr>
                         ))}

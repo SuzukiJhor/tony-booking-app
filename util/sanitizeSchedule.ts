@@ -1,7 +1,6 @@
 import { StatusConfirmacao } from "@/app/enum/statusConfirmacao";
 
 export function sanitizeSchedule(event) {
-  console.log("Sanitizing event data:", event);
   return {
     paciente: {
       nome: event.paciente.nome.trim(),

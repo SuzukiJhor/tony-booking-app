@@ -5,6 +5,20 @@ import { getValidatedCompanyId } from '@/lib/auth-utils';
 import { PatientService } from '@/app/services/ClientService';
 import { CreatePatientSchema, DeletePatientSchema, UpdatePatientSchema } from '@/lib/validations/clients';
 
+function handleActionError(error: any, defaultMessage: string) {
+    console.error(`[ACTION ERROR]:`, error);
+    if (error instanceof ZodError) {
+        return {
+            success: false,
+            error: error.issues[0]?.message || "Dados inválidos"
+        };
+    }
+    return {
+        success: false,
+        error: error.message || defaultMessage
+    };
+}
+
 export async function getAllClientsAction() {
     try {
         const companyId = await getValidatedCompanyId();
@@ -25,17 +39,7 @@ export async function createClientAction(data: any) {
         revalidatePath('/dashboard/clients');
         return { success: true };
     } catch (error: any) {
-        if (error instanceof ZodError) {
-            const mensagem = error.issues[0]?.message;
-            return {
-                success: false,
-                error: mensagem || "Dados de formulário inválidos"
-            };
-        }
-        return {
-            success: false,
-            error: error.message || "Erro ao registrar cliente"
-        };
+        return handleActionError(error, "Erro ao registrar cliente");
     }
 }
 
@@ -48,14 +52,7 @@ export async function updateClientAction(id: number, data: any) {
         revalidatePath('/dashboard/clients');
         return { success: true };
     } catch (error: any) {
-        if (error instanceof ZodError) {
-            const mensagem = error.issues[0]?.message;
-            return {
-                success: false,
-                error: mensagem || "Dados de formulário inválidos"
-            };
-        }
-        return { success: false, error: error.message || "Erro ao atualizar cliente" };
+        return handleActionError(error, "Erro ao atualizar cliente");
     }
 }
 
@@ -68,13 +65,6 @@ export async function deleteClientAction(id: number) {
         revalidatePath('/dashboard/clients');
         return { success: true };
     } catch (error: any) {
-        if (error instanceof ZodError) {
-            const mensagem = error.issues[0]?.message;
-            return {
-                success: false,
-                error: mensagem || "Dados de formulário inválidos"
-            };
-        }
-        return { success: false, error: "Erro ao inativar cliente" };
+        return handleActionError(error, "Erro ao inativar cliente");
     }
 }

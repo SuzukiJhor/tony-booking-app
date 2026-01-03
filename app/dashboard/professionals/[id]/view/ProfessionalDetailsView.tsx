@@ -22,7 +22,6 @@ export default function ProfessionalDetailsView({ initialProfessional }: Props) 
     const [formData, setFormData] = useState(initialProfessional);
     const [isEditing, setIsEditing] = useState(false);
     const router = useRouter();
-    console.log("Initial Professional:", initialProfessional);
     const handleUpdate = async () => {
         await onUpdate(initialProfessional.id, formData, () => {
             setIsEditing(false);
