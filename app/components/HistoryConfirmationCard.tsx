@@ -1,5 +1,5 @@
 import { Line, ResponsiveContainer, Tooltip, XAxis, YAxis, LineChart } from "recharts";
-import SubTitlePage from "../dashboard/components/SubTitlePage";
+import SubTitlePage from "../panel/components/SubTitlePage";
 
 interface HistoryDataPoint {
     date: string;

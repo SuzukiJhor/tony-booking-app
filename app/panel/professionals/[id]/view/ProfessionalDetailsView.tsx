@@ -3,7 +3,7 @@
 import { useState } from "react";
 import { useRouter } from "next/navigation";
 import ServiceHistory from "../../components/serviceHistory";
-import SubTitlePage from "@/app/dashboard/components/SubTitlePage";
+import SubTitlePage from "@/app/panel/components/SubTitlePage";
 import { ProfessionalInfo } from "../../components/ProfessionalInfo";
 import { User, Phone, FileText, Trash2, Save, X, UserPen } from "lucide-react";
 import { useProfessionalController } from "../../controller/useProfessionalController";

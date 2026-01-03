@@ -1,6 +1,6 @@
 'use client';
 import { Toaster } from "react-hot-toast";
-import TitlePage from "@/app/dashboard/components/TitlePage";
+import TitlePage from "@/app/panel/components/TitlePage";
 import { CalendarEvent, IlamyCalendar } from "@ilamy/calendar";
 import { DialogNewEvent } from "../../components/DialogNewEvent";
 import { brasilTranslations } from "@/util/translations-calendar";

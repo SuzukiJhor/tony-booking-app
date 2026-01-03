@@ -6,11 +6,11 @@ import { signOut } from "next-auth/react"
 import { LogoTonySVG } from '@/assets/logoTonySVG';
 
 const navLinks = [
-  { name: 'Dashboard', href: '/dashboard', icon: Home },
-  { name: 'Calendário', href: '/dashboard/calendar', icon: Calendar },
-  { name: 'Pacientes', href: '/dashboard/clients', icon: Users },
-  { name: 'Dentistas', href: '/dashboard/professionals', icon: BriefcaseMedical },
-  { name: 'Configurações', href: '/dashboard/settings', icon: Settings },
+  { name: 'Dashboard', href: '/panel', icon: Home },
+  { name: 'Calendário', href: '/panel/calendar', icon: Calendar },
+  { name: 'Pacientes', href: '/panel/clients', icon: Users },
+  { name: 'Dentistas', href: '/panel/professionals', icon: BriefcaseMedical },
+  { name: 'Configurações', href: '/panel/settings', icon: Settings },
 ];
 
 export default function SideNav() {
@@ -44,7 +44,7 @@ export default function SideNav() {
         })}
         <div className="pt-4 mt-4 border-t border-gray-100 dark:border-gray-800">
           <Link
-            href="/dashboard/scheduleList"
+            href="/panel/scheduleList"
             className={`flex items-center p-3 text-sm font-bold rounded-xl transition-all shadow-sm
               ${pathname === '/dashboard/scheduleList'
                 ? 'bg-sky-600 text-white shadow-sky-200'

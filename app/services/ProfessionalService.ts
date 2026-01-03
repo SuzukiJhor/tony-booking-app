@@ -33,6 +33,7 @@ export class ProfessionalService extends BaseService {
     }
 
     async create(data: Partial<Profissional>) {
+        this.logAction('Registro', `Profissional ${data.nome}`);
         if (data.documento) {
             const existing = await this.db.profissional.findFirst({
                 where: {

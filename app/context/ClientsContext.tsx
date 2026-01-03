@@ -1,6 +1,6 @@
 'use client';
 import { createContext, useContext, useState, useEffect, ReactNode } from "react";
-import { DataBasePacienteType } from "../dashboard/types/patientDBType";
+import { DataBasePacienteType } from "../panel/types/patientDBType";
 import { fetchClients } from "@/util/api/api-clients";
 
 interface ClientContextProps {

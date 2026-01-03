@@ -1,5 +1,5 @@
 import { Cell, Pie, PieChart as RechartsPieChart, ResponsiveContainer, Tooltip } from "recharts";
-import SubTitlePage from "../dashboard/components/SubTitlePage";
+import SubTitlePage from "../panel/components/SubTitlePage";
 
 interface StatusData {
     name: string;

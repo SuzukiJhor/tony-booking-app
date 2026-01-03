@@ -16,7 +16,7 @@ export async function proxy(req: NextRequest) {
 
   // Se estiver autenticado e tentar acessar área pública → redireciona dashboard
   if (token && publicPaths.some((p) => pathname.startsWith(p))) {
-    return NextResponse.redirect(new URL("/dashboard", req.url));
+    return NextResponse.redirect(new URL("/panel", req.url));
   }
 
   return NextResponse.next();

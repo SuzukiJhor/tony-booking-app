@@ -6,11 +6,11 @@ import { useRouter } from "next/navigation";
 import GoToBack from "@/app/components/GoToBack";
 import { formatPhone } from "@/util/mask/mask-phone-br";
 import HistoryTable from "../../components/HistoryTable";
-import SubTitlePage from "@/app/dashboard/components/SubTitlePage";
+import SubTitlePage from "@/app/panel/components/SubTitlePage";
 import { ActionButtons } from "../../../../components/ActionsButtons";
 import { useClientsController } from "../../controller/ClientsController";
 import { User, Phone, FileText, Mail, Calendar, ArrowLeft, History } from "lucide-react";
-import { ProfessionalInfo } from "@/app/dashboard/professionals/components/ProfessionalInfo";
+import { ProfessionalInfo } from "@/app/panel/professionals/components/ProfessionalInfo";
 
 interface Props {
     initialPatient: any;

@@ -1,7 +1,7 @@
 'use client';
 import { createContext, useContext, useState, useEffect, ReactNode } from "react";
 import { fetchAppointments } from "@/util/api/api-calendar";
-import { DataBaseEventType } from "../dashboard/types/eventDBType";
+import { DataBaseEventType } from "../panel/types/eventDBType";
 
 interface CalendarContextProps {
     events: DataBaseEventType[];

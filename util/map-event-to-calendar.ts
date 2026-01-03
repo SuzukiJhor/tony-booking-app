@@ -1,5 +1,5 @@
-import { CalendarEventType } from "@/app/dashboard/types/eventCalendarType";
-import { DataBaseEventType } from "@/app/dashboard/types/eventDBType";
+import { CalendarEventType } from "@/app/panel/types/eventCalendarType";
+import { DataBaseEventType } from "@/app/panel/types/eventDBType";
 
 const statusColorMap: Record<string, string> = {
     CONFIRMADO: "#16a34a",

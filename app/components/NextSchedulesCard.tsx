@@ -1,8 +1,8 @@
 import { useState, useEffect, useMemo } from "react";
 import ButtonCard from "./ButtonCard";
 import { Clock, Eye, Loader2, User, Activity } from "lucide-react"; // Importei novos ícones
-import { statusStyleMap } from "../dashboard/constants";
-import SubTitlePage from "../dashboard/components/SubTitlePage";
+import { statusStyleMap } from "../panel/constants";
+import SubTitlePage from "../panel/components/SubTitlePage";
 import { NextSchedulesModalDetails } from "./NextSchedulesModalDetails";
 import { fetchAppointments } from "@/util/api/api-calendar";
 import ButtonWhatsApp from "./ButtonWhatsApp";

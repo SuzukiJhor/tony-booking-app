@@ -9,7 +9,7 @@ import { formatPhone } from "@/util/mask/mask-phone-br";
 import { useLoading } from "@/app/components/LoadingProvider";
 import { durationOptions } from "@/util/options-duration-input";
 import { getAllProfessionalsAction } from "../professionals/actions";
-import { DataBaseEventType } from "@/app/dashboard/types/eventDBType";
+import { DataBaseEventType } from "@/app/panel/types/eventDBType";
 import { useCalendarController } from "../calendar/controller/CalendarController";
 
 export function DialogNewEvent({

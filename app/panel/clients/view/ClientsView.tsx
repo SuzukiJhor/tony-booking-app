@@ -1,7 +1,7 @@
 'use client';
 
 import React, { useState, useMemo } from 'react';
-import TitlePage from "@/app/dashboard/components/TitlePage";
+import TitlePage from "@/app/panel/components/TitlePage";
 import { useClientsController } from '../controller/ClientsController';
 import ClientListItem from '../components/ClientListItem';
 import PaginationControls from '../../components/PaginationControls';
