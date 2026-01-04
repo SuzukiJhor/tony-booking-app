@@ -1,62 +1,19 @@
 "use client";
-
-import { useState, useEffect } from "react";
-import { Phone, MessageSquare, Loader2, Edit3, Save, X } from "lucide-react";
-import toast, { Toaster } from "react-hot-toast";
+import { Toaster } from "react-hot-toast";
 import SubTitlePage from "../../components/SubTitlePage";
-import { formatPhone } from "@/util/mask/mask-phone-br";
+import { useSettingsController } from "../controller/useSettingsController";
+import { Phone, MessageSquare, Loader2, Edit3, Save, X } from "lucide-react";
 
 export default function BusinessPhoneSection() {
-    const [phoneNumber, setPhoneNumber] = useState("");
-    const [isLoading, setIsLoading] = useState(false);
-    const [isEditing, setIsEditing] = useState(false);
-
-    const handlePhoneChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-        const maskedValue = formatPhone(e.target.value);
-        setPhoneNumber(maskedValue);
-    };
-
-    const fetchSettings = async () => {
-        try {
-            const response = await fetch("/api/company/settings");
-            const data = await response.json();
-            if (data.mainPhone) {
-                setPhoneNumber(formatPhone(data.mainPhone));
-                setIsEditing(false);
-            } else {
-                setIsEditing(true);
-            }
-        } catch (error) {
-            console.error("Failed to fetch settings:", error);
-        }
-    };
-
-    const handleSavePhone = async () => {
-        setIsLoading(true);
-        try {
-            const response = await fetch("/api/company/settings", {
-                method: "POST",
-                headers: { "Content-Type": "application/json" },
-                body: JSON.stringify({
-                    telefone: phoneNumber.replace(/\D/g, "")
-                }),
-            });
-
-            if (!response.ok) throw new Error("Failed to save");
-
-            toast.success("Configurações de telefone atualizadas!");
-            setIsEditing(false); // Volta para modo leitura após salvar
-        } catch (error) {
-            toast.error("Erro ao salvar o telefone.");
-            console.error(error);
-        } finally {
-            setIsLoading(false);
-        }
-    };
-
-    useEffect(() => {
-        fetchSettings();
-    }, []);
+    const {
+        phoneNumber,
+        isLoading,
+        isEditing,
+        setIsEditing,
+        handlePhoneChange,
+        handleSavePhone,
+        cancelEditing
+    } = useSettingsController();
 
     return (
         <div className="bg-white dark:bg-background-secondary rounded-xl border dark:border-gray-700 shadow-sm overflow-hidden">
@@ -84,7 +41,7 @@ export default function BusinessPhoneSection() {
                             type="text"
                             placeholder="(00) 00000-0000"
                             value={phoneNumber}
-                            onChange={handlePhoneChange}
+                            onChange={e => handlePhoneChange(e.target.value)}
                             readOnly={!isEditing} // Bloqueia o input se não estiver editando
                             disabled={isLoading}
                             className={`flex-1 px-3 py-2 rounded-lg border transition-all outline-none 
@@ -96,10 +53,9 @@ export default function BusinessPhoneSection() {
 
                         {isEditing ? (
                             <div className="flex gap-2">
-                                {/* Botão Cancelar (opcional, mas bom para UX) */}
                                 {phoneNumber && (
                                     <button
-                                        onClick={() => { setIsEditing(false); fetchSettings(); }}
+                                        onClick={() => { cancelEditing(); }}
                                         className="p-2 text-red-500 hover:bg-red-50 dark:hover:bg-red-950/20 rounded-lg transition"
                                         title="Cancelar"
                                     >

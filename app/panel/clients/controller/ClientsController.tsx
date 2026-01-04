@@ -1,8 +1,8 @@
+import Swal from 'sweetalert2';
 import { useState } from 'react';
 import toast from 'react-hot-toast';
 import { useLoading } from '@/app/components/LoadingProvider';
 import { createClientAction, deleteClientAction, updateClientAction } from '../actions';
-import Swal from 'sweetalert2';
 
 const toastStyle = {
     style: { borderRadius: '10px', background: '#333', color: '#fff' }
