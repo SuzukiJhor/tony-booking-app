@@ -1,4 +1,5 @@
 'use client';
+
 import { useState, useMemo } from 'react';
 import { Toaster } from 'react-hot-toast';
 import TitlePage from '../../components/TitlePage';
@@ -36,48 +37,66 @@ export default function ProfessionalsView({ initialData }: { initialData: any[] 
     };
 
     return (
-        <div className="p-4 bg-background dark:bg-background-tertiary min-h-screen">
-            <Toaster position="top-right" reverseOrder={true} containerStyle={{
-                zIndex: 99999,
-            }} />
-            <TitlePage title="Visão Geral dos Dentistas" />
+        <div className="flex flex-col min-h-screen bg-background dark:bg-background-tertiary">
+            <Toaster position="top-right" reverseOrder={true} containerStyle={{ zIndex: 99999 }} />
 
-            <div className="relative w-full md:w-1/3">
-                <input
-                    type="text"
-                    placeholder="Pesquisar por nome..."
-                    value={searchQuery}
-                    onChange={handleSearch}
-                    className="w-full p-2 pl-10 rounded-lg border dark:text-amber-100 border-gray-300 dark:border-gray-700 bg-white dark:bg-background-secondary focus:ring-2 focus:ring-sky-500 outline-none"
-                />
-                <span className="absolute left-3 top-2.5 text-gray-400">
-                    🔍
-                </span>
-            </div>
+            <div className="grow p-4 pb-32 md:pb-24">
+                <TitlePage title="Visão Geral dos Dentistas" />
 
-            <div className="mb-6 flex justify-between items-center">
-                <p className="text-muted-foreground">Total: {initialData.length}</p>
-                <button
-                    onClick={() => { setSelectedProfessional(null); setIsModalOpen(true); }}
-                    className="bg-sky-500 text-white py-2 px-6 rounded-lg hover:bg-sky-400 transition cursor-pointer"
-                >
-                    + Novo Dentista
-                </button>
-            </div>
-
-            {filteredData.length === 0 ? (
-                <ButtonCreateNewEmpty onClick={() => setIsModalOpen(true)} description="Nenhum Dentista cadastrado encontrado." descriptionButton="Cadastrar Novo Dentista" />
-            ) : (
-                <div className="space-y-4">
-                    {currentItems.map((pro) => (
-                        <ProfessionalListItem
-                            key={pro.id}
-                            professional={pro}
-                            onEdit={() => { setSelectedProfessional(pro); setIsModalOpen(true); }}
-                            onViewDetails={() => (console.log("View details function can be implemented here"))}
+                <div className="flex flex-col md:flex-row md:items-center justify-between gap-4 mb-6">
+                    <div className="relative w-full md:max-w-xs">
+                        <input
+                            type="text"
+                            placeholder="Pesquisar por nome..."
+                            value={searchQuery}
+                            onChange={handleSearch}
+                            className="w-full p-2.5 pl-10 rounded-xl border border-gray-300 dark:border-gray-700 bg-white dark:bg-background-secondary focus:ring-2 focus:ring-sky-500 outline-none transition-all dark:text-amber-100"
                         />
-                    ))}
-                    <PaginationControls currentPage={currentPage} totalPages={totalPages} goToPage={setCurrentPage} itemsPerPage={itemsPerPage} totalItems={filteredData.length} isTransitioning={false} />
+                        <span className="absolute left-3 top-3 text-gray-400">🔍</span>
+                    </div>
+
+                    <button
+                        onClick={() => { setSelectedProfessional(null); setIsModalOpen(true); }}
+                        className="w-full md:w-auto bg-sky-500 text-white py-2.5 px-6 rounded-xl hover:bg-sky-400 font-semibold transition-all shadow-sm active:scale-95"
+                    >
+                        + Novo Dentista
+                    </button>
+                </div>
+
+                {filteredData.length === 0 ? (
+                    <ButtonCreateNewEmpty
+                        onClick={() => setIsModalOpen(true)}
+                        description="Nenhum Dentista cadastrado encontrado."
+                        descriptionButton="Cadastrar Novo Dentista"
+                    />
+                ) : (
+                    <div className="space-y-4">
+                        <p className="text-muted-foreground">Total: {initialData.length}</p>
+
+                        {currentItems.map((pro) => (
+                            <ProfessionalListItem
+                                key={pro.id}
+                                professional={pro}
+                                onEdit={() => { setSelectedProfessional(pro); setIsModalOpen(true); }}
+                                onViewDetails={() => (console.log("Details"))}
+                            />
+                        ))}
+                    </div>
+                )}
+            </div>
+
+            {filteredData.length > 0 && (
+                <div className="fixed bottom-0 left-0 lg:left-54 right-0 z-20 bg-background dark:bg-background-tertiary backdrop-blur-md border-t border-border p-4 shadow-[0_-4px_10px_rgba(0,0,0,0.05)]">
+                    <div className="max-w-7xl mx-auto">
+                        <PaginationControls
+                            currentPage={currentPage}
+                            totalPages={totalPages}
+                            goToPage={setCurrentPage}
+                            itemsPerPage={itemsPerPage}
+                            totalItems={filteredData.length}
+                            isTransitioning={false}
+                        />
+                    </div>
                 </div>
             )}
 

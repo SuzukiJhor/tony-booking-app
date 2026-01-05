@@ -6,21 +6,16 @@ import { ClientProvider } from '../context/ClientsContext';
 
 export default async function Layout({ children }: { children: React.ReactNode }) {
 
-  // Opcional: Obter dados da sessão para exibição ou controle de acesso mais granular
 
   return (
-    <div className="flex h-screen bg-gray-50 dark:bg-background">
-
-      {/* Menu Lateral Fixo */}
+    <div className="flex h-screen bg-gray-50 dark:bg-background overflow-hidden">
       <SideNav />
 
-      {/* Conteúdo Principal */}
-      <div className="grow ml-54 overflow-y-auto">
+      <div className="flex flex-col flex-1 lg:ml-54 min-w-0">
 
         <Header />
 
-        {/* Conteúdo da Página (page.tsx ou sub-rotas) */}
-        <main className="p-0">
+        <main className="flex-1 overflow-y-auto p-0">
           <NextTopLoader
             height={4}
             showSpinner={false}
@@ -29,11 +24,10 @@ export default async function Layout({ children }: { children: React.ReactNode }
             color="#0EA5E9"
           />
           <NavigationUX>
-            <ClientProvider>
-              {children}
-            </ClientProvider>
+            <ClientProvider>{children}</ClientProvider>
           </NavigationUX>
         </main>
+
       </div>
     </div>
   );

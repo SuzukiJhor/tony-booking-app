@@ -13,13 +13,28 @@ const navLinks = [
   { name: 'Configurações', href: '/panel/settings', icon: Settings },
 ];
 
-export default function SideNav() {
+interface SideNavProps {
+  isMobile?: boolean;
+  onClose?: () => void;
+}
+
+export default function SideNav({ isMobile, onClose }: SideNavProps) {
   const pathname = usePathname();
 
+  const handleAction = () => {
+    if (isMobile && onClose) {
+      onClose();
+    }
+  };
+
   return (
-    <div className="flex flex-col h-full border-r bg-background dark:bg-background-secondary p-4 w-54 fixed top-0 left-0">
+    <div className={`
+      flex flex-col h-full bg-background dark:bg-background-secondary p-4
+      ${!isMobile ? 'fixed top-0 left-0 w-54 border-r hidden lg:flex' : 'w-full'}
+    `}>
+      
       <div className="flex items-center justify-center mb-6 h-15">
-        <LogoTonySVG className="text-sky-500 dark:text-sky-500" />
+        <LogoTonySVG className="text-sky-500" />
       </div>
 
       <nav className="grow space-y-2">
@@ -31,6 +46,7 @@ export default function SideNav() {
             <Link
               key={link.name}
               href={link.href}
+              onClick={handleAction}
               className={`flex items-center p-3 text-sm font-medium rounded-lg transition-colors 
                 ${isActive
                   ? 'bg-indigo-100 font-semibold text-sky-500 dark:bg-sky-900/20'
@@ -42,11 +58,13 @@ export default function SideNav() {
             </Link>
           );
         })}
+
         <div className="pt-4 mt-4 border-t border-gray-100 dark:border-gray-800">
           <Link
             href="/panel/scheduleList"
+            onClick={handleAction} 
             className={`flex items-center p-3 text-sm font-bold rounded-xl transition-all shadow-sm
-              ${pathname === '/dashboard/scheduleList'
+              ${pathname === '/panel/scheduleList'
                 ? 'bg-sky-600 text-white shadow-sky-200'
                 : 'bg-sky-50 text-sky-700 hover:bg-sky-100 dark:bg-sky-900/20 dark:text-sky-400 dark:hover:bg-sky-900/30'
               }`}
@@ -59,7 +77,10 @@ export default function SideNav() {
 
       <button
         className="flex justify-center items-center w-full p-3 text-sm font-medium text-red-600 hover:bg-red-50 dark:hover:bg-red-950/20 rounded-lg transition-colors cursor-pointer mt-4"
-        onClick={() => signOut()}
+        onClick={() => {
+          handleAction();
+          signOut();
+        }}
       >
         <LogOut className="w-5 h-5 mr-3" />
         Sair
