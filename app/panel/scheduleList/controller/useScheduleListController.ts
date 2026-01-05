@@ -4,6 +4,7 @@ import { useState, useMemo } from "react";
 export function useScheduleListController(initialData: any[]) {
     const [filtro, setFiltro] = useState<'hoje' | 'semana'>('hoje');
     const [selectedSchedule, setSelectedSchedule] = useState<any | null>(null);
+    const [searchQuery, setSearchQuery] = useState('');
 
     const filteredAppointments = useMemo(() => {
         if (!initialData || !Array.isArray(initialData)) return [];
@@ -20,21 +21,30 @@ export function useScheduleListController(initialData: any[]) {
 
         return initialData
             .filter(s => {
-                if (!s.dataHora || s.isDeleted) return false;
-                const dataAgendamento = new Date(s.dataHora);
+                if (s.isDeleted) return false;
 
-                if (filtro === 'hoje') {
-                    return dataAgendamento >= inicioHoje && dataAgendamento <= fimHoje;
-                } else {
-                    return dataAgendamento >= inicioHoje && dataAgendamento <= fimSemana;
-                }
+                const matchesSearch = searchQuery.length > 0
+                    ? (s.paciente?.nome?.toLowerCase().includes(searchQuery.toLowerCase()) ||
+                        s.profissional?.nome?.toLowerCase().includes(searchQuery.toLowerCase()))
+                    : true;
+
+                if (searchQuery.length > 0) return matchesSearch;
+
+                const dataAgendamento = new Date(s.dataHora);
+                const matchesDate = filtro === 'hoje'
+                    ? (dataAgendamento >= inicioHoje && dataAgendamento <= fimHoje)
+                    : (dataAgendamento >= inicioHoje && dataAgendamento <= fimSemana);
+
+                return matchesDate;
             })
             .sort((a, b) => new Date(a.dataHora).getTime() - new Date(b.dataHora).getTime());
-    }, [filtro, initialData]);
+    }, [filtro, searchQuery, initialData]);
 
     return {
         filtro,
         setFiltro,
+        searchQuery,
+        setSearchQuery,
         selectedSchedule,
         setSelectedSchedule,
         filteredAppointments

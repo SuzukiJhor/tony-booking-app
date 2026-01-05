@@ -1,5 +1,5 @@
 'use client';
-import { ListFilter } from "lucide-react";
+import { ListFilter, Search } from "lucide-react";
 import GoToBack from "@/app/components/GoToBack";
 import FullScheduleList from "../components/FullScheduleList";
 import { useScheduleListController } from "../controller/useScheduleListController";
@@ -11,7 +11,9 @@ export default function ScheduleListView({ initialData }: { initialData: any[] }
         setFiltro,
         selectedSchedule,
         setSelectedSchedule,
-        filteredAppointments
+        filteredAppointments,
+        searchQuery,
+        setSearchQuery,
     } = useScheduleListController(initialData);
 
     return (
@@ -29,6 +31,19 @@ export default function ScheduleListView({ initialData }: { initialData: any[] }
                             <h3 className="font-bold text-gray-700 dark:text-gray-200">Listagem de Agendamentos</h3>
                             <p className="text-xs text-gray-500 italic">Filtrando por: {filtro === 'hoje' ? 'Hoje' : 'Próximos 7 dias'}</p>
                         </div>
+                    </div>
+
+                    <div className="relative w-full md:w-80">
+                        <span className="absolute left-3 top-1/2 -translate-y-1/2 text-gray-400">
+                            <Search size={16} />
+                        </span>
+                        <input
+                            type="text"
+                            placeholder="Buscar paciente ou profissional..."
+                            value={searchQuery}
+                            onChange={(e) => setSearchQuery(e.target.value)}
+                            className="w-full bg-gray-100 dark:bg-gray-800 border-none rounded-xl py-2 pl-10 pr-4 text-sm focus:ring-2 focus:ring-sky-500 outline-none transition-all dark:text-gray-200"
+                        />
                     </div>
 
                     <div className="flex bg-gray-200 dark:bg-gray-800 p-1 rounded-xl">
