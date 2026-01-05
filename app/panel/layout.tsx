@@ -2,7 +2,6 @@ import NextTopLoader from 'nextjs-toploader';
 import { Header } from './components/Header';
 import SideNav from './components/SideNav';
 import { NavigationUX } from './components/NavigationUX';
-import { CalendarProvider } from '../context/CalendarContext';
 import { ClientProvider } from '../context/ClientsContext';
 
 export default async function Layout({ children }: { children: React.ReactNode }) {
@@ -30,11 +29,9 @@ export default async function Layout({ children }: { children: React.ReactNode }
             color="#0EA5E9"
           />
           <NavigationUX>
-            <CalendarProvider>
-              <ClientProvider>
-                {children}
-              </ClientProvider>
-            </CalendarProvider>
+            <ClientProvider>
+              {children}
+            </ClientProvider>
           </NavigationUX>
         </main>
       </div>

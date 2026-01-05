@@ -20,7 +20,7 @@ export default function RedirectToDetailsSchedules() {
             </div>
 
             <ButtonCard
-                href="/dashboard/scheduleList"
+                href="/panel/scheduleList"
             >
                 Ver Listagem Completa
                 <ArrowRight size={18} className="transition-transform group-hover:translate-x-1" />

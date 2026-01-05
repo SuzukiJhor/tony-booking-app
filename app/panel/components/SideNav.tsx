@@ -1,9 +1,9 @@
 'use client';
 import Link from 'next/link';
-import { usePathname } from 'next/navigation';
-import { LogOut, Calendar, Home, Settings, Users, BriefcaseMedical, CalendarCheck } from 'lucide-react';
 import { signOut } from "next-auth/react"
+import { usePathname } from 'next/navigation';
 import { LogoTonySVG } from '@/assets/logoTonySVG';
+import { LogOut, Calendar, Home, Settings, Users, BriefcaseMedical, CalendarCheck } from 'lucide-react';
 
 const navLinks = [
   { name: 'Dashboard', href: '/panel', icon: Home },

@@ -13,7 +13,7 @@ export class PatientService extends BaseService {
             include: {
                 agendamentos: {
                     where: { isDeleted: false },
-                    take: 5, // Opcional: traz apenas os últimos 5
+                   // take: 5,  Opcional: traz apenas os últimos 5
                     orderBy: { dataHora: 'desc' }
                 }
             },

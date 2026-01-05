@@ -1,7 +1,7 @@
 'use client';
 import { createContext, useContext, useState, useEffect, ReactNode } from "react";
 import { DataBasePacienteType } from "../panel/types/patientDBType";
-import { fetchClients } from "@/util/api/api-clients";
+import { getAllClientsAction } from "../panel/clients/actions";
 
 interface ClientContextProps {
     clients: DataBasePacienteType[];
@@ -14,8 +14,20 @@ export function ClientProvider({ children }: { children: ReactNode }) {
     const [clients, setClients] = useState<DataBasePacienteType[]>([]);
 
     async function reloadEvents() {
-        const data = await fetchClients();
-        setClients(data);
+        const { data } = await getAllClientsAction();
+        if (!data) return;
+        setClients(
+            data.map((client: any) => ({
+                ...client,
+                agendamentos: client.agendamentos?.map((agendamento: any) => ({
+                    ...agendamento,
+                    status: agendamento.status ?? '',
+                    dataHora: typeof agendamento.dataHora === 'string' ? agendamento.dataHora : agendamento.dataHora?.toISOString?.() ?? '',
+                    statusConfirmacao: String(agendamento.statusConfirmacao),
+                    tempoAtendimento: typeof agendamento.tempoAtendimento === 'number' ? String(agendamento.tempoAtendimento) : agendamento.tempoAtendimento,
+                })) ?? [],
+            }))
+        );
     }
 
     useEffect(() => {

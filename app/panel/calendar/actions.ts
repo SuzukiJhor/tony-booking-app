@@ -4,7 +4,6 @@ import { revalidatePath } from 'next/cache';
 import { getValidatedCompanyId } from "@/lib/auth-utils";
 import { ScheduleService } from "@/app/services/ScheduleService";
 import { CreateScheduleSchema, DeleteScheduleSchema, UpdateScheduleSchema } from "@/lib/validations/events";
-import { sanitizeSchedule } from "@/util/sanitizeSchedule";
 
 export async function getAllSchedules() {
     try {

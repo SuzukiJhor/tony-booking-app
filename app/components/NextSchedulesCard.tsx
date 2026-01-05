@@ -4,8 +4,8 @@ import { Clock, Eye, Loader2, User, Activity } from "lucide-react"; // Importei 
 import { statusStyleMap } from "../panel/constants";
 import SubTitlePage from "../panel/components/SubTitlePage";
 import { NextSchedulesModalDetails } from "./NextSchedulesModalDetails";
-import { fetchAppointments } from "@/util/api/api-calendar";
 import ButtonWhatsApp from "./ButtonWhatsApp";
+import { getAllSchedules } from "../panel/calendar/actions";
 
 interface DataBaseEventType {
     id: number;
@@ -52,8 +52,13 @@ export default function NextSchedulesCard() {
     async function reloadEvents() {
         try {
             setLoading(true);
-            const data = await fetchAppointments();
-            setEvents(data);
+            const { data } = await getAllSchedules();
+            setEvents(
+                (data ?? []).map((event: any) => ({
+                    ...event,
+                    statusConfirmacao: event.statusConfirmacao as DataBaseEventType["statusConfirmacao"],
+                }))
+            );
         } catch (error) {
             console.error("Erro ao buscar eventos:", error);
         } finally {
@@ -119,7 +124,7 @@ export default function NextSchedulesCard() {
 
                 <div className="flex flex-row items-center gap-2 shrink-0 md:ml-4">
                     <div className="flex-none">
-                          <StatusBadge status={s.statusConfirmacao} />
+                        <StatusBadge status={s.statusConfirmacao} />
                     </div>
                     <div className="flex-none">
                         <ButtonWhatsApp schedule={s} />

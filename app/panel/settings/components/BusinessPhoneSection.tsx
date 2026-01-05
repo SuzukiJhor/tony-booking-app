@@ -42,7 +42,7 @@ export default function BusinessPhoneSection() {
                             placeholder="(00) 00000-0000"
                             value={phoneNumber}
                             onChange={e => handlePhoneChange(e.target.value)}
-                            readOnly={!isEditing} // Bloqueia o input se não estiver editando
+                            readOnly={!isEditing}
                             disabled={isLoading}
                             className={`flex-1 px-3 py-2 rounded-lg border transition-all outline-none 
                                 ${!isEditing
@@ -81,29 +81,6 @@ export default function BusinessPhoneSection() {
                         )}
                     </div>
                 </div>
-                {/* 
-                <div className="mt-4 p-4 rounded-lg bg-gray-50 dark:bg-background-tertiary flex items-center justify-between">
-                    <div className="flex items-center gap-3">
-                        {isInstanceConnected ? (
-                            <CheckCircle2 className="text-green-500" size={20} />
-                        ) : (
-                            <AlertCircle className="text-yellow-500" size={20} />
-                        )}
-                        <div>
-                            <p className="text-sm font-medium dark:text-card">
-                                Status da Instância: {isInstanceConnected ? "Conectada" : "Desconectada"}
-                            </p>
-                            <p className="text-xs text-muted-foreground">
-                                {isInstanceConnected ? "Seu sistema está pronto para enviar mensagens." : "Conecte seu WhatsApp para habilitar envios."}
-                            </p>
-                        </div>
-                    </div>
-                    {!isInstanceConnected && (
-                        <button className="text-xs font-bold text-sky-700 dark:text-sky-400 hover:underline cursor-pointer">
-                            Configurar agora
-                        </button>
-                    )}
-                </div> */}
             </div>
         </div>
     );
