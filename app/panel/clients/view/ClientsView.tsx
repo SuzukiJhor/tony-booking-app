@@ -13,16 +13,28 @@ export default function ClientsView({ initialData }: { initialData: any[] }) {
     const [isModalOpen, setIsModalOpen] = useState(false);
     const [currentPage, setCurrentPage] = useState(1);
     const [selectedClient, setSelectedClient] = useState<any | null>(null);
+    const [searchQuery, setSearchQuery] = useState('');
 
     const controller = useClientsController();
     const itemsPerPage = 6;
 
+    const filteredData = useMemo(() => {
+        return initialData.filter(client =>
+            client.nome.toLowerCase().includes(searchQuery.toLowerCase())
+        );
+    }, [initialData, searchQuery]);
+
     const currentItems = useMemo(() => {
         const start = (currentPage - 1) * itemsPerPage;
-        return initialData.slice(start, start + itemsPerPage);
-    }, [initialData, currentPage]);
+        return filteredData.slice(start, start + itemsPerPage);
+    }, [filteredData, currentPage]);
 
-    const totalPages = Math.ceil(initialData.length / itemsPerPage);
+    const totalPages = Math.ceil(filteredData.length / itemsPerPage);
+
+    const handleSearch = (e: React.ChangeEvent<HTMLInputElement>) => {
+        setSearchQuery(e.target.value);
+        setCurrentPage(1);
+    };
 
     const handleOpenModal = (client?: any) => {
         setSelectedClient(client || null);
@@ -36,6 +48,19 @@ export default function ClientsView({ initialData }: { initialData: any[] }) {
             }} />
             <TitlePage title="Visão Geral dos Pacientes" />
 
+            <div className="relative w-full md:w-1/3">
+                <input
+                    type="text"
+                    placeholder="Pesquisar por nome..."
+                    value={searchQuery}
+                    onChange={handleSearch}
+                    className="w-full p-2 pl-10 rounded-lg border dark:text-amber-100 border-gray-300 dark:border-gray-700 bg-white dark:bg-background-secondary focus:ring-2 focus:ring-sky-500 outline-none"
+                />
+                <span className="absolute left-3 top-2.5 text-gray-400">
+                    🔍
+                </span>
+            </div>
+
             <div className="mb-6 flex justify-between items-center">
                 <p className="text-muted-foreground">Total: {initialData.length} pacientes</p>
                 <button
@@ -46,14 +71,13 @@ export default function ClientsView({ initialData }: { initialData: any[] }) {
                 </button>
             </div>
 
-            {initialData.length > 0 ? (
+            {filteredData.length > 0 ? (
                 <div className="space-y-8">
                     <div className={`space-y-4 transition-opacity ${controller.isTransitioning ? 'opacity-50' : 'opacity-100'}`}>
                         {currentItems.map((patient) => (
                             <ClientListItem
                                 key={patient.id}
                                 patient={patient}
-                                // onEdit={() => handleOpenModal(patient)}
                                 onViewDetails={(id) => console.log("Details", id)}
                             />
                         ))}
@@ -63,7 +87,7 @@ export default function ClientsView({ initialData }: { initialData: any[] }) {
                         currentPage={currentPage}
                         totalPages={totalPages}
                         itemsPerPage={itemsPerPage}
-                        totalItems={initialData.length}
+                        totalItems={filteredData.length}
                         goToPage={setCurrentPage}
                         isTransitioning={controller.isTransitioning}
                     />
@@ -71,7 +95,7 @@ export default function ClientsView({ initialData }: { initialData: any[] }) {
             ) : (
                 <ButtonCreateNewEmpty
                     onClick={() => handleOpenModal()}
-                    description="Nenhum paciente cadastrado."
+                    description="Nenhum paciente encontrado."
                     descriptionButton="Cadastrar Novo Paciente"
                 />
             )}

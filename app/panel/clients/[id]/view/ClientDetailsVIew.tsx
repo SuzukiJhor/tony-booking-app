@@ -29,7 +29,7 @@ export default function ClientDetailsView({ initialPatient }: Props) {
 
     const handleDelete = async () => {
         await onDelete(initialPatient.id, initialPatient.nome);
-        router.push("/dashboard/professionals");
+        router.push("/panel/professionals");
     };
 
     const handlePhoneChange = (val: string) => {

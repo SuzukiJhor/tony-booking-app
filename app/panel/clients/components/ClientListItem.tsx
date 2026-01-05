@@ -25,7 +25,7 @@ export default function ClientListItem({ patient, onViewDetails }: {
             <div className="flex space-x-2">
 
                 <ButtonCard
-                    href={`/dashboard/clients/${patient.id}`}
+                    href={`/panel/clients/${patient.id}`}
                     onClick={() => onViewDetails(patient.id)}
                 >
                     <Eye size={16} />

@@ -30,7 +30,7 @@ export default function ProfessionalDetailsView({ initialProfessional }: Props) 
 
     const handleDelete = async () => {
         await onDelete(initialProfessional.id, initialProfessional.nome);
-        router.push("/dashboard/professionals");
+        router.push("/panel/professionals");
     };
 
     const handlePhoneChange = (val: string) => {

@@ -8,6 +8,7 @@ import { revalidatePath } from 'next/cache';
 export async function processConfirmation(formData: FormData): Promise<void> {
   const action = formData.get('action') as string;
   const token = formData.get('uuid') as string;
+
   try {
     const decodedToken = decodeURIComponent(token);
     const idReal = await decrypt(decodedToken);

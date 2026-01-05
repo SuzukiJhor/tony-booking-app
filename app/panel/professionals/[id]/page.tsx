@@ -10,6 +10,6 @@ export default async function Page({ params }: PageProps) {
     const { id } = await params;
     const response = await getProfessionalByIdAction(Number(id));
     if (!response.success || !response.data)
-        return redirect('/dashboard/professionals');
+        return redirect('/panel/professionals');
     return <ProfessionalDetailsView initialProfessional={response.data} />;
 }

@@ -60,7 +60,7 @@ export default function ProfessionalListItem({
                 )}
 
                 <ButtonCard
-                    href={`/dashboard/professionals/${professional.id}`}
+                    href={`/panel/professionals/${professional.id}`}
                 >
                     <Eye size={16} />
                     Ver Mais
