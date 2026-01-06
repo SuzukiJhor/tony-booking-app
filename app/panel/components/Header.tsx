@@ -1,10 +1,18 @@
 'use client';
+
 import SideNav from "./SideNav";
 import { useState } from "react";
 import { Menu } from "lucide-react";
 import { useSession } from "next-auth/react";
 import { ModeToggle } from "@/app/components/ThemeToggle";
-import { Sheet, SheetContent, SheetTrigger } from "@/components/ui/sheet";
+import {
+    Sheet,
+    SheetContent,
+    SheetTrigger,
+    SheetHeader,
+    SheetTitle,
+    SheetDescription
+} from "@/components/ui/sheet";
 
 export function Header() {
     const [isSheetOpen, setIsSheetOpen] = useState(false);
@@ -12,7 +20,6 @@ export function Header() {
 
     return (
         <header className="sticky top-0 z-10 bg-background dark:bg-background-secondary border-b dark:border-gray-800 p-4 flex justify-between items-center h-15">
-
             <div className="flex items-center gap-3">
                 <div className="lg:hidden">
                     <Sheet open={isSheetOpen} onOpenChange={setIsSheetOpen}>
@@ -22,6 +29,10 @@ export function Header() {
                             </button>
                         </SheetTrigger>
                         <SheetContent side="left" className="p-0 w-64 border-none">
+                            <SheetHeader className="sr-only">
+                                <SheetTitle>Menu</SheetTitle>
+                                <SheetDescription>Navegação lateral</SheetDescription>
+                            </SheetHeader>
                             <SideNav isMobile onClose={() => setIsSheetOpen(false)} />
                         </SheetContent>
                     </Sheet>
@@ -35,7 +46,6 @@ export function Header() {
             <div className="flex items-center">
                 <ModeToggle />
             </div>
-
         </header>
     );
 }
