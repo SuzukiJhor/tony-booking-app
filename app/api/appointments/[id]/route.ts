@@ -3,7 +3,6 @@ import prisma from "@/lib/prisma";
 import { getErrorMessage } from "@/util/errors/get-error-message";
 import { AgendamentoUpdateDTO } from "@/app/DTO/AgendamentoUpdateDTO";
 import { TipoAgendamento } from "@/app/enum/tipoAgendamento";
-import { StatusConfirmacao } from "@/app/enum/statusConfirmacao";
 
 export async function PATCH(
     request: Request,
