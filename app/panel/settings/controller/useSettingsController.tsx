@@ -26,7 +26,6 @@ export function useSettingsController() {
 
         try {
             const response = await checkConnectionWppAction() as any;
-            console.log('resposta', response);
 
             if (response.data?.status === 'unauthorized') {
                 setConnectionStatus('unauthorized');
