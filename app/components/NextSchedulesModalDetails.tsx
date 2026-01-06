@@ -12,7 +12,6 @@ interface ModalDetailsProps {
 
 
 export function NextSchedulesModalDetails({ schedule, onClose }: ModalDetailsProps) {
-    console.log(schedule)
     if (!schedule) return null;
 
     return (

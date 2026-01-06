@@ -50,7 +50,7 @@ export default function LoginPage() {
             email,
             password,
             redirect: true,
-            callbackUrl: "/dashboard",
+            callbackUrl: "/panel",
         });
 
         setIsLoading(false);
@@ -120,7 +120,7 @@ export default function LoginPage() {
                         Entrar
                     </motion.button>
 
-                    <motion.div variants={itemVariants} className="relative py-2 text-center text-sm text-gray-500">
+                    {/* <motion.div variants={itemVariants} className="relative py-2 text-center text-sm text-gray-500">
                         <span className="text-primary px-2">ou</span>
                     </motion.div>
 
@@ -133,7 +133,7 @@ export default function LoginPage() {
                     >
                         <GoogleSVG />
                         Entrar com Google
-                    </motion.button>
+                    </motion.button> */}
                 </motion.form>
             </motion.div>
         </div>

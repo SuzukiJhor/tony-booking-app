@@ -4,6 +4,7 @@ import type { NextRequest } from "next/server";
 
 export async function proxy(req: NextRequest) {
  
+  // return;
   const token = await getToken({ req });
   const pathname = req.nextUrl.pathname;
 

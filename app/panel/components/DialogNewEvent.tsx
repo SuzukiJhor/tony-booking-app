@@ -8,8 +8,8 @@ import { useSession } from "next-auth/react";
 import { formatPhone } from "@/util/mask/mask-phone-br";
 import { useLoading } from "@/app/components/LoadingProvider";
 import { durationOptions } from "@/util/options-duration-input";
-import { getAllProfessionalsAction } from "../professionals/actions";
 import { DataBaseEventType } from "@/app/panel/types/eventDBType";
+import { getAllProfessionalsAction } from "../professionals/actions";
 import { useCalendarController } from "../calendar/controller/CalendarController";
 
 export function DialogNewEvent({
@@ -20,7 +20,6 @@ export function DialogNewEvent({
     onDelete,
     onClose,
 }: any) {
-    if (!open) return null;
     const { setIsLoading } = useLoading();
     const { data: session } = useSession();
     const calendarController = useCalendarController();
@@ -105,6 +104,8 @@ export function DialogNewEvent({
             loadProfessionals();
         }
     }, [open]);
+
+    if (!open) return null;
 
     return (
         <dialog
@@ -239,6 +240,7 @@ export function DialogNewEvent({
                             <option value="MENSAGEM_ENVIADA">🔵 Mensagem Enviada</option>
                             <option value="CONFIRMADO">🟢 Confirmado</option>
                             <option value="NAO_CONFIRMADO">🔴 Não Confirmado</option>
+                            <option value="CANCELADO">🔴 Cancelado</option>
                         </select>
                     </div>
                 </div>

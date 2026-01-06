@@ -1,10 +1,13 @@
 'use client';
 import { useState, useMemo } from "react";
+import { sendConfirmationWhatsAppAction } from "../actions";
+import toast from "react-hot-toast";
 
 export function useScheduleListController(initialData: any[]) {
     const [filtro, setFiltro] = useState<'hoje' | 'semana'>('hoje');
     const [selectedSchedule, setSelectedSchedule] = useState<any | null>(null);
     const [searchQuery, setSearchQuery] = useState('');
+    const [isSendingMessage, setIsSendingMessage] = useState<boolean>(false);
 
     const filteredAppointments = useMemo(() => {
         if (!initialData || !Array.isArray(initialData)) return [];
@@ -40,6 +43,20 @@ export function useScheduleListController(initialData: any[]) {
             .sort((a, b) => new Date(a.dataHora).getTime() - new Date(b.dataHora).getTime());
     }, [filtro, searchQuery, initialData]);
 
+    const handleSendWhatsApp = async (agendamentoId: number) => {
+        try {
+            setIsSendingMessage(true);
+            const result = await sendConfirmationWhatsAppAction(agendamentoId);
+            if (result.success) return toast.success(result.message || "Confirmação enviada!");
+            return toast.error(result.error || "Erro ao enviar mensagem.");
+        } catch (error) {
+            toast.error("Erro crítico ao processar o envio.");
+            console.error(error);
+        } finally {
+            setIsSendingMessage(false);
+        }
+    };
+
     return {
         filtro,
         setFiltro,
@@ -47,6 +64,8 @@ export function useScheduleListController(initialData: any[]) {
         setSearchQuery,
         selectedSchedule,
         setSelectedSchedule,
-        filteredAppointments
+        filteredAppointments,
+        handleSendWhatsApp,
+        isSendingMessage
     };
 }

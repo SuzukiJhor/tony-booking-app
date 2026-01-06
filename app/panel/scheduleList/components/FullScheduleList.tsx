@@ -1,9 +1,11 @@
 import ButtonCard from "@/app/components/ButtonCard";
+import ButtonSendConfirmation from "@/app/components/ButtonSendConfirmation";
 import ButtonWhatsApp from "@/app/components/ButtonWhatsApp";
 import { selectColorByStatus } from "@/util/selectColorByStatus";
 import { Calendar, Clock, Eye, Phone, Timer, UserCheck } from "lucide-react";
 
-export default function FullScheduleList({ filteredAppointments, setSelectedSchedule }: { filteredAppointments: any[], setSelectedSchedule: (schedule: any) => void }) {
+export default function FullScheduleList({ filteredAppointments, setSelectedSchedule, handleMessage, loading }: { filteredAppointments: any[], setSelectedSchedule: (schedule: any) => void, handleMessage: (id: number) => void, loading: boolean }) {
+
     return (
         <div className="divide-y dark:divide-gray-800">
             {filteredAppointments.length > 0 ? (
@@ -56,18 +58,33 @@ export default function FullScheduleList({ filteredAppointments, setSelectedSche
                             </div>
                         </div>
 
-                        <div className="flex flex-row items-center gap-2 shrink-0 md:ml-4">
-                            <div className="flex-none">
+                        <div className="flex flex-wrap md:flex-row items-center gap-2 shrink-0 md:ml-4">
+
+                            {s.statusConfirmacao === 'PENDENTE' && (
+                                <div className="w-full md:w-auto md:flex-none order-last md:order-0">
+                                    <ButtonSendConfirmation
+                                        key={s.id}
+                                        agendamentoId={s.id}
+                                        onSend={async () => handleMessage(s.id)}
+                                        isLoading={loading}
+                                    />
+                                </div>
+                            )}
+                            <div className="flex-1 md:flex-none">
                                 <ButtonWhatsApp schedule={s} />
                             </div>
-                            <div className="flex-none">
+
+                            <div className="flex-1 md:flex-none">
                                 <ButtonCard onClick={() => setSelectedSchedule(s)}>
-                                    <div className="flex items-center gap-2">
+                                    <div className="flex items-center justify-center gap-2">
                                         <Eye size={16} />
                                         <span>Detalhes</span>
                                     </div>
                                 </ButtonCard>
                             </div>
+
+                            {/* O botão de confirmação ocupará a linha de baixo no mobile e terá destaque */}
+                           
                         </div>
                     </div>
                 ))

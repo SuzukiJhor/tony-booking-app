@@ -54,4 +54,31 @@ export class WuzapiClient {
         const res = await this.request('/session/qr');
         return res.data?.qrcode ?? '';
     }
+
+    async transmitMessage(number: string, body: string): Promise<any> {
+        let cleanedNumber = number.replace(/\D/g, '');
+
+        if (!cleanedNumber.startsWith('55'))
+            cleanedNumber = `55${cleanedNumber}`;
+
+        const whatsappPayload = { Phone: cleanedNumber, body: body };
+
+        return await fetch(`${this.baseUrl}/chat/send/text`, {
+            method: 'POST',
+            headers: {
+                "accept": "application/json",
+                'token': `${this.token}`,
+                'Content-Type': 'application/json',
+            },
+            body: JSON.stringify(whatsappPayload),
+        });
+        return this.request('/chat/send/text', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({
+                Phone: cleanNumber,
+                Body: body
+            }),
+        });
+    }
 }
