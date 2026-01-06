@@ -95,7 +95,7 @@ export default function ClientDetailsView({ initialPatient }: Props) {
                             label="E-mail"
                             value={formData.email}
                             isEditing={isEditing}
-                            onChange={(val) => setFormData({ ...formData, email: val })}
+                            onChange={(val: any) => setFormData({ ...formData, email: val })}
                         />
                         <div className="flex items-center gap-3">
                             <Calendar size={18} className="text-muted-foreground" />

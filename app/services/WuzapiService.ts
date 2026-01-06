@@ -17,7 +17,13 @@ export class WuzapiService {
 
         if (connection.success === false) throw new Error("Conexão não configurada.");
 
-        if (connection.data?.connected === false) throw new Error("Conexão não Conectada.");
+        if (
+            connection.data &&
+            typeof (connection.data as any).connected === 'boolean' &&
+            (connection.data as any).connected === false
+        ) {
+            throw new Error("Conexão não Conectada.");
+        }
 
         const agenda = await prisma.agendamento.findUnique({
             where: { id: agendamentoId },

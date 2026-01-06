@@ -96,7 +96,7 @@ export default function ProfessionalDetailsView({ initialProfessional }: Props) 
                             label="Documento / CRO"
                             value={formData.documento}
                             isEditing={isEditing}
-                            onChange={(val) => setFormData({ ...formData, documento: val })}
+                            onChange={(val: any) => setFormData({ ...formData, documento: val })}
                         />
                         <ProfessionalInfo
                             icon={<Phone size={18} />}
@@ -110,7 +110,7 @@ export default function ProfessionalDetailsView({ initialProfessional }: Props) 
                             label="Especialidade"
                             value={formData.especialidade}
                             isEditing={isEditing}
-                            onChange={(val) => setFormData({ ...formData, especialidade: val })}
+                            onChange={(val: any) => setFormData({ ...formData, especialidade: val })}
                         />
                     </div>
                 </div>

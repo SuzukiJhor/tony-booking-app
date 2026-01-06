@@ -4,7 +4,7 @@ import crypto from 'crypto';
 const SECRET_KEY = process.env.SECRET_KEY_CRYPTO || 'pL9zX2mK5vR1nB8jW4qT7yH3sC6aD0gF';
 const ALGORITHM = 'aes-256-gcm';
 
-export async function encrypt(text) {
+export async function encrypt(text: string) {
     const iv = crypto.randomBytes(12);
     const cipher = crypto.createCipheriv(ALGORITHM, Buffer.from(SECRET_KEY), iv);
 
@@ -19,7 +19,7 @@ export async function encrypt(text) {
         .replace(/=+$/, '');
 }
 
-export async function decrypt(safeBase64) {
+export async function decrypt(safeBase64: string) {
     try {
         if (!safeBase64) return null;
         const base64 = safeBase64.replace(/-/g, '+').replace(/_/g, '/');

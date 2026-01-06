@@ -53,7 +53,7 @@ async function main() {
         const paciente = await prisma.paciente.create({
             data: {
                 nome: faker.person.fullName(),
-                telefone: faker.phone.number('+55##########'),
+                telefone: faker.phone.number({}),
                 email: faker.internet.email(),
                 empresaId: empresa.id,
             },

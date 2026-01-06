@@ -72,13 +72,5 @@ export class WuzapiClient {
             },
             body: JSON.stringify(whatsappPayload),
         });
-        return this.request('/chat/send/text', {
-            method: 'POST',
-            headers: { 'Content-Type': 'application/json' },
-            body: JSON.stringify({
-                Phone: cleanNumber,
-                Body: body
-            }),
-        });
     }
 }

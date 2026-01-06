@@ -1,6 +1,6 @@
 import { StatusConfirmacao } from "@/app/enum/statusConfirmacao";
 
-export function sanitizeSchedule(event) {
+export function sanitizeSchedule(event: { paciente: { nome: string; telefone: string; email: string; }; statusConfirmacao: StatusConfirmacao; start: string | number | Date; tempoAtendimento: any; tipoAgendamento: string; profissionalId: any; empresaId: any; }) {
   return {
     paciente: {
       nome: event.paciente.nome.trim(),

@@ -39,7 +39,7 @@ export async function GET(
     return NextResponse.json(professional, { status: 200 });
 
 } catch (error: unknown) {
-    console.error(`Erro ao buscar profissional ${params.id}:`, error);
+    console.error(`Erro ao buscar profissional ${(await params).id}:`, error);
 
     return NextResponse.json(
         { message: "Falha ao buscar dados no servidor.", error: getErrorMessage(error) },
