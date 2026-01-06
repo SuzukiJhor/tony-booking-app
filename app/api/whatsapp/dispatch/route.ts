@@ -1,7 +1,7 @@
-import { StatusAgendamento } from '@prisma/client';
 import { NextResponse } from 'next/server';
 import prisma from '@/lib/prisma';
 import { resumeAndPrerenderToNodeStream } from 'react-dom/static';
+import { StatusConfirmacao } from '@/app/enum/statusConfirmacao';
 
 const WHATSAPP_API_URL = process.env.WUZAPI_URL || "https://wuzapi.tonyv1.cloud";
 
@@ -77,7 +77,7 @@ export async function POST(request: Request) {
     await prisma.agendamento.update({
       where: { id: agendamentoId },
       data: {
-        statusConfirmacao: StatusAgendamento.MENSAGEM_ENVIADA,
+        statusConfirmacao: StatusConfirmacao.MENSAGEM_ENVIADA,
         mensagemId: String(messageId),
         mensagemEnviadaEm: new Date(),
       },
