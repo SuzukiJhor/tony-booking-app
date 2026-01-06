@@ -16,28 +16,42 @@ export default function ServiceHistory({ title, agendamentos }: any) {
                     <thead className="bg-gray-50 dark:bg-background-tertiary">
                         <tr>
                             <th className="p-4 text-xs font-bold uppercase text-muted-foreground">Paciente</th>
-                            <th className="p-4 text-xs font-bold uppercase text-muted-foreground">Data</th>
+                            <th className="p-4 text-xs font-bold uppercase text-muted-foreground">Data e Horário</th>
                             <th className="p-4 text-xs font-bold uppercase text-muted-foreground text-center">Status</th>
                         </tr>
                     </thead>
                     <tbody className="divide-y dark:divide-gray-700">
-                        {agendamentos.map((ag: any) => (
-                            <tr key={ag.id} className="hover:bg-gray-50 dark:hover:bg-gray-800/50">
-                                <td className="p-4 font-semibold text-sky-700 dark:text-sky-400">{ag.paciente?.nome}</td>
-                                <td className="p-4 text-sm dark:text-card">{formatDate(ag.dataHora)}</td>
-                                <td className="p-4 text-center">
-                                    {(() => {
-                                        const status = selectColorByStatus(ag.statusConfirmacao);
-                                        return (
-                                            <span className={`text-[10px] font-bold px-2 py-1 rounded-full ${status.classes}`}>
-                                                {status.icon && <span className="mr-1">{status.icon}</span>}
-                                                {status.label}
+                        {agendamentos.map((ag: any) => {
+                            const dateObj = new Date(ag.dataHora);
+                            const diaSemana = dateObj.toLocaleDateString('pt-BR', { weekday: 'long' });
+                            const status = selectColorByStatus(ag.statusConfirmacao);
+
+                            return (
+                                <tr key={ag.id} className="hover:bg-gray-50 dark:hover:bg-gray-800/50 transition-colors">
+                                    <td className="p-4">
+                                        <div className="font-semibold text-sky-700 dark:text-sky-400">
+                                            {ag.paciente?.nome}
+                                        </div>
+                                    </td>
+                                    <td className="p-4">
+                                        <div className="flex flex-col gap-0.5">
+                                            <span className="text-[10px] font-black uppercase tracking-wider text-sky-600 dark:text-sky-500 bg-sky-50 dark:bg-sky-900/20 px-2 py-0.5 rounded w-fit">
+                                                {diaSemana}
                                             </span>
-                                        );
-                                    })()}
-                                </td>
-                            </tr>
-                        ))}
+                                            <span className="text-sm font-medium dark:text-card">
+                                                {formatDate(ag.dataHora)}
+                                            </span>
+                                        </div>
+                                    </td>
+                                    <td className="p-4 text-center">
+                                        <span className={`inline-flex items-center text-[10px] font-bold px-2.5 py-1 rounded-full ${status.classes}`}>
+                                            {status.icon && <span className="mr-1.5">{status.icon}</span>}
+                                            {status.label}
+                                        </span>
+                                    </td>
+                                </tr>
+                            );
+                        })}
                     </tbody>
                 </table>
             </div>
