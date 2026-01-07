@@ -75,7 +75,10 @@ export function DialogNewEvent({
 
     async function loadData() {
         const id = Number(selectedEvent?.id);
-        if (!id) return setEventDetails(null);
+        if (!id) {
+            setPhoneValue("");
+            return setEventDetails(null);
+        }
         setIsLoading(true);
         try {
             const { data } = await calendarController.onGetById(id);
@@ -138,7 +141,9 @@ export function DialogNewEvent({
                             type="datetime-local"
                             name="start"
                             id="start"
-                            defaultValue={selectedEvent?.start ? selectedEvent.start.format("YYYY-MM-DDTHH:mm") : ""}
+                            // defaultValue={selectedEvent?.start ? selectedEvent.start.format("YYYY-MM-DDTHH:mm") : ""}
+                            defaultValue={selectedEvent?.start ? dayjs(selectedEvent.start).format("YYYY-MM-DDTHH:mm") : ""}
+
                             className="
                             w-full px-3 py-2 rounded-lg border
                             bg-background text-foreground dark:text-background border-border

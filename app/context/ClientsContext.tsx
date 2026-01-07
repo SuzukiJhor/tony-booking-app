@@ -5,6 +5,8 @@ import { getAllClientsAction } from "../panel/clients/actions";
 
 interface ClientContextProps {
     clients: DataBasePacienteType[];
+    selectedDentistId: string;
+    setSelectedDentistId: (id: string) => void;
     reloadEvents: () => Promise<void>;
 }
 
@@ -12,6 +14,7 @@ const ClientContext = createContext<ClientContextProps | undefined>(undefined);
 
 export function ClientProvider({ children }: { children: ReactNode }) {
     const [clients, setClients] = useState<DataBasePacienteType[]>([]);
+    const [selectedDentistId, setSelectedDentistId] = useState<string>("all");
 
     async function reloadEvents() {
         const { data } = await getAllClientsAction();
@@ -37,8 +40,14 @@ export function ClientProvider({ children }: { children: ReactNode }) {
         fetchData();
     }, []);
 
+
     return (
-        <ClientContext.Provider value={{ clients, reloadEvents }}>
+        <ClientContext.Provider value={{
+            clients,
+            selectedDentistId,
+            setSelectedDentistId,
+            reloadEvents
+        }}>
             {children}
         </ClientContext.Provider>
     );

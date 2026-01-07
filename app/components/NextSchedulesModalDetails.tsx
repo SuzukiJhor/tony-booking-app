@@ -35,8 +35,7 @@ export function NextSchedulesModalDetails({ schedule, onClose }: ModalDetailsPro
                         </div>
                         <div>
                             <p className="text-[10px] uppercase tracking-wider text-sky-600 dark:text-sky-400 font-bold">Paciente</p>
-                            <p className="font-bold text-lg text-gray-900 dark:text-white leading-tight">{schedule.patientName}</p>
-                            <p className="text-xs text-gray-500 dark:text-gray-400">ID: #{schedule.pacienteId}</p>
+                            <p className="text-xs text-gray-500 dark:text-gray-400">{schedule.paciente.nome}</p>
                         </div>
                     </div>
 
@@ -68,13 +67,14 @@ export function NextSchedulesModalDetails({ schedule, onClose }: ModalDetailsPro
                                 <span className="font-medium dark:text-gray-300">{schedule.tipoAgendamento}</span>
                             </div>
                             <div className="flex items-center justify-between p-2 text-sm border-b dark:border-gray-800">
+                                <span className="flex items-center gap-2 text-gray-500"><Activity size={14} /> Profissional</span>
+                                <span className="font-medium dark:text-gray-300">{schedule.profissional.nome}</span>
+                            </div>
+                            <div className="flex items-center justify-between p-2 text-sm border-b dark:border-gray-800">
                                 <span className="flex items-center gap-2 text-gray-500"><Timer size={14} /> Duração</span>
                                 <span className="font-medium dark:text-gray-300">{schedule.tempoAtendimento} minutos</span>
                             </div>
-                            <div className="flex items-center justify-between p-2 text-sm border-b dark:border-gray-800">
-                                <span className="flex items-center gap-2 text-gray-500"><ShieldCheck size={14} /> Empresa</span>
-                                <span className="font-medium dark:text-gray-300">Unidade #{schedule.empresaId}</span>
-                            </div>
+
                         </div>
                     </div>
 
