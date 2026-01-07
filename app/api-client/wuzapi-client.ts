@@ -56,12 +56,14 @@ export class WuzapiClient {
     }
 
     async transmitMessage(number: string, body: string): Promise<any> {
-        let cleanedNumber = number.replace(/\D/g, '');
+        let num = number.replace(/\D/g, '');
 
-        if (!cleanedNumber.startsWith('55'))
-            cleanedNumber = `55${cleanedNumber}`;
+        if (!num.startsWith('55')) num = `55${num}`;
 
-        const whatsappPayload = { Phone: cleanedNumber, body: body };
+        if (num.length === 13 && num[4] === '9' && ['6', '7', '8', '9'].includes(num[5]))
+            num = num.substring(0, 4) + num.substring(5);
+
+        const whatsappPayload = { Phone: num, body: body };
 
         return await fetch(`${this.baseUrl}/chat/send/text`, {
             method: 'POST',
