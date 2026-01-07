@@ -1,4 +1,5 @@
 'use client';
+import { useMemo } from "react";
 import { Info } from "lucide-react";
 import { Toaster } from "react-hot-toast";
 import TitlePage from "@/app/panel/components/TitlePage";
@@ -7,10 +8,11 @@ import { DialogNewEvent } from "../../components/DialogNewEvent";
 import { brasilTranslations } from "@/util/translations-calendar";
 import { mapEventsToCalendar } from "@/util/map-event-to-calendar";
 import { useCalendarController } from "../controller/CalendarController";
+import { useClient } from "@/app/context/ClientsContext";
 
 export default function CalendarView({ initialData }: { initialData: any[] }) {
     const { onAdd, onDelete, onUpdate } = useCalendarController();
-
+    const { selectedDentistId } = useClient();
     const handleUpdate = async (eventData: any, callback: () => void) => {
         if (!eventData?.id) return;
         onUpdate(eventData.id, eventData, callback);
@@ -21,6 +23,16 @@ export default function CalendarView({ initialData }: { initialData: any[] }) {
         if (!id) return;
         onDelete(Number(id), title);
     };
+
+    const finalFilteredAppointments = useMemo(() => {
+        if (!selectedDentistId || selectedDentistId === "all") {
+            return initialData;
+        }
+
+        return initialData.filter(
+            (appointment: any) => String(appointment.profissionalId) === String(selectedDentistId)
+        );
+    }, [initialData, selectedDentistId]);
 
     return (
         <div className="min-h-screen bg-background dark:bg-background-tertiary">
@@ -40,7 +52,7 @@ export default function CalendarView({ initialData }: { initialData: any[] }) {
 
                 <div className="rounded-xl shadow-sm border border-gray-200 dark:border-gray-800 bg-white dark:bg-background-secondary overflow-hidden">
                     <IlamyCalendar
-                        events={mapEventsToCalendar(initialData)}
+                        events={mapEventsToCalendar(finalFilteredAppointments)}
                         timeFormat="12-hour"
                         locale="pt-BR"
                         translations={brasilTranslations}

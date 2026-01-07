@@ -12,22 +12,23 @@ export default async function Layout({ children }: { children: React.ReactNode }
       <SideNav />
 
       <div className="flex flex-col flex-1 lg:ml-54 min-w-0">
+        <ClientProvider>
 
-        <Header />
+          <Header />
 
-        <main className="flex-1 overflow-y-auto p-0">
-          <NextTopLoader
-            height={4}
-            showSpinner={false}
-            easing="ease"
-            speed={350}
-            color="#0EA5E9"
-          />
-          <NavigationUX>
-            <ClientProvider>{children}</ClientProvider>
-          </NavigationUX>
-        </main>
-
+          <main className="flex-1 overflow-y-auto p-0">
+            <NextTopLoader
+              height={4}
+              showSpinner={false}
+              easing="ease"
+              speed={350}
+              color="#0EA5E9"
+            />
+            <NavigationUX>
+              {children}
+            </NavigationUX>
+          </main>
+        </ClientProvider>
       </div>
     </div>
   );
