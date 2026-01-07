@@ -150,3 +150,25 @@ body {
   color: #38bdf8;
   background-color: rgba(14, 165, 233, 0.15);
 }
+
+button[data-slot="button"]:has(.lucide-plus) {
+  position: relative;
+  background-color: #0284c7 !important;
+  color: #ffffff !important;
+  font-weight: 700 !important;
+  padding-left: 1rem !important;
+  padding-right: 1rem !important;
+  border: none !important;
+  transition: all 0.3s ease-in-out !important;
+
+  box-shadow: 0 0 15px rgba(2, 132, 199, 0.5) !important;
+
+  animation: pulse-attention 2s infinite;
+}
+
+button[data-slot="button"]:has(.lucide-plus):hover {
+  background-color: #0369a1 !important;
+  box-shadow: 0 0 25px rgba(2, 132, 199, 0.8) !important;
+  animation: none;
+  cursor: pointer;
+}
