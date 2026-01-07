@@ -74,7 +74,7 @@ export default function LoginPage() {
                     animate={{ scale: 1, opacity: 1 }}
                     transition={{ duration: 0.5 }}
                     whileHover={{ rotate: 2, scale: 1.05 }}
-                    className="w-full px-3 py-2 rounded-lg  text-background focus:ring-2 focus:ring-primary focus:outline-none"
+                    className="w-full px-3 py-2 pl-12 rounded-lg  text-background focus:ring-2 focus:ring-primary focus:outline-none"
 
                 >
                     <LogoTonySVG className="text-sky-500 dark:text-sky-500 animate-pulse duration-2000" />
