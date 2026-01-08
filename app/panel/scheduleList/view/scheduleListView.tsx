@@ -73,7 +73,7 @@ export default function ScheduleListView({ initialData }: { initialData: any[] }
     const handleDelete = async (event: CalendarEvent) => {
         const { id, title } = event;
         if (!id) return;
-        onDelete(Number(id), title);
+        onDelete(Number(id), title ?? null);
     };
 
     useEffect(() => {
@@ -89,7 +89,7 @@ export default function ScheduleListView({ initialData }: { initialData: any[] }
         <div className="p-6 bg-background dark:bg-background-tertiary min-h-screen space-y-6">
             <Toaster position="top-right" reverseOrder={true} containerStyle={{ zIndex: 99999 }} />
 
-            <div className="flex w-2/6 items-center gap-2 px-4 py-2 bg-sky-50 dark:bg-sky-900/20 border border-sky-100 dark:border-sky-800 rounded-lg">
+            <div className="flex w-6/6 items-center gap-2 px-4 py-2 bg-sky-50 dark:bg-sky-900/20 border border-sky-100 dark:border-sky-800 rounded-lg">
                 <Info size={16} className="text-sky-600 dark:text-sky-400" />
                 <p className="text-xs sm:text-sm text-sky-900 dark:text-sky-200">
                     Visualizando a agenda de:
@@ -154,7 +154,9 @@ export default function ScheduleListView({ initialData }: { initialData: any[] }
                         </div>
                         <div>
                             <h3 className="font-bold text-gray-700 dark:text-gray-200">Listagem de Agendamentos</h3>
-                            <p className="text-xs text-gray-500 italic">Filtrando por: {filtro === 'hoje' ? 'Hoje' : 'Próximos 7 dias'}</p>
+                            <p className="text-xs text-gray-500 italic">
+                                Filtrando por: {filtro === 'hoje' ? 'Hoje' : filtro === 'semana' ? 'Próximos 7 dias' : 'Todos'}
+                            </p>
                         </div>
                     </div>
 
@@ -172,7 +174,7 @@ export default function ScheduleListView({ initialData }: { initialData: any[] }
                     </div>
 
                     <div className="flex bg-gray-200 dark:bg-gray-800 p-1 rounded-xl">
-                        {['hoje', 'semana'].map((type) => (
+                        {['hoje', 'semana', 'todos'].map((type) => (
                             <button
                                 key={type}
                                 onClick={() => setFiltro(type as any)}
@@ -181,7 +183,7 @@ export default function ScheduleListView({ initialData }: { initialData: any[] }
                                     : 'text-gray-500 hover:text-gray-700 dark:hover:text-gray-300'
                                     }`}
                             >
-                                {type === 'hoje' ? 'Hoje' : 'Próximos 7 dias'}
+                                {type === 'hoje' ? 'Hoje' : type === 'semana' ? 'Próximos 7 dias' : 'Todos'}
                             </button>
                         ))}
                     </div>
@@ -192,6 +194,7 @@ export default function ScheduleListView({ initialData }: { initialData: any[] }
                     setSelectedSchedule={setSelectedSchedule}
                     handleMessage={handleSendWhatsApp}
                     loading={!!isSendingMessage}
+                    handleDelete={(id: number) => handleDelete({ id } as CalendarEvent)}
                 />
 
                 <DialogNewEvent

@@ -1,91 +1,53 @@
-import ButtonCard from "@/app/components/ButtonCard";
-import ButtonSendConfirmation from "@/app/components/ButtonSendConfirmation";
-import ButtonWhatsApp from "@/app/components/ButtonWhatsApp";
-import { selectColorByStatus } from "@/util/selectColorByStatus";
-import { Calendar, Clock, Eye, Phone, Timer, UserCheck } from "lucide-react";
+'use client';
 
-export default function FullScheduleList({ filteredAppointments, setSelectedSchedule, handleMessage, loading }: { filteredAppointments: any[], setSelectedSchedule: (schedule: any) => void, handleMessage: (id: number) => void, loading: boolean }) {
+import { useState } from "react";
+import { Calendar } from "lucide-react";
+import ListDetails from "./ListDetails";
+import GroupActionsBtn from "./GroupActionsBtn";
+
+export default function FullScheduleList({ filteredAppointments, setSelectedSchedule, handleMessage, handleDelete, loading }: { filteredAppointments: any[], setSelectedSchedule: (schedule: any) => void, handleMessage: (id: number) => void, handleDelete: (id: number) => void, loading: boolean }) {
+    const [openMenuId, setOpenMenuId] = useState<number | null>(null);
+
+    const isSingleItemMenuOpen = filteredAppointments.length === 1 && openMenuId !== null;
+    const isFirstOfTwoItemsMenuOpen = filteredAppointments.length === 2 && openMenuId === filteredAppointments[0].id;
+    const isLastOfTwoItemsMenuOpen = filteredAppointments.length === 2 && openMenuId === filteredAppointments[1].id;
+
+    const classNameOpenMenu = `divide-y dark:divide-gray-800 transition-all duration-300 ${isFirstOfTwoItemsMenuOpen
+        ? 'pb-40'
+        : isLastOfTwoItemsMenuOpen
+            ? 'pt-20'
+            : isSingleItemMenuOpen
+                ? 'pb-60'
+                : 'pb-0'
+        }`;
 
     return (
-        <div className="divide-y dark:divide-gray-800">
+        <div className={classNameOpenMenu}>
             {filteredAppointments.length > 0 ? (
-                filteredAppointments.map((s) => (
-                    <div key={s.id} className="p-5 hover:bg-gray-50 dark:hover:bg-white/5 transition-all flex flex-col md:flex-row md:items-center justify-between gap-4">
+                filteredAppointments.map((s, index) => {
+                    const isLastItem = filteredAppointments.length > 1 && index >= filteredAppointments.length - 2;
 
-                        <div className="flex gap-5 items-center flex-1 min-w-0">
-                            <div className="text-center min-w-17.5 p-2 bg-white dark:bg-gray-800 rounded-xl border border-gray-200 dark:border-gray-700 shadow-sm shrink-0">
-                                <p className="text-[10px] uppercase font-bold text-sky-600">
-                                    {new Date(s.dataHora).toLocaleDateString('pt-BR', { weekday: 'short' })}
-                                </p>
-                                <p className="text-xl font-black text-gray-800 dark:text-white">
-                                    {new Date(s.dataHora).getDate()}
-                                </p>
-                            </div>
+                    return (
+                        <div
+                            key={s.id}
+                            className={`p-5 hover:bg-gray-50 dark:hover:bg-white/5 transition-all flex flex-col md:flex-row md:items-center justify-between gap-4 ${openMenuId === s.id ? 'z-50' : 'z-10'}`}
+                        >
+                            <ListDetails s={s} />
 
-                            <div className="space-y-1 overflow-hidden">
-                                <div className="flex items-center gap-2 flex-wrap">
-                                    <p className="font-bold text-gray-900 dark:text-white text-lg truncate max-w-62.5">
-                                        {s.paciente?.nome || 'Paciente não identificado'}
-                                    </p>
-                                    <span className={`px-2 py-0.5 rounded-md text-[10px] font-bold border shrink-0 ${selectColorByStatus(s.statusConfirmacao).classes}`}>
-                                        {selectColorByStatus(s.statusConfirmacao).label}
-                                    </span>
-                                </div>
-
-                                <div className="flex flex-wrap items-center gap-x-4 gap-y-1 text-sm text-gray-500">
-                                    <span className="flex items-center gap-1.5 font-medium text-sky-600 dark:text-sky-400">
-                                        <Clock size={14} />
-                                        {new Date(s.dataHora).toLocaleTimeString('pt-BR', { hour: '2-digit', minute: '2-digit' })}
-                                    </span>
-
-                                    {s.paciente?.telefone && (
-                                        <span className="flex items-center gap-1.5">
-                                            <Phone size={14} />
-                                            {s.paciente.telefone}
-                                        </span>
-                                    )}
-
-                                    <span className="flex items-center gap-1.5 shrink-0">
-                                        <Timer size={14} /> {s.tempoAtendimento || 0} min
-                                    </span>
-
-                                    {s.profissional && (
-                                        <span className="flex items-center gap-1.5 text-indigo-600 dark:text-indigo-400 font-medium">
-                                            <UserCheck size={14} /> {s.profissional.nome}
-                                        </span>
-                                    )}
-                                </div>
-                            </div>
+                            <GroupActionsBtn
+                                setOpenMenuId={setOpenMenuId}
+                                openMenuId={openMenuId}
+                                isFirstOfTwoItemsMenuOpen={isFirstOfTwoItemsMenuOpen}
+                                isLastItem={isLastItem}
+                                setSelectedSchedule={setSelectedSchedule}
+                                loading={loading}
+                                handleDelete={handleDelete}
+                                handleMessage={handleMessage}
+                                s={s}
+                            />
                         </div>
-
-                        <div className="flex flex-wrap md:flex-row items-center gap-2 shrink-0 md:ml-4">
-
-                            {s.statusConfirmacao === 'PENDENTE' && (
-                                <div className="w-full md:w-auto md:flex-none order-last md:order-0">
-                                    <ButtonSendConfirmation
-                                        key={s.id}
-                                        agendamentoId={s.id}
-                                        onSend={async () => handleMessage(s.id)}
-                                        isLoading={loading}
-                                    />
-                                </div>
-                            )}
-                            <div className="flex-1 md:flex-none">
-                                <ButtonWhatsApp schedule={s} />
-                            </div>
-
-                            <div className="flex-1 md:flex-none">
-                                <ButtonCard onClick={() => setSelectedSchedule(s)}>
-                                    <div className="flex items-center justify-center gap-2">
-                                        <Eye size={16} />
-                                        <span>Detalhes</span>
-                                    </div>
-                                </ButtonCard>
-                            </div>
-                           
-                        </div>
-                    </div>
-                ))
+                    );
+                })
             ) : (
                 <div className="p-20 text-center">
                     <div className="w-20 h-20 bg-gray-100 dark:bg-gray-800 rounded-full flex items-center justify-center mx-auto mb-4">
