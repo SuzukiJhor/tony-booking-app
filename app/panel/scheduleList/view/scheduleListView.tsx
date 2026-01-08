@@ -89,11 +89,11 @@ export default function ScheduleListView({ initialData }: { initialData: any[] }
         <div className="p-6 bg-background dark:bg-background-tertiary min-h-screen space-y-6">
             <Toaster position="top-right" reverseOrder={true} containerStyle={{ zIndex: 99999 }} />
 
-            <div className="flex w-md items-center gap-2 px-4 py-2 bg-sky-50 dark:bg-sky-900/20 border border-sky-100 dark:border-sky-800 rounded-lg">
+            <div className="flex w-2/6 items-center gap-2 px-4 py-2 bg-sky-50 dark:bg-sky-900/20 border border-sky-100 dark:border-sky-800 rounded-lg">
                 <Info size={16} className="text-sky-600 dark:text-sky-400" />
                 <p className="text-xs sm:text-sm text-sky-900 dark:text-sky-200">
                     Visualizando a agenda de:
-                    <span className="ml-1 px-2 py-0.5 bg-white dark:bg-sky-900/50 rounded-md font-bold border border-sky-100 dark:border-sky-700 shadow-sm">
+                    <span className="ml-2 px-2 py-0.5 bg-white dark:bg-sky-900/50 rounded-md font-bold border border-sky-100 dark:border-sky-700 shadow-sm">
                         {professionalInfo?.nome || "Todos"}
                     </span>
                 </p>
