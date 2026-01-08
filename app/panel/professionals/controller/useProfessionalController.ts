@@ -76,10 +76,14 @@ export const useProfessionalController = () => {
     };
 
     const onGetById = async (id: number) => {
-        await handleAction(
-            getProfessionalByIdAction(id),
-            { loading: 'Carregando...', success: 'Carregado com sucesso!' }
-        );
+        if (!id) return;
+        const { data } = await getProfessionalByIdAction(id);
+        if (!data) {
+            toast.error("Ocorreu um erro inesperado", toastStyle);
+            return null;
+        }
+        toast.success(`${data.nome} Selecionado`, toastStyle);
+        return data;
     };
 
     return { onGetById, onAdd, onUpdate, onDelete };
