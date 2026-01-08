@@ -1,11 +1,11 @@
 'use client';
 
+import SideNav from "./SideNav";
 import { useEffect, useState } from "react";
-import { Menu, UserCircle } from "lucide-react";
 import { useSession } from "next-auth/react";
+import { Menu, UserCircle } from "lucide-react";
 import { ModeToggle } from "@/app/components/ThemeToggle";
 import { getAllProfessionalsAction } from "../professionals/actions";
-import SideNav from "./SideNav";
 import {
     Select,
     SelectContent,
@@ -30,12 +30,8 @@ export function Header({ onFilterChange }: { onFilterChange?: (id: string) => vo
     const { data: session } = useSession();
 
     const handleValueChange = (value: string) => {
-        console.log("ID do Dentista Selecionado:", value);
         setSelectedDentistId(value);
-
-        if (onFilterChange) {
-            onFilterChange(value);
-        }
+        if (onFilterChange) onFilterChange(value);
     };
 
     useEffect(() => {

@@ -82,8 +82,6 @@ export default function FullScheduleList({ filteredAppointments, setSelectedSche
                                     </div>
                                 </ButtonCard>
                             </div>
-
-                            {/* O botão de confirmação ocupará a linha de baixo no mobile e terá destaque */}
                            
                         </div>
                     </div>

@@ -1,21 +1,23 @@
 'use client';
 
-import { useMemo, useState } from "react";
 import { Toaster } from "react-hot-toast";
 import GoToBack from "@/app/components/GoToBack";
 import ButtonCard from "@/app/components/ButtonCard";
-import { ListFilter, Search, Plus, Calendar, ChevronDown, ChevronUp } from "lucide-react";
+import { useEffect, useMemo, useState } from "react";
 import { useClient } from "@/app/context/ClientsContext";
 import FullScheduleList from "../components/FullScheduleList";
+import { CalendarEvent, IlamyCalendar } from "@ilamy/calendar";
 import { DialogNewEvent } from "../../components/DialogNewEvent";
+import { brasilTranslations } from "@/util/translations-calendar";
+import { mapEventsToCalendar } from "@/util/map-event-to-calendar";
 import { useScheduleListController } from "../controller/useScheduleListController";
 import { useCalendarController } from "../../calendar/controller/CalendarController";
 import { NextSchedulesModalDetails } from "@/app/components/NextSchedulesModalDetails";
-import { CalendarEvent, IlamyCalendar } from "@ilamy/calendar";
-import { mapEventsToCalendar } from "@/util/map-event-to-calendar";
-import { brasilTranslations } from "@/util/translations-calendar";
+import { ListFilter, Search, Plus, Calendar, ChevronDown, ChevronUp, Info } from "lucide-react";
+import { useProfessionalController } from "../../professionals/controller/useProfessionalController";
 
 export default function ScheduleListView({ initialData }: { initialData: any[] }) {
+    const [professionalInfo, setProfessionalInfo] = useState<any>(null);
     const [showCalendar, setShowCalendar] = useState(false);
     const { selectedDentistId } = useClient();
     const {
@@ -29,8 +31,9 @@ export default function ScheduleListView({ initialData }: { initialData: any[] }
         handleSendWhatsApp,
         isSendingMessage,
     } = useScheduleListController(initialData);
-
+    const { onGetById } = useProfessionalController();
     const { onAdd, onDelete, onUpdate } = useCalendarController();
+
     const [isNewEventModalOpen, setIsNewEventModalOpen] = useState(false);
 
     const now = new Date();
@@ -73,11 +76,31 @@ export default function ScheduleListView({ initialData }: { initialData: any[] }
         onDelete(Number(id), title);
     };
 
+    useEffect(() => {
+        async function fetchData() {
+            if (selectedDentistId === "all") return setProfessionalInfo(null);
+            const data = await onGetById(Number(selectedDentistId));
+            setProfessionalInfo(data);
+        }
+        fetchData();
+    }, [selectedDentistId]);
+
     return (
         <div className="p-6 bg-background dark:bg-background-tertiary min-h-screen space-y-6">
             <Toaster position="top-right" reverseOrder={true} containerStyle={{ zIndex: 99999 }} />
 
+            <div className="flex w-md items-center gap-2 px-4 py-2 bg-sky-50 dark:bg-sky-900/20 border border-sky-100 dark:border-sky-800 rounded-lg">
+                <Info size={16} className="text-sky-600 dark:text-sky-400" />
+                <p className="text-xs sm:text-sm text-sky-900 dark:text-sky-200">
+                    Visualizando a agenda de:
+                    <span className="ml-1 px-2 py-0.5 bg-white dark:bg-sky-900/50 rounded-md font-bold border border-sky-100 dark:border-sky-700 shadow-sm">
+                        {professionalInfo?.nome || "Todos"}
+                    </span>
+                </p>
+            </div>
+
             <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
+
                 <GoToBack SubTitlePage="Voltar" />
 
                 <div className="flex items-center gap-3">
