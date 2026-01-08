@@ -23,7 +23,7 @@ export default function ButtonWhatsApp({ schedule }: { schedule: any }) {
             title="Enviar WhatsApp"
         >
             <MessageCircle size={20} className="transition-transform group-hover:scale-110 shrink-0" />
-            <span className="sm:inline whitespace-nowrap">Enviar WhatsApp</span>
+            <span className="sm:inline whitespace-nowrap">Enviar mensagem</span>
         </button>
     );
 }

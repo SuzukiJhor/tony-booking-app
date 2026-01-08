@@ -79,8 +79,10 @@ export const useCalendarController = () => {
     };
 
     const onDelete = async (id: number, title: string) => {
+        const titleCondition = title ? `Tem certeza que deseja excluir a reserva para "${title}"?` : 'Tem certeza que deseja excluir esta reserva?';
+
         const result = await Swal.fire({
-            title: `Tem certeza que deseja excluir a reserva para "${title}"?`,
+            title: titleCondition,
             text: "Esta reserva sera desativada e não aparecerá mais no calendário",
             icon: 'warning',
             showCancelButton: true,
@@ -89,6 +91,7 @@ export const useCalendarController = () => {
             confirmButtonText: 'Sim, Excluir!',
             cancelButtonText: 'Cancelar'
         });
+
         if (result.isConfirmed) {
             await handleAction(
                 deleteProfessionalAction(id),

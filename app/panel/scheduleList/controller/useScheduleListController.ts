@@ -5,7 +5,7 @@ import { useState, useMemo } from "react";
 import { sendConfirmationWhatsAppAction } from "../actions";
 
 export function useScheduleListController(initialData: any[]) {
-    const [filtro, setFiltro] = useState<'hoje' | 'semana'>('hoje');
+    const [filtro, setFiltro] = useState<'hoje' | 'semana' | 'todos'>('hoje');
     const [selectedSchedule, setSelectedSchedule] = useState<any | null>(null);
     const [searchQuery, setSearchQuery] = useState('');
     const [isSendingMessage, setIsSendingMessage] = useState<boolean>(false);
@@ -34,6 +34,8 @@ export function useScheduleListController(initialData: any[]) {
 
                 if (searchQuery.length > 0) return matchesSearch;
 
+                if (filtro === 'todos') return true;
+
                 const dataAgendamento = new Date(s.dataHora);
                 const matchesDate = filtro === 'hoje'
                     ? (dataAgendamento >= inicioHoje && dataAgendamento <= fimHoje)
@@ -61,7 +63,6 @@ export function useScheduleListController(initialData: any[]) {
     };
 
     async function handleConfirmMessage(id: number) {
-        console.log("Enviando confirmação para agendamento ID:", id);
         const dataResponse = initialData.filter(
             (appointment: any) => String(appointment.id) === String(id)
         );
@@ -73,6 +74,7 @@ export function useScheduleListController(initialData: any[]) {
         const horaFormatada = dataObj
             ? dataObj.toLocaleTimeString('pt-BR', { hour: '2-digit', minute: '2-digit' })
             : '00:00';
+
         const pacienteNome = dataResponse[0]?.paciente?.nome || 'Paciente não identificado';
         const pacienteTelefone = dataResponse[0]?.paciente?.telefone || '(00) 00000-0000';
         const infoPersonal = pacienteNome ? `*${pacienteNome}*` : "paciente";
@@ -112,6 +114,7 @@ export function useScheduleListController(initialData: any[]) {
             cancelButtonText: "Cancelar",
             reverseButtons: true
         });
+
         if (result.isConfirmed) {
             Swal.fire({
                 title: "Enviando!",
