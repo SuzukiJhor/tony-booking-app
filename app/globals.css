@@ -172,3 +172,13 @@ button[data-slot="button"]:has(.lucide-plus):hover {
   animation: none;
   cursor: pointer;
 }
+
+.btn-cancel-swalfire {
+  background-color: #d33 !important;
+  color: white !important;
+}
+
+.btn-confirm-swalfire {
+  background-color: #3085d6 !important;
+  color: white !important;
+}

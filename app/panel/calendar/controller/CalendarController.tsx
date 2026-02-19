@@ -55,8 +55,10 @@ export const useCalendarController = () => {
             text: "Esta reserva sera criada e aparecerá no calendário",
             icon: "info",
             showCancelButton: true,
-            confirmButtonColor: 'oklch(0.696 0.17 162.48)',
-            cancelButtonColor: '#d33 ',
+            customClass: {
+                confirmButton: 'btn-confirm-swalfire',
+                cancelButton: 'btn-cancel-swalfire'
+            },
             confirmButtonText: 'Sim, Agendar!',
             cancelButtonText: 'Cancelar'
         });
